@@ -1,119 +1,186 @@
-//
-//  RecipeCreationView.swift
-//  FlavorShare_iOS
-//
-//  Created by Benjamin Lefebvre on 2024-09-12.
-//
-
 import SwiftUI
 
 struct RecipeEditorView: View {
+    @State private var id: String
     @State private var title: String
-    @State private var cuisineType: String
+    @State private var imageURL: String
+    @State private var ownerId: String
+    @State private var createdAt: Date
+    @State private var updatedAt: Date
+    @State private var description: String
     @State private var ingredients: [String]
     @State private var instructions: [String]
-    @State private var prepTime: Int
     @State private var cookTime: Int
     @State private var servings: Int
-    private var isEditing: Bool
+    @State private var likes: Int
+    @State private var cuisineType: String
+    @State private var nutritionalValues: NutritionalValues?
+    @State private var user: User?
     
-    // Initialize with an existing recipe or a new one
+    @State private var newIngredient: String = ""
+    @State private var newInstruction: String = ""
+    
+    @State private var isNewRecipe = true
+    
     init(recipe: Recipe? = nil) {
-        _title = State(initialValue: recipe?.title ?? "")
-        _cuisineType = State(initialValue: recipe?.cuisineType ?? "")
-        _ingredients = State(initialValue: recipe?.ingredients ?? [])
-        _instructions = State(initialValue: recipe?.instructions ?? [])
-        _prepTime = State(initialValue: recipe?.prepTime ?? 0)
-        _cookTime = State(initialValue: recipe?.cookTime ?? 0)
-        _servings = State(initialValue: recipe?.servings ?? 1)
-        isEditing = recipe != nil
+        if let recipe = recipe {
+            _id = State(initialValue: recipe.id)
+            _title = State(initialValue: recipe.title)
+            _imageURL = State(initialValue: recipe.imageURL)
+            _ownerId = State(initialValue: recipe.ownerId)
+            _createdAt = State(initialValue: recipe.createdAt)
+            _updatedAt = State(initialValue: recipe.updatedAt)
+            _description = State(initialValue: recipe.description)
+            _ingredients = State(initialValue: recipe.ingredients)
+            _instructions = State(initialValue: recipe.instructions)
+            _cookTime = State(initialValue: recipe.cookTime)
+            _servings = State(initialValue: recipe.servings)
+            _likes = State(initialValue: recipe.likes)
+            _cuisineType = State(initialValue: recipe.cuisineType)
+            _nutritionalValues = State(initialValue: recipe.nutrionalValues)
+            _user = State(initialValue: recipe.user)
+            
+            _isNewRecipe = State(initialValue: false)
+        } else {
+            _id = State(initialValue: UUID().uuidString)
+            _title = State(initialValue: "")
+            _imageURL = State(initialValue: "")
+            _ownerId = State(initialValue: "")
+            _createdAt = State(initialValue: Date())
+            _updatedAt = State(initialValue: Date())
+            _description = State(initialValue: "")
+            _ingredients = State(initialValue: [])
+            _instructions = State(initialValue: [])
+            _cookTime = State(initialValue: 0)
+            _servings = State(initialValue: 0)
+            _likes = State(initialValue: 0)
+            _cuisineType = State(initialValue: "")
+            _nutritionalValues = State(initialValue: nil)
+            _user = State(initialValue: nil)
+        }
     }
     
     var body: some View {
         Form {
-            Section(header: Text("Recipe Information")) {
+            Section(header: Text("Recipe Details")) {
                 TextField("Title", text: $title)
-                
+                TextField("Image URL", text: $imageURL)
+                TextField("Owner ID", text: $ownerId)
+                DatePicker("Created At", selection: $createdAt, displayedComponents: .date)
+                DatePicker("Updated At", selection: $updatedAt, displayedComponents: .date)
+                TextField("Description", text: $description)
                 TextField("Cuisine Type", text: $cuisineType)
+                Stepper(value: $cookTime, in: 0...240) {
+                    Text("Cook Time: \(cookTime) minutes")
+                }
+                Stepper(value: $servings, in: 1...20) {
+                    Text("Servings: \(servings)")
+                }
+                Stepper(value: $likes, in: 0...10000) {
+                    Text("Likes: \(likes)")
+                }
             }
             
             Section(header: Text("Ingredients")) {
-                ForEach(0..<ingredients.count, id: \.self) { index in
-                    TextField("Ingredient", text: $ingredients[index])
+                ForEach(ingredients, id: \.self) { ingredient in
+                    Text(ingredient)
                 }
-                Button(action: {
-                    ingredients.append("")
-                }) {
-                    Label("Add Ingredient", systemImage: "plus.circle")
+                HStack {
+                    TextField("New Ingredient", text: $newIngredient)
+                    Button(action: {
+                        if !newIngredient.isEmpty {
+                            ingredients.append(newIngredient)
+                            newIngredient = ""
+                        }
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                    }
                 }
             }
             
             Section(header: Text("Instructions")) {
-                ForEach(0..<instructions.count, id: \.self) { index in
-                    TextEditor(text: $instructions[index])
-                        .frame(height: 100)
+                ForEach(instructions.indices, id: \.self) { index in
+                    Text("\(index + 1). \(instructions[index])")
                 }
-                Button(action: {
-                    instructions.append("")
-                }) {
-                    Label("Add Instruction", systemImage: "plus.circle")
+                HStack {
+                    TextField("New Instruction", text: $newInstruction)
+                    Button(action: {
+                        if !newInstruction.isEmpty {
+                            instructions.append(newInstruction)
+                            newInstruction = ""
+                        }
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                    }
                 }
             }
             
-            Section(header: Text("Times & Servings")) {
-                Stepper(value: $prepTime, in: 0...180, step: 5) {
-                    Text("Prep Time: \(prepTime) minutes")
+            Section(header: Text("Nutritional Values")) {
+                if let nutritionalValues = nutritionalValues {
+                    TextField("Calories", value: Binding(get: {
+                        nutritionalValues.calories
+                    }, set: { newValue in
+                        self.nutritionalValues?.calories = newValue
+                    }), formatter: NumberFormatter())
+                    TextField("Protein", value: Binding(get: {
+                        nutritionalValues.protein
+                    }, set: { newValue in
+                        self.nutritionalValues?.protein = newValue
+                    }), formatter: NumberFormatter())
+                    TextField("Fat", value: Binding(get: {
+                        nutritionalValues.fat
+                    }, set: { newValue in
+                        self.nutritionalValues?.fat = newValue
+                    }), formatter: NumberFormatter())
+                    TextField("Carbohydrates", value: Binding(get: {
+                        nutritionalValues.carbohydrates
+                    }, set: { newValue in
+                        self.nutritionalValues?.carbohydrates = newValue
+                    }), formatter: NumberFormatter())
+                } else {
+                    Button(action: {
+                        self.nutritionalValues = NutritionalValues(calories: 0, protein: 0, fat: 0, carbohydrates: 0)
+                    }) {
+                        Text("Add Nutritional Values")
+                    }
                 }
-                
-                Stepper(value: $cookTime, in: 0...180, step: 5) {
-                    Text("Cook Time: \(cookTime) minutes")
-                }
-                
-                Stepper(value: $servings, in: 1...20) {
-                    Text("Servings: \(servings)")
+            }
+            
+            Section {
+                Button(action: {
+                    // Handle form submission
+                    let newRecipe = Recipe(
+                        id: id,
+                        title: title,
+                        imageURL: imageURL,
+                        ownerId: ownerId,
+                        createdAt: createdAt,
+                        updatedAt: updatedAt,
+                        description: description,
+                        ingredients: ingredients,
+                        instructions: instructions,
+                        cookTime: cookTime,
+                        servings: servings,
+                        likes: likes,
+                        cuisineType: cuisineType,
+                        nutrionalValues: nutritionalValues,
+                        user: user
+                    )
+                    // Save or update the recipe
+                    print("Recipe saved: \(newRecipe)")
+                }) {
+                    Text("Save Recipe")
                 }
             }
         }
-        .navigationTitle(isEditing ? "Edit Recipe" : "New Recipe")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(isEditing ? "Update" : "Add") {
-                    saveRecipe()
-                }
-            }
-        }
-    }
-    
-    // Function to save the recipe (implement your save logic here)
-    private func saveRecipe() {
-        let newRecipe = Recipe(
-            title: title,
-            cuisineType: cuisineType,
-            ingredients: ingredients,
-            instructions: instructions,
-            prepTime: prepTime,
-            cookTime: cookTime,
-            servings: servings,
-            createdAt: Date(),
-            updatedAt: Date()
-        )
-        // Add logic to save the newRecipe (e.g., update your database or state)
-        print("Recipe saved: \(newRecipe)")
+        .navigationTitle("Recipe Editor")
     }
 }
 
-#Preview {
-    NavigationView {
-        RecipeEditorView(recipe: Recipe(
-            title: "Sample Recipe",
-            cuisineType: "Fusion",
-            ingredients: ["Ingredient 1", "Ingredient 2"],
-            instructions: ["Instruction 1", "Instruction 2"],
-            prepTime: 15,
-            cookTime: 30,
-            servings: 4,
-            createdAt: Date(),
-            updatedAt: Date()
-        ))
+struct RecipeEditorView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            RecipeEditorView()
+        }
     }
 }

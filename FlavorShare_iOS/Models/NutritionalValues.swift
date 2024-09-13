@@ -8,10 +8,10 @@
 import Foundation
 
 struct NutritionalValues {
-    let calories: Int
-    let protein: Int
-    let fat: Int
-    let carbohydrates: Int
+    var calories: Int
+    var protein: Int
+    var fat: Int
+    var carbohydrates: Int
     
     init(calories: Int, protein: Int, fat: Int, carbohydrates: Int) {
         self.calories = calories

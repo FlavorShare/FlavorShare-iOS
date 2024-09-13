@@ -7,25 +7,25 @@
 
 import Foundation
 
-struct Recipe {
+struct Recipe: Identifiable {
     let id: String
     
-    let title: String
-    let imageURL: String
-    let ownerId: String
+    var title: String
+    var imageURL: String
+    var ownerId: String
     
-    let createdAt: Date
-    let updatedAt: Date
+    var createdAt: Date
+    var updatedAt: Date
     
-    let description: String
-    let ingredients: [String]
-    let instructions: [String]
-    let cookTime: Int 
-    let servings: Int
+    var description: String
+    var ingredients: [String]
+    var instructions: [String]
+    var cookTime: Int
+    var servings: Int
 
-    let likes: Int
-    let cuisineType: String
-    let nutrionalValues: NutritionalValues?
+    var likes: Int
+    var cuisineType: String
+    var nutrionalValues: NutritionalValues?
     var user: User?
     
     init(

@@ -8,8 +8,8 @@
 import Foundation
 
 struct Instruction {
-    let step: Int
-    let description: String
+    var step: Int
+    var description: String
     
     init(step: Int, description: String) {
         self.step = step

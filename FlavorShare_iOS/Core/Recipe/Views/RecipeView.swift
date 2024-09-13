@@ -11,74 +11,151 @@ struct RecipeView: View {
     let recipe: Recipe
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(recipe.title)
-                .font(.largeTitle)
-                .bold()
-            
-            Text("Cuisine: \(recipe.cuisineType)")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-            
-            Text("Ingredients")
-                .font(.headline)
-            
-            ForEach(recipe.ingredients, id: \.self) { ingredient in
-                Text("- \(ingredient)")
-            }
-            
-            Text("Instructions")
-                .font(.headline)
-            
-            ForEach(recipe.instructions, id: \.self) { instruction in
-                Text(instruction)
-                    .padding(.bottom, 4)
-            }
-            
-            HStack {
-                Text("Prep Time: \(recipe.prepTime) mins")
-                Spacer()
-                Text("Cook Time: \(recipe.cookTime) mins")
-            }
-            .font(.subheadline)
-            
-            Text("Servings: \(recipe.servings)")
-                .font(.subheadline)
-            
-            if let createdAt = recipe.createdAt {
-                Text("Created at: \(formattedDate(createdAt))")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            
-            if let updatedAt = recipe.updatedAt {
-                Text("Updated at: \(formattedDate(updatedAt))")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Recipe Image
+                if (recipe.imageURL != "") {
+                    let url = URL(string: recipe.imageURL)
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 50, height: 50)
+                            .clipped()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                }    
+                
+                // Recipe Title
+                Text(recipe.title)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.horizontal)
+                
+                // Recipe Owner
+                if let user = recipe.user {
+                    HStack {
+                        if let url = URL(string: user.profileImageURL ?? "") {
+                            AsyncImage(url: url) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            } placeholder: {
+                                Circle()
+                                    .fill(Color.gray)
+                                    .frame(width: 50, height: 50)
+                            }
+                        }
+                        VStack(alignment: .leading) {
+                            Text(user.username)
+                                .font(.headline)
+                            Text(user.email)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                
+                // Recipe Description
+                Text(recipe.description)
+                    .font(.body)
+                    .padding(.horizontal)
+                
+                // Recipe Ingredients
+                Text("Ingredients")
+                    .font(.headline)
+                    .padding(.horizontal)
+                ForEach(recipe.ingredients, id: \.self) { ingredient in
+                    Text(ingredient)
+                        .padding(.horizontal)
+                }
+                
+                // Recipe Instructions
+                Text("Instructions")
+                    .font(.headline)
+                    .padding(.horizontal)
+                ForEach(recipe.instructions.indices, id: \.self) { index in
+                    Text("\(index + 1). \(recipe.instructions[index])")
+                        .padding(.horizontal)
+                }
+                
+                // Recipe Details
+                HStack {
+                    Text("Cook Time: \(recipe.cookTime) minutes")
+                    Spacer()
+                    Text("Servings: \(recipe.servings)")
+                }
+                .padding(.horizontal)
+                
+                // Recipe Likes
+                HStack {
+                    Text("Likes: \(recipe.likes)")
+                    Spacer()
+                    Text("Cuisine Type: \(recipe.cuisineType)")
+                }
+                .padding(.horizontal)
+                
+                // Nutritional Values
+                if let nutritionalValues = recipe.nutrionalValues {
+                    Text("Nutritional Values")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    Text("Calories: \(nutritionalValues.calories)")
+                        .padding(.horizontal)
+                    Text("Protein: \(nutritionalValues.protein)g")
+                        .padding(.horizontal)
+                    Text("Fat: \(nutritionalValues.fat)g")
+                        .padding(.horizontal)
+                    Text("Carbohydrates: \(nutritionalValues.carbohydrates)g")
+                        .padding(.horizontal)
+                }
             }
         }
-        .padding()
-    }
-    
-    // Helper function to format the date
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
+        .navigationTitle("Recipe Details")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: RecipeEditorView(recipe: recipe)) {
+                    Text("Edit")
+                }
+            }
+        }
     }
 }
 
-
 #Preview {
     RecipeView(recipe: Recipe(
-        title: "Spaghetti Bolognese",
-        cuisineType: "Italian",
-        ingredients: ["Spaghetti", "Tomato Sauce", "Ground Beef"],
-        instructions: ["Cook spaghetti", "Prepare the sauce", "Combine and serve"],
-        prepTime: 10,
-        cookTime: 20,
-        servings: 4,
+        id: "1",
+        title: "Spaghetti Carbonara",
+        imageURL: "https://www.allrecipes.com/thmb/N3hqMgkSlKbPmcWCkHmxekKO61I=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Easyspaghettiwithtomatosauce_11715_DDMFS_1x2_2425-c67720e4ea884f22a852f0bb84a87a80.jpg",
+        ownerId: "1",
         createdAt: Date(),
-        updatedAt: Date()
-    ))
+        updatedAt: Date(),
+        description: "A classic Italian pasta dish.",
+        ingredients: ["Spaghetti", "Eggs", "Pancetta", "Parmesan Cheese", "Black Pepper"],
+        instructions: ["Boil the spaghetti.", "Cook the pancetta.", "Mix eggs and cheese.", "Combine all ingredients."],
+        cookTime: 30,
+        servings: 4,
+        likes: 100,
+        cuisineType: "Italian",
+        nutrionalValues: NutritionalValues(calories: 500, protein: 20, fat: 25, carbohydrates: 50),
+        user: User(
+            id: "1",
+            email: "user@example.com",
+            username: "user123",
+            firstName: "John",
+            lastName: "Doe",
+            phone: "123-456-7890",
+            dateOfBirth: Date(),
+            profileImageURL: nil,
+            bio: "This is a bio",
+            isFollowed: false,
+            stats: UserStats(followers: 100, following: 50, posts: 10),
+            isCurrentUser: false
+        )
+    )
+    )
 }

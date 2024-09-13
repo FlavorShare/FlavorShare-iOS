@@ -9,8 +9,8 @@ import Foundation
 
 struct User {
     let id: String
-    let email: String
-    let username: String
+    var email: String
+    var username: String
     
     var firstName: String
     var lastName: String
@@ -43,9 +43,9 @@ struct User {
 }
 
 struct UserStats {
-    let followers: Int
-    let following: Int
-    let posts: Int
+    var followers: Int
+    var following: Int
+    var posts: Int
     
     init(followers: Int, following: Int, posts: Int) {
         self.followers = followers

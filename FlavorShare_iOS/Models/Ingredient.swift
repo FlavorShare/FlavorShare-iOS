@@ -8,9 +8,9 @@
 import Foundation
 
 struct Ingredient {
-    let name: String
-    let quantity: String
-    let imageURL: String?
+    var name: String
+    var quantity: String
+    var imageURL: String?
     
     init(name: String, quantity: String, imageURL: String?) {
         self.name = name
