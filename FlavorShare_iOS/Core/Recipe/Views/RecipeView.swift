@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeView: View {
-    let recipe: Recipe
+    @State var recipe: Recipe
     
     var body: some View {
         ScrollView {
@@ -70,7 +70,7 @@ struct RecipeView: View {
                     .font(.headline)
                     .padding(.horizontal)
                 ForEach(recipe.ingredients, id: \.self) { ingredient in
-                    Text(ingredient)
+                    Text(ingredient.name)
                         .padding(.horizontal)
                 }
                 
@@ -79,7 +79,7 @@ struct RecipeView: View {
                     .font(.headline)
                     .padding(.horizontal)
                 ForEach(recipe.instructions.indices, id: \.self) { index in
-                    Text("\(index + 1). \(recipe.instructions[index])")
+                    Text("\(index + 1). \(recipe.instructions[index].description)")
                         .padding(.horizontal)
                 }
                 
@@ -95,12 +95,12 @@ struct RecipeView: View {
                 HStack {
                     Text("Likes: \(recipe.likes)")
                     Spacer()
-                    Text("Cuisine Type: \(recipe.cuisineType)")
+                    Text("Cuisine Type: \(recipe.type)")
                 }
                 .padding(.horizontal)
                 
                 // Nutritional Values
-                if let nutritionalValues = recipe.nutrionalValues {
+                if let nutritionalValues = recipe.nutritionalValues {
                     Text("Nutritional Values")
                         .font(.headline)
                         .padding(.horizontal)
@@ -118,7 +118,7 @@ struct RecipeView: View {
         .navigationTitle("Recipe Details")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: RecipeEditorView(recipe: recipe)) {
+                NavigationLink(destination: RecipeEditorView(isNewRecipe: false, recipe: Binding(get: { Optional(recipe) }, set: { recipe = $0! }))) {
                     Text("Edit")
                 }
             }
@@ -135,13 +135,13 @@ struct RecipeView: View {
         createdAt: Date(),
         updatedAt: Date(),
         description: "A classic Italian pasta dish.",
-        ingredients: ["Spaghetti", "Eggs", "Pancetta", "Parmesan Cheese", "Black Pepper"],
-        instructions: ["Boil the spaghetti.", "Cook the pancetta.", "Mix eggs and cheese.", "Combine all ingredients."],
+        ingredients: [Ingredient(name: "Spaghetti"), Ingredient(name: "Eggs"), Ingredient(name: "Pancetta"), Ingredient(name: "Parmesan Cheese"), Ingredient(name: "Black Pepper")],
+        instructions: [Instruction(step: 1, description: "Boil the spaghetti."), Instruction(step: 2, description: "Cook the pancetta."), Instruction(step: 3, description: "Mix eggs and cheese."), Instruction(step: 4, description: "Combine all ingredients.")],
         cookTime: 30,
         servings: 4,
         likes: 100,
-        cuisineType: "Italian",
-        nutrionalValues: NutritionalValues(calories: 500, protein: 20, fat: 25, carbohydrates: 50),
+        type: "Italian",
+        nutritionalValues: NutritionalValues(calories: 500, protein: 20, fat: 25, carbohydrates: 50),
         user: User(
             id: "1",
             email: "user@example.com",

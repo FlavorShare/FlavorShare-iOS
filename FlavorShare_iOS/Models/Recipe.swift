@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Recipe: Identifiable {
+struct Recipe: Identifiable, Encodable {
     let id: String
     
     var title: String
@@ -18,14 +18,14 @@ struct Recipe: Identifiable {
     var updatedAt: Date
     
     var description: String
-    var ingredients: [String]
-    var instructions: [String]
+    var ingredients: [Ingredient]
+    var instructions: [Instruction]
     var cookTime: Int
     var servings: Int
-
+    
     var likes: Int
-    var cuisineType: String
-    var nutrionalValues: NutritionalValues?
+    var type: String
+    var nutritionalValues: NutritionalValues?
     var user: User?
     
     init(
@@ -39,14 +39,14 @@ struct Recipe: Identifiable {
         updatedAt: Date = Date(),
         
         description: String,
-        ingredients: [String],
-        instructions: [String],
+        ingredients: [Ingredient],
+        instructions: [Instruction],
         cookTime: Int,
         servings: Int,
-
+        
         likes: Int,
-        cuisineType: String,
-        nutrionalValues: NutritionalValues?,
+        type: String,
+        nutritionalValues: NutritionalValues?,
         user: User?
     ) {
         self.id = id
@@ -65,8 +65,8 @@ struct Recipe: Identifiable {
         self.servings = servings
         
         self.likes = likes
-        self.cuisineType = cuisineType
-        self.nutrionalValues = nutrionalValues
+        self.type = type
+        self.nutritionalValues = nutritionalValues
         self.user = user
     }
 }

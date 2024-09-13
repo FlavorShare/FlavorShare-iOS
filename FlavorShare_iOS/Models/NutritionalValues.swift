@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NutritionalValues {
+struct NutritionalValues: Encodable {
     var calories: Int
     var protein: Int
     var fat: Int

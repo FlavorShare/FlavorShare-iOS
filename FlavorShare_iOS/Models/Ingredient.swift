@@ -7,14 +7,20 @@
 
 import Foundation
 
-struct Ingredient {
+struct Ingredient: Hashable, Encodable {
     var name: String
-    var quantity: String
+    var quantity: Int?
     var imageURL: String?
     
-    init(name: String, quantity: String, imageURL: String?) {
+    init(name: String, quantity: Int? = nil, imageURL: String? = nil) {
         self.name = name
-        self.quantity = quantity
+        
+        if quantity == nil {
+            self.quantity = 1
+        } else {
+            self.quantity = quantity
+        }
+        
         self.imageURL = imageURL
     }
 }

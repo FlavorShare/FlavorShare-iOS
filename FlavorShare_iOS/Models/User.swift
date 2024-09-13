@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User {
+struct User: Encodable {
     let id: String
     var email: String
     var username: String
@@ -42,7 +42,7 @@ struct User {
     }
 }
 
-struct UserStats {
+struct UserStats: Encodable {
     var followers: Int
     var following: Int
     var posts: Int
