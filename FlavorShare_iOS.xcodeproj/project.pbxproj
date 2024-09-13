@@ -15,6 +15,7 @@
 		802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047F92C93E11600F07CE4 /* RecipeListView.swift */; };
 		802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047FB2C93E12D00F07CE4 /* RecipeEditorView.swift */; };
 		802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047FD2C93E4CB00F07CE4 /* Recipe.swift */; };
+		802048002C93E95E00F07CE4 /* RecipeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047FF2C93E95E00F07CE4 /* RecipeService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		802047F92C93E11600F07CE4 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
 		802047FB2C93E12D00F07CE4 /* RecipeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditorView.swift; sourceTree = "<group>"; };
 		802047FD2C93E4CB00F07CE4 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		802047FF2C93E95E00F07CE4 /* RecipeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 		802047F12C93E02E00F07CE4 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				802047FF2C93E95E00F07CE4 /* RecipeService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 			files = (
 				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,
 				802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */,
+				802048002C93E95E00F07CE4 /* RecipeService.swift in Sources */,
 				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
 				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,
 				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
