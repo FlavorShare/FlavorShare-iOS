@@ -14,6 +14,7 @@
 		802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047F72C93E0FB00F07CE4 /* RecipeView.swift */; };
 		802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047F92C93E11600F07CE4 /* RecipeListView.swift */; };
 		802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047FB2C93E12D00F07CE4 /* RecipeEditorView.swift */; };
+		802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047FD2C93E4CB00F07CE4 /* Recipe.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		802047F72C93E0FB00F07CE4 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		802047F92C93E11600F07CE4 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
 		802047FB2C93E12D00F07CE4 /* RecipeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditorView.swift; sourceTree = "<group>"; };
+		802047FD2C93E4CB00F07CE4 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		802047EF2C93E01E00F07CE4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				802047FD2C93E4CB00F07CE4 /* Recipe.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,
 				802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */,
 				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
+				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,
 				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
 				802047DE2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift in Sources */,
 			);
