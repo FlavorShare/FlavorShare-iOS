@@ -8,36 +8,65 @@
 import Foundation
 
 struct Recipe {
+    let id: String
+    
     let title: String
-    let cuisineType: String
+    let imageURL: String
+    let ownerId: String
+    
+    let createdAt: Date
+    let updatedAt: Date
+    
+    let description: String
     let ingredients: [String]
     let instructions: [String]
-    let prepTime: Int // in minutes
-    let cookTime: Int // in minutes
+    let cookTime: Int 
     let servings: Int
-    let createdAt: Date?
-    let updatedAt: Date?
+
+    let likes: Int
+    let cuisineType: String
+    let nutrionalValues: NutritionalValues?
+    var user: User?
     
-    // A default initializer in case you want to set default values like in the TypeScript model
     init(
+        id: String,
+        
         title: String,
-        cuisineType: String,
+        imageURL: String,
+        ownerId: String,
+        
+        createdAt: Date = Date(),
+        updatedAt: Date = Date(),
+        
+        description: String,
         ingredients: [String],
         instructions: [String],
-        prepTime: Int,
         cookTime: Int,
         servings: Int,
-        createdAt: Date? = Date(),
-        updatedAt: Date? = Date()
+
+        likes: Int,
+        cuisineType: String,
+        nutrionalValues: NutritionalValues?,
+        user: User?
     ) {
+        self.id = id
+        
         self.title = title
-        self.cuisineType = cuisineType
-        self.ingredients = ingredients
-        self.instructions = instructions
-        self.prepTime = prepTime
-        self.cookTime = cookTime
-        self.servings = servings
+        self.imageURL = imageURL
+        self.ownerId = ownerId
+        
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        
+        self.description = description
+        self.ingredients = ingredients
+        self.instructions = instructions
+        self.cookTime = cookTime
+        self.servings = servings
+        
+        self.likes = likes
+        self.cuisineType = cuisineType
+        self.nutrionalValues = nutrionalValues
+        self.user = user
     }
 }
