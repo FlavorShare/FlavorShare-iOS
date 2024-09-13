@@ -11,6 +11,9 @@
 		802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047DF2C93DF1200F07CE4 /* ContentView.swift */; };
 		802047E22C93DF1400F07CE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 802047E12C93DF1400F07CE4 /* Assets.xcassets */; };
 		802047E52C93DF1400F07CE4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 802047E42C93DF1400F07CE4 /* Preview Assets.xcassets */; };
+		802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047F72C93E0FB00F07CE4 /* RecipeView.swift */; };
+		802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047F92C93E11600F07CE4 /* RecipeListView.swift */; };
+		802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047FB2C93E12D00F07CE4 /* RecipeEditorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		802047DF2C93DF1200F07CE4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		802047E12C93DF1400F07CE4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		802047E42C93DF1400F07CE4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		802047F72C93E0FB00F07CE4 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
+		802047F92C93E11600F07CE4 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
+		802047FB2C93E12D00F07CE4 /* RecipeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,10 +57,16 @@
 		802047DC2C93DF1200F07CE4 /* FlavorShare_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				802047DD2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift */,
-				802047DF2C93DF1200F07CE4 /* ContentView.swift */,
 				802047E12C93DF1400F07CE4 /* Assets.xcassets */,
+				802047EB2C93DFE100F07CE4 /* App */,
+				802047EC2C93E00300F07CE4 /* Components */,
+				802047ED2C93E01000F07CE4 /* Core */,
+				802047EE2C93E01700F07CE4 /* Extensions */,
+				802047EF2C93E01E00F07CE4 /* Models */,
 				802047E32C93DF1400F07CE4 /* Preview Content */,
+				802047F02C93E02200F07CE4 /* PreviewContent */,
+				802047F12C93E02E00F07CE4 /* Services */,
+				802047F22C93E03500F07CE4 /* Utils */,
 			);
 			path = FlavorShare_iOS;
 			sourceTree = "<group>";
@@ -65,6 +77,99 @@
 				802047E42C93DF1400F07CE4 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		802047EB2C93DFE100F07CE4 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				802047DD2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		802047EC2C93E00300F07CE4 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		802047ED2C93E01000F07CE4 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				802047F42C93E0BE00F07CE4 /* Recipe */,
+				802047F32C93E09100F07CE4 /* Root */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		802047EE2C93E01700F07CE4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		802047EF2C93E01E00F07CE4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		802047F02C93E02200F07CE4 /* PreviewContent */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PreviewContent;
+			sourceTree = "<group>";
+		};
+		802047F12C93E02E00F07CE4 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		802047F22C93E03500F07CE4 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		802047F32C93E09100F07CE4 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				802047DF2C93DF1200F07CE4 /* ContentView.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		802047F42C93E0BE00F07CE4 /* Recipe */ = {
+			isa = PBXGroup;
+			children = (
+				802047F62C93E0DC00F07CE4 /* ViewModels */,
+				802047F52C93E0D400F07CE4 /* Views */,
+			);
+			path = Recipe;
+			sourceTree = "<group>";
+		};
+		802047F52C93E0D400F07CE4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				802047FB2C93E12D00F07CE4 /* RecipeEditorView.swift */,
+				802047F72C93E0FB00F07CE4 /* RecipeView.swift */,
+				802047F92C93E11600F07CE4 /* RecipeListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		802047F62C93E0DC00F07CE4 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,7 +242,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,
 				802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */,
+				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
+				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
 				802047DE2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
