@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var authViewModel = AuthViewModel()
+
     var body: some View {
-        RecipeListView()
+        NavigationView {
+            if authViewModel.isAuthenticated {
+                RecipeListView()
+                    .environmentObject(authViewModel)
+            } else {
+                AuthView()
+                    .environmentObject(authViewModel)
+            }
+        }
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }

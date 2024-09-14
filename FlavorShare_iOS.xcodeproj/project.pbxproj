@@ -25,6 +25,13 @@
 		802048122C9498A200F07CE4 /* RecipeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048112C9498A200F07CE4 /* RecipeConversion.swift */; };
 		802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048132C949E9500F07CE4 /* DateFormatter.swift */; };
 		802048162C94A5C000F07CE4 /* RecipeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048152C94A5C000F07CE4 /* RecipeEditorViewModel.swift */; };
+		802048182C9501A500F07CE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 802048172C9501A500F07CE4 /* GoogleService-Info.plist */; };
+		8020481B2C95021C00F07CE4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 8020481A2C95021C00F07CE4 /* FirebaseAuth */; };
+		8020481E2C9502FB00F07CE4 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8020481D2C9502FB00F07CE4 /* AuthViewModel.swift */; };
+		802048202C95031C00F07CE4 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8020481F2C95031C00F07CE4 /* AuthView.swift */; };
+		802048232C95042700F07CE4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048222C95042700F07CE4 /* AuthService.swift */; };
+		802048252C95055600F07CE4 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048242C95055600F07CE4 /* UserService.swift */; };
+		80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF12C95EF26009C40C4 /* UserListConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +54,12 @@
 		802048112C9498A200F07CE4 /* RecipeConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeConversion.swift; sourceTree = "<group>"; };
 		802048132C949E9500F07CE4 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		802048152C94A5C000F07CE4 /* RecipeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditorViewModel.swift; sourceTree = "<group>"; };
+		802048172C9501A500F07CE4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8020481D2C9502FB00F07CE4 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		8020481F2C95031C00F07CE4 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		802048222C95042700F07CE4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		802048242C95055600F07CE4 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		80326AF12C95EF26009C40C4 /* UserListConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8020481B2C95021C00F07CE4 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +93,7 @@
 		802047DC2C93DF1200F07CE4 /* FlavorShare_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				802048172C9501A500F07CE4 /* GoogleService-Info.plist */,
 				802047E12C93DF1400F07CE4 /* Assets.xcassets */,
 				802047EB2C93DFE100F07CE4 /* App */,
 				802047EC2C93E00300F07CE4 /* Components */,
@@ -118,6 +133,7 @@
 		802047ED2C93E01000F07CE4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				8020481C2C9502D900F07CE4 /* Auth */,
 				802047F42C93E0BE00F07CE4 /* Recipe */,
 				802047F32C93E09100F07CE4 /* Root */,
 			);
@@ -135,12 +151,8 @@
 		802047EF2C93E01E00F07CE4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				802047FD2C93E4CB00F07CE4 /* Recipe.swift */,
-				802048032C94810500F07CE4 /* NutritionalValues.swift */,
-				802048052C94811D00F07CE4 /* Instruction.swift */,
-				802048072C94814100F07CE4 /* Ingredient.swift */,
-				802048092C94814900F07CE4 /* User.swift */,
-				8020480F2C94954A00F07CE4 /* RecipeModels.swift */,
+				80326AF02C95EEED009C40C4 /* UserModels */,
+				80326AEF2C95EEE2009C40C4 /* RecipeModels */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -149,6 +161,8 @@
 			isa = PBXGroup;
 			children = (
 				8020480B2C94946000F07CE4 /* RecipeAPIService.swift */,
+				802048222C95042700F07CE4 /* AuthService.swift */,
+				802048242C95055600F07CE4 /* UserService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -197,6 +211,36 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		8020481C2C9502D900F07CE4 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				8020481D2C9502FB00F07CE4 /* AuthViewModel.swift */,
+				8020481F2C95031C00F07CE4 /* AuthView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		80326AEF2C95EEE2009C40C4 /* RecipeModels */ = {
+			isa = PBXGroup;
+			children = (
+				802047FD2C93E4CB00F07CE4 /* Recipe.swift */,
+				802048032C94810500F07CE4 /* NutritionalValues.swift */,
+				802048052C94811D00F07CE4 /* Instruction.swift */,
+				802048072C94814100F07CE4 /* Ingredient.swift */,
+				8020480F2C94954A00F07CE4 /* RecipeModels.swift */,
+			);
+			path = RecipeModels;
+			sourceTree = "<group>";
+		};
+		80326AF02C95EEED009C40C4 /* UserModels */ = {
+			isa = PBXGroup;
+			children = (
+				802048092C94814900F07CE4 /* User.swift */,
+				80326AF12C95EF26009C40C4 /* UserListConfig.swift */,
+			);
+			path = UserModels;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -213,6 +257,9 @@
 			dependencies = (
 			);
 			name = FlavorShare_iOS;
+			packageProductDependencies = (
+				8020481A2C95021C00F07CE4 /* FirebaseAuth */,
+			);
 			productName = FlavorShare_iOS;
 			productReference = 802047DA2C93DF1200F07CE4 /* FlavorShare_iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -241,6 +288,9 @@
 				Base,
 			);
 			mainGroup = 802047D12C93DF1200F07CE4;
+			packageReferences = (
+				802048192C95021C00F07CE4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 802047DB2C93DF1200F07CE4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -256,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				802047E52C93DF1400F07CE4 /* Preview Assets.xcassets in Resources */,
+				802048182C9501A500F07CE4 /* GoogleService-Info.plist in Resources */,
 				802047E22C93DF1400F07CE4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,16 +321,21 @@
 				802048102C94954A00F07CE4 /* RecipeModels.swift in Sources */,
 				802048162C94A5C000F07CE4 /* RecipeEditorViewModel.swift in Sources */,
 				802048062C94811D00F07CE4 /* Instruction.swift in Sources */,
+				80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */,
 				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,
 				802048082C94814100F07CE4 /* Ingredient.swift in Sources */,
 				802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */,
+				802048232C95042700F07CE4 /* AuthService.swift in Sources */,
 				802048042C94810500F07CE4 /* NutritionalValues.swift in Sources */,
+				8020481E2C9502FB00F07CE4 /* AuthViewModel.swift in Sources */,
+				802048202C95031C00F07CE4 /* AuthView.swift in Sources */,
 				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
 				802048122C9498A200F07CE4 /* RecipeConversion.swift in Sources */,
 				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,
 				802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */,
 				8020480C2C94946000F07CE4 /* RecipeAPIService.swift in Sources */,
 				8020480E2C94949000F07CE4 /* RecipeListViewModel.swift in Sources */,
+				802048252C95055600F07CE4 /* UserService.swift in Sources */,
 				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
 				802047DE2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift in Sources */,
 				8020480A2C94814900F07CE4 /* User.swift in Sources */,
@@ -419,6 +475,8 @@
 				DEVELOPMENT_TEAM = 3TTC93JXA8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FlavorShare;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -448,6 +506,8 @@
 				DEVELOPMENT_TEAM = 3TTC93JXA8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FlavorShare;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -488,6 +548,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		802048192C95021C00F07CE4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8020481A2C95021C00F07CE4 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 802048192C95021C00F07CE4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 802047D22C93DF1200F07CE4 /* Project object */;
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Encodable {
+struct User: Codable {
     let id: String
     var email: String
     var username: String
@@ -24,9 +24,9 @@ struct User: Encodable {
     var isFollowed: Bool? = false
     var stats: UserStats?
     
-    var isCurrentUser: Bool
+    var isCurrentUser: Bool?
     
-    init(id: String, email: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date, profileImageURL: String? = nil, bio: String? = nil, isFollowed: Bool? = nil, stats: UserStats? = nil, isCurrentUser: Bool) {
+    init(id: String, email: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date, profileImageURL: String? = nil, bio: String? = nil, isFollowed: Bool? = nil, stats: UserStats? = nil, isCurrentUser: Bool? = nil) {
         self.id = id
         self.email = email
         self.username = username
@@ -42,7 +42,7 @@ struct User: Encodable {
     }
 }
 
-struct UserStats: Encodable {
+struct UserStats: Codable {
     var followers: Int
     var following: Int
     var posts: Int
