@@ -47,6 +47,7 @@ struct RecipeListView: View {
                 Text(errorMessage)
                     .foregroundColor(.red)
             } else {
+                
                 List(filteredRecipes) { recipe in
                     NavigationLink(destination: RecipeView(recipe: recipe)) {
                         HStack {
@@ -71,6 +72,7 @@ struct RecipeListView: View {
                         }
                     }
                 }
+                //                .onDelete(perform: viewModel.deleteRecipe)
                 .listStyle(PlainListStyle()) // Use plain list style to reduce padding
             }
         }
@@ -96,9 +98,8 @@ struct RecipeListView: View {
     }
 }
 
-struct RecipeListView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeListView()
-            .environmentObject(AuthViewModel())
-    }
+#Preview {
+    RecipeListView()
+        .environmentObject(AuthViewModel())
 }
+

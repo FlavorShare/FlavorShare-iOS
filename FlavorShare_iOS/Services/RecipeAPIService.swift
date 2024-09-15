@@ -11,6 +11,11 @@ class RecipeAPIService {
     static let shared = RecipeAPIService()
     private let baseURL = "http://localhost:3000"
     
+    // MARK: - fetchCuisineTypes()
+    /**
+     Get a String array containing the different recipe category
+     - returns: String array with the cuisineType server enum OR the error encoutered
+     */
     func fetchCuisineTypes(completion: @escaping (Result<[String], Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/cuisinetypes") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
@@ -38,6 +43,11 @@ class RecipeAPIService {
         }.resume()
     }
     
+    // MARK: - fetchAllRecipes()
+    /**
+     Get a list of all recipe created
+     - returns: Recipe array of all recipe  OR the error encoutered
+     */
     func fetchAllRecipes(completion: @escaping (Result<[Recipe], Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/recipes") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
@@ -71,6 +81,12 @@ class RecipeAPIService {
         }.resume()
     }
     
+    // MARK: - fetchRecipeById()
+    /**
+     Get a specified recipe based on it's ID
+     - parameter id: The recipe ID for the recipe you want back
+     - returns: The Recipe found  OR the error encoutered
+     */
     func fetchRecipeById(id: String, completion: @escaping (Result<Recipe, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/recipes/\(id)") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
@@ -99,6 +115,12 @@ class RecipeAPIService {
         }.resume()
     }
     
+    // MARK: - createRecipe()
+    /**
+     Post new recipe to the server
+     - parameter recipe: The new recipe to add to the database
+     - returns: The created recipe OR the encoutered error
+     */
     func createRecipe(recipe: Recipe, completion: @escaping (Result<Recipe, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/recipes") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
@@ -141,6 +163,13 @@ class RecipeAPIService {
         }.resume()
     }
     
+    // MARK: - updateRecipe()
+    /**
+     Update the existing recipe with the edited data
+     - parameter id: The ID for the edited recipe
+     - parameter recipe: The new recipe to add to the database
+     - returns: The edited recipe OR the encoutered error
+     */
     func updateRecipe(id: String, recipe: Recipe, completion: @escaping (Result<Recipe, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/recipes/\(id)") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
@@ -183,6 +212,12 @@ class RecipeAPIService {
         }.resume()
     }
     
+    // MARK: - deleteRecipe()
+    /**
+     Delete an existing recipe
+     - parameter id: The ID for the recipe to delete
+     - returns: Nothing OR the encoutered error
+     */
     func deleteRecipe(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/recipes/\(id)") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))

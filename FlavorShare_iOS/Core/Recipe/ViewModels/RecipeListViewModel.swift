@@ -21,7 +21,6 @@ class RecipeListViewModel: ObservableObject {
     // MARK: Get Recipe List
     /**
      This function updates the recipes property for the RecipeListViewModel
-     - Authors: Benjamin Lefebvre
      */
     func fetchRecipes() {
         isLoading = true
@@ -41,7 +40,6 @@ class RecipeListViewModel: ObservableObject {
     // MARK: Get Cuisine Categories
     /**
      This function updates the cuisineTypes property for the RecipeListViewModel
-     - Authors: Benjamin Lefebvre
      */
     func fetchCuisineTypes() {
         RecipeAPIService.shared.fetchCuisineTypes { result in

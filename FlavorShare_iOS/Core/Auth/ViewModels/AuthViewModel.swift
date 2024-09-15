@@ -21,7 +21,6 @@ class AuthViewModel: ObservableObject {
     // MARK: Registration
     /**
      This function is used to handle the user registration
-     - Authors: Benjamin Lefebvre
      */
     @MainActor
     func signUp() async {
@@ -40,7 +39,6 @@ class AuthViewModel: ObservableObject {
     // MARK: Login
     /**
      This function is used to handle the user login
-     - Authors: Benjamin Lefebvre
      */
     @MainActor
     func signIn() async {

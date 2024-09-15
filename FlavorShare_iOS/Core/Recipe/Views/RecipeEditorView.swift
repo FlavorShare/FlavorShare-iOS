@@ -87,6 +87,22 @@ struct RecipeEditorView: View {
             }
             
             Section {
+                if !isNewRecipe {
+                    Button(action: {
+                        viewModel.deleteRecipe { success in
+                            if success {
+                                presentationMode.wrappedValue.dismiss()
+                            } else {
+                                alertMessage = "Failed to delete recipe. Please try again."
+                                showAlert = true
+                            }
+                        }
+                    }) {
+                        Text("Delete Recipe")
+                            .foregroundColor(.red)
+                    }
+                }
+                
                 Button(action: {
                     if isNewRecipe {
                         viewModel.createRecipe { success in
@@ -135,7 +151,6 @@ struct RecipeEditorView: View {
             if let recipe = recipe, !isNewRecipe {
                 viewModel.loadRecipe(recipe)
             }
-            viewModel.fetchCuisineTypes() // Ensure cuisine types are fetched
         }
         .alert(isPresented: $showAlert) {
             Alert(
@@ -147,37 +162,7 @@ struct RecipeEditorView: View {
     }
 }
 
-struct RecipeEditorView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeEditorView(isNewRecipe: true, recipe: .constant(Recipe(
-            id: "1",
-            title: "Spaghetti Carbonara",
-            imageURL: "https://www.allrecipes.com/thmb/N3hqMgkSlKbPmcWCkHmxekKO61I=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Easyspaghettiwithtomatosauce_11715_DDMFS_1x2_2425-c67720e4ea884f22a852f0bb84a87a80.jpg",
-            ownerId: "1",
-            createdAt: Date(),
-            updatedAt: Date(),
-            description: "A classic Italian pasta dish.",
-            ingredients: [Ingredient(name: "Spaghetti"), Ingredient(name: "Eggs"), Ingredient(name: "Pancetta"), Ingredient(name: "Parmesan Cheese"), Ingredient(name: "Black Pepper")],
-            instructions: [Instruction(step: 1, description: "Boil the spaghetti."), Instruction(step: 2, description: "Cook the pancetta."), Instruction(step: 3, description: "Mix eggs and cheese."), Instruction(step: 4, description: "Combine all ingredients.")],
-            cookTime: 30,
-            servings: 4,
-            likes: 100,
-            type: "Italian",
-            nutritionalValues: NutritionalValues(calories: 500, protein: 20, fat: 25, carbohydrates: 50),
-            user: User(
-                id: "1",
-                email: "user@example.com",
-                username: "user123",
-                firstName: "John",
-                lastName: "Doe",
-                phone: "123-456-7890",
-                dateOfBirth: Date(),
-                profileImageURL: nil,
-                bio: "This is a bio",
-                isFollowed: false,
-                stats: UserStats(followers: 100, following: 50, posts: 10),
-                isCurrentUser: false
-            )
-        )))
-    }
+#Preview {
+    RecipeEditorView(isNewRecipe: true, recipe: .constant(MockData.shared.recipe[0]))
 }
+

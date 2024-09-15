@@ -31,6 +31,7 @@
 		802048252C95055600F07CE4 /* UserAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048242C95055600F07CE4 /* UserAPIService.swift */; };
 		80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF12C95EF26009C40C4 /* UserListConfig.swift */; };
 		80326AF42C971AE8009C40C4 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF32C971AE8009C40C4 /* ContentViewModel.swift */; };
+		80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF72C97A0FE009C40C4 /* MockData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,9 @@
 		802048242C95055600F07CE4 /* UserAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPIService.swift; sourceTree = "<group>"; };
 		80326AF12C95EF26009C40C4 /* UserListConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListConfig.swift; sourceTree = "<group>"; };
 		80326AF32C971AE8009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentViewModel.swift; path = ../../../../../../../../Applications/ContentViewModel.swift; sourceTree = "<group>"; };
+		80326AF72C97A0FE009C40C4 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		80326AFD2C97A279009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		80326AFE2C97A282009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentViewModel.swift; path = ../../../../../../../../../Applications/ContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +172,7 @@
 		802047F22C93E03500F07CE4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				80326AF72C97A0FE009C40C4 /* MockData.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -175,7 +180,8 @@
 		802047F32C93E09100F07CE4 /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				802047DF2C93DF1200F07CE4 /* ContentView.swift */,
+				80326AFC2C97A273009C40C4 /* VIewModels */,
+				80326AFB2C97A26D009C40C4 /* Views */,
 				80326AF32C971AE8009C40C4 /* ContentViewModel.swift */,
 			);
 			path = Root;
@@ -212,8 +218,8 @@
 		8020481C2C9502D900F07CE4 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				8020481D2C9502FB00F07CE4 /* AuthViewModel.swift */,
-				8020481F2C95031C00F07CE4 /* AuthView.swift */,
+				80326AFA2C97A255009C40C4 /* ViewModels */,
+				80326AF92C97A24C009C40C4 /* Views */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -236,6 +242,39 @@
 				80326AF12C95EF26009C40C4 /* UserListConfig.swift */,
 			);
 			path = UserModels;
+			sourceTree = "<group>";
+		};
+		80326AF92C97A24C009C40C4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8020481F2C95031C00F07CE4 /* AuthView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		80326AFA2C97A255009C40C4 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8020481D2C9502FB00F07CE4 /* AuthViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		80326AFB2C97A26D009C40C4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				802047DF2C93DF1200F07CE4 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		80326AFC2C97A273009C40C4 /* VIewModels */ = {
+			isa = PBXGroup;
+			children = (
+				80326AFE2C97A282009C40C4 /* ContentViewModel.swift */,
+				80326AFD2C97A279009C40C4 /* ContentViewModel.swift */,
+			);
+			path = VIewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,6 +370,7 @@
 				802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */,
 				8020480C2C94946000F07CE4 /* RecipeAPIService.swift in Sources */,
 				8020480E2C94949000F07CE4 /* RecipeListViewModel.swift in Sources */,
+				80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */,
 				802048252C95055600F07CE4 /* UserAPIService.swift in Sources */,
 				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
 				802047DE2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift in Sources */,

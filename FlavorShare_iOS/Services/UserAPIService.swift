@@ -14,8 +14,13 @@ class UserAPIService {
     
     static let shared = UserAPIService()
     
-    private let baseURL = "http://localhost:3000" 
+    private let baseURL = "http://localhost:3000"
     
+    // MARK: - fetchCurrentUser()
+    /**
+     Get the logged in user data
+     - returns: String containing error if process failed
+     */
     @MainActor
     func fetchCurrentUser() async throws -> String? {
         var errorMessage: String? = nil
@@ -33,9 +38,14 @@ class UserAPIService {
             }
         }
         return errorMessage
-        //        self.currentUser = try await fetchUserById(withUid: uid)
     }
     
+    // MARK: - fetchUserById()
+    /**
+     Get the user for a specified user ID
+     - parameter withUid: Represent the ID for the wanted user
+     - returns: The user found OR the error encountered
+     */
     func fetchUserById(withUid id: String, completion: @escaping (Result<User, Error>) -> Void) {
         
         guard let url = URL(string: "\(baseURL)/users/\(id)") else {
@@ -64,16 +74,38 @@ class UserAPIService {
                 completion(.failure(error))
             }
         }.resume()
-        //        print("getUser Called")
-        //        let url = URL(string: "\(baseURL)/users/\(uid)")!
-        //        let (data, response) = try await URLSession.shared.data(from: url)
-        //        print(response)
-        //        print(data)
-        //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-        //            throw URLError(.badServerResponse)
-        //        }
-        //        return try JSONDecoder().decode(User.self, from: data)
     }
+    
+    // MARK: - uploadUserData()
+    /**
+     This function is used to register the the new user data.
+     - returns: String containing error if process failed
+     */
+    func uploadUserData(user: User) async -> String? {
+        do {
+            let url = URL(string: "\(baseURL)/register")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONEncoder().encode(user)
+            
+            let (_, response) = try await URLSession.shared.data(for: request)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                print(response)
+                throw URLError(.badServerResponse)
+            }
+            self.currentUser = user
+        } catch {
+            print(error)
+            return error.localizedDescription
+        }
+        
+        return nil
+    }
+}
+
+extension UserAPIService {
+    // MARK: Functions Commented Out
     
     //    func fetchAllUsers() async throws -> [User] {
     //        let url = URL(string: "\(baseURL)/users")!
@@ -161,32 +193,4 @@ class UserAPIService {
     //        }
     //        return try JSONDecoder().decode(UserStats.self, from: data)
     //    }
-    
-    // MARK: - uploadUserData()
-    /**
-     This function is used to load the the current user data.
-     - returns: String containing error if process failed
-     - Authors: Benjamin Lefebvre
-     */
-    func uploadUserData(user: User) async -> String? {
-        do {
-            let url = URL(string: "\(baseURL)/register")!
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = try JSONEncoder().encode(user)
-            
-            let (_, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                print(response)
-                throw URLError(.badServerResponse)
-            }
-            self.currentUser = user
-        } catch {
-            print(error)
-            return error.localizedDescription
-        }
-        
-        return nil
-    }
 }

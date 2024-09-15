@@ -36,7 +36,6 @@ class RecipeEditorViewModel: ObservableObject {
     // MARK: Load Existing Recipe
     /**
      Update the recipe properties with an existing recipe values
-     - Authors: Benjamin Lefebvre
      */
     func loadRecipe(_ recipe: Recipe) {
         self.id = recipe.id
@@ -59,7 +58,6 @@ class RecipeEditorViewModel: ObservableObject {
     // MARK: Load Cuisine Types
     /**
      Update the cuisineTypes property with the API enum values
-     - Authors: Benjamin Lefebvre
      */
     func fetchCuisineTypes() {
         RecipeAPIService.shared.fetchCuisineTypes { result in
@@ -77,7 +75,6 @@ class RecipeEditorViewModel: ObservableObject {
     // MARK: Add Recipe
     /**
      Send the newRecipe object to the RecipeAPIService to add it to the database
-     - Authors: Benjamin Lefebvre
      */
     func createRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
@@ -118,7 +115,6 @@ class RecipeEditorViewModel: ObservableObject {
     // MARK: Update Recipe
     /**
      Send the updatedRecipe object to the RecipeAPIService to update the existing object on the database
-     - Authors: Benjamin Lefebvre
      */
     func updateRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
@@ -159,7 +155,6 @@ class RecipeEditorViewModel: ObservableObject {
     // MARK: Delete Recipe
     /**
      Send the deletion request to the RecipeAPIService for tthe currently displayed recipe
-     - Authors: Benjamin Lefebvre
      */
     func deleteRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true

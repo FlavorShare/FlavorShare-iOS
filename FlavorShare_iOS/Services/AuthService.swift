@@ -20,7 +20,7 @@ class AuthService: ObservableObject {
     
     private let baseURL = "http://localhost:3000"
     
-    // MARK: - Initializer
+    // MARK: - Init
     init() {
         self.isAuthenticated = Auth.auth().currentUser != nil
         if isAuthenticated {
@@ -40,7 +40,6 @@ class AuthService: ObservableObject {
      - parameter phone: user phone number provided for registration
      - parameter dateOfBirth: user date of birth provided for registration
      - returns: String containing error if process failed
-     - Authors: Benjamin Lefebvre
      */
     @MainActor
     func signUp(email: String, password: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async -> String? {
@@ -75,7 +74,6 @@ class AuthService: ObservableObject {
      - parameter email: user email provided for registration
      - parameter password: user password provided for registration
      - returns: String containing error if process failed
-     - Authors: Benjamin Lefebvre
      */
     @MainActor
     func signIn(email: String, password: String) async -> String? {
@@ -104,7 +102,6 @@ class AuthService: ObservableObject {
     /**
      This function is used to logout the current user.
      - returns: String containing error if process failed
-     - Authors: Benjamin Lefebvre
      */
     @MainActor
     func signOut() -> String? {
@@ -128,7 +125,6 @@ class AuthService: ObservableObject {
     /**
      This function is used to load  the current user data.
      - returns: String containing error if process failed
-     - Authors: Benjamin Lefebvre
      */
     @MainActor
     func loadUserData() async -> String? {
