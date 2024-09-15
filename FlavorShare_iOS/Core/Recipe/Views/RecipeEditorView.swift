@@ -11,20 +11,20 @@ struct RecipeEditorView: View {
     @StateObject private var viewModel = RecipeEditorViewModel()
     @State private var newIngredient: String = ""
     @State private var newInstruction: String = ""
-
+    
     @Environment(\.presentationMode) var presentationMode
-
+    
     @State private var showAlert = false
     @State private var alertMessage = ""
-
+    
     var isNewRecipe: Bool
     @Binding var recipe: Recipe?
-
+    
     init(isNewRecipe: Bool, recipe: Binding<Recipe?> = .constant(nil)) {
         self.isNewRecipe = isNewRecipe
         self._recipe = recipe
     }
-
+    
     var body: some View {
         Form {
             Section(header: Text("Recipe Details")) {
@@ -49,7 +49,7 @@ struct RecipeEditorView: View {
                     Text("Likes: \(viewModel.likes)")
                 }
             }
-
+            
             Section(header: Text("Ingredients")) {
                 ForEach(viewModel.ingredients, id: \.self) { ingredient in
                     Text("\(ingredient.name) - \(ingredient.quantity ?? 0)")
@@ -66,7 +66,7 @@ struct RecipeEditorView: View {
                     }
                 }
             }
-
+            
             Section(header: Text("Instructions")) {
                 ForEach(viewModel.instructions.indices, id: \.self) { index in
                     let instruction = viewModel.instructions[index]
@@ -85,7 +85,7 @@ struct RecipeEditorView: View {
                     }
                 }
             }
-
+            
             Section {
                 Button(action: {
                     if isNewRecipe {

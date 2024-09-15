@@ -15,108 +15,152 @@ class UserAPIService {
     static let shared = UserAPIService()
     
     private let baseURL = "http://localhost:3000" 
-
+    
     @MainActor
-    func getCurrentUser() async throws {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        self.currentUser = try await getUser(withUid: uid)
-    }
-
-    func getUser(withUid uid: String) async throws -> User {
-        let url = URL(string: "\(baseURL)/users/\(uid)")!
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
+    func fetchCurrentUser() async throws -> String? {
+        var errorMessage: String? = nil
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return "No user authenticated" }
+        
+        fetchUserById(withUid: uid) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let user):
+                    self?.currentUser = user
+                case .failure(let error):
+                    errorMessage = error.localizedDescription
+                }
+            }
         }
-        return try JSONDecoder().decode(User.self, from: data)
+        return errorMessage
+        //        self.currentUser = try await fetchUserById(withUid: uid)
     }
-
-    func getAllUsers() async throws -> [User] {
-        let url = URL(string: "\(baseURL)/users")!
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
+    
+    func fetchUserById(withUid id: String, completion: @escaping (Result<User, Error>) -> Void) {
+        
+        guard let url = URL(string: "\(baseURL)/users/\(id)") else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            return
         }
-        return try JSONDecoder().decode([User].self, from: data)
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+                let user = try decoder.decode(User.self, from: data)
+                completion(.success(user))
+            } catch {
+                print(error)
+                completion(.failure(error))
+            }
+        }.resume()
+        //        print("getUser Called")
+        //        let url = URL(string: "\(baseURL)/users/\(uid)")!
+        //        let (data, response) = try await URLSession.shared.data(from: url)
+        //        print(response)
+        //        print(data)
+        //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+        //            throw URLError(.badServerResponse)
+        //        }
+        //        return try JSONDecoder().decode(User.self, from: data)
     }
-
-    func getUsers(forConfig config: UserListConfig) async throws -> [User] {
-        switch config {
-        case .followers(let uid):
-            return try await getFollowers(uid: uid)
-        case .following(let uid):
-            return try await getFollowing(uid: uid)
-        case .likes(let postId):
-            return try await getPostLikesUsers(postId: postId)
-        case .explore:
-            return try await getAllUsers()
-        }
-    }
-
-    private func getFollowers(uid: String) async throws -> [User] {
-        let url = URL(string: "\(baseURL)/users/\(uid)/followers")!
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-        return try JSONDecoder().decode([User].self, from: data)
-    }
-
-    private func getFollowing(uid: String) async throws -> [User] {
-        let url = URL(string: "\(baseURL)/users/\(uid)/following")!
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-        return try JSONDecoder().decode([User].self, from: data)
-    }
-
-    private func getPostLikesUsers(postId: String) async throws -> [User] {
-        // Implement logic to get users who liked a post
-        return []
-    }
-
-    func follow(uid: String) async throws {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        let url = URL(string: "\(baseURL)/users/\(currentUid)/follow/\(uid)")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        let (_, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-    }
-
-    func unfollow(uid: String) async throws {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        let url = URL(string: "\(baseURL)/users/\(currentUid)/unfollow/\(uid)")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        let (_, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-    }
-
-    func isUserFollowed(uid: String) async throws -> Bool {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return false }
-        let url = URL(string: "\(baseURL)/users/\(currentUid)/is-following/\(uid)")!
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-        let result = try JSONDecoder().decode([String: Bool].self, from: data)
-        return result["isFollowing"] ?? false
-    }
-
-    func getUserStats(uid: String) async throws -> UserStats {
-        let url = URL(string: "\(baseURL)/users/\(uid)/stats")!
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-        return try JSONDecoder().decode(UserStats.self, from: data)
-    }
+    
+    //    func fetchAllUsers() async throws -> [User] {
+    //        let url = URL(string: "\(baseURL)/users")!
+    //        let (data, response) = try await URLSession.shared.data(from: url)
+    //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //        return try JSONDecoder().decode([User].self, from: data)
+    //    }
+    //
+    //    func getUsers(forConfig config: UserListConfig) async throws -> [User] {
+    //        switch config {
+    //        case .followers(let uid):
+    //            return try await getFollowers(uid: uid)
+    //        case .following(let uid):
+    //            return try await getFollowing(uid: uid)
+    //        case .likes(let postId):
+    //            return try await getPostLikesUsers(postId: postId)
+    //        case .explore:
+    //            return try await getAllUsers()
+    //        }
+    //    }
+    //
+    //    private func getFollowers(uid: String) async throws -> [User] {
+    //        let url = URL(string: "\(baseURL)/users/\(uid)/followers")!
+    //        let (data, response) = try await URLSession.shared.data(from: url)
+    //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //        return try JSONDecoder().decode([User].self, from: data)
+    //    }
+    //
+    //    private func getFollowing(uid: String) async throws -> [User] {
+    //        let url = URL(string: "\(baseURL)/users/\(uid)/following")!
+    //        let (data, response) = try await URLSession.shared.data(from: url)
+    //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //        return try JSONDecoder().decode([User].self, from: data)
+    //    }
+    //
+    //    private func getPostLikesUsers(postId: String) async throws -> [User] {
+    //        // Implement logic to get users who liked a post
+    //        return []
+    //    }
+    //
+    //    func follow(uid: String) async throws {
+    //        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+    //        let url = URL(string: "\(baseURL)/users/\(currentUid)/follow/\(uid)")!
+    //        var request = URLRequest(url: url)
+    //        request.httpMethod = "POST"
+    //        let (_, response) = try await URLSession.shared.data(for: request)
+    //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //    }
+    //
+    //    func unfollow(uid: String) async throws {
+    //        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+    //        let url = URL(string: "\(baseURL)/users/\(currentUid)/unfollow/\(uid)")!
+    //        var request = URLRequest(url: url)
+    //        request.httpMethod = "POST"
+    //        let (_, response) = try await URLSession.shared.data(for: request)
+    //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //    }
+    //
+    //    func isUserFollowed(uid: String) async throws -> Bool {
+    //        guard let currentUid = Auth.auth().currentUser?.uid else { return false }
+    //        let url = URL(string: "\(baseURL)/users/\(currentUid)/is-following/\(uid)")!
+    //        let (data, response) = try await URLSession.shared.data(from: url)
+    //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //        let result = try JSONDecoder().decode([String: Bool].self, from: data)
+    //        return result["isFollowing"] ?? false
+    //    }
+    //
+    //    func getUserStats(uid: String) async throws -> UserStats {
+    //        let url = URL(string: "\(baseURL)/users/\(uid)/stats")!
+    //        let (data, response) = try await URLSession.shared.data(from: url)
+    //        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+    //            throw URLError(.badServerResponse)
+    //        }
+    //        return try JSONDecoder().decode(UserStats.self, from: data)
+    //    }
     
     // MARK: - uploadUserData()
     /**
@@ -124,10 +168,8 @@ class UserAPIService {
      - returns: String containing error if process failed
      - Authors: Benjamin Lefebvre
      */
-    func uploadUserData(uid: String, email: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async -> String? {
+    func uploadUserData(user: User) async -> String? {
         do {
-            let user = User(id: uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
-            
             let url = URL(string: "\(baseURL)/register")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"

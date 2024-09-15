@@ -12,7 +12,7 @@ struct RecipeListView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var selectedCategory: String = "All"
     
-    var filteredRecipes: [RecipeAPIService.Recipe] {
+    var filteredRecipes: [Recipe] {
         if selectedCategory == "All" {
             return viewModel.recipes
         } else {
@@ -48,7 +48,7 @@ struct RecipeListView: View {
                     .foregroundColor(.red)
             } else {
                 List(filteredRecipes) { recipe in
-                    NavigationLink(destination: RecipeView(recipe: convertToRecipe(apiRecipe: recipe))) {
+                    NavigationLink(destination: RecipeView(recipe: recipe)) {
                         HStack {
                             if let url = URL(string: recipe.imageURL) {
                                 AsyncImage(url: url) { image in
@@ -78,7 +78,11 @@ struct RecipeListView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-//                    authViewModel.signOut()
+                    let feedback = AuthService.shared.signOut()
+                    if let errorMessage = feedback {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                    }
                 }) {
                     Text("Sign Out")
                 }

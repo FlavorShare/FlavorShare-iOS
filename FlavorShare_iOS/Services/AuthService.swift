@@ -21,8 +21,12 @@ class AuthService: ObservableObject {
     private let baseURL = "http://localhost:3000"
     
     // MARK: - Initializer
-    private init() {
-        Task { await loadUserData() }
+    init() {
+        self.isAuthenticated = Auth.auth().currentUser != nil
+        if isAuthenticated {
+            self.userSession = Auth.auth().currentUser
+            Task { await loadUserData() }
+        }
     }
     
     // MARK: - signUp()
@@ -49,9 +53,13 @@ class AuthService: ObservableObject {
             self.isAuthenticated = true
             
             // 3 - Create new User Object in the Database
-            let feedback = await UserAPIService.shared.uploadUserData(uid: result.user.uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+            let user = User(id: result.user.uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+            
+            let feedback = await UserAPIService.shared.uploadUserData(user: user)
             if feedback != nil {
                 return feedback
+            } else {
+                self.currentUser = user
             }
             
         } catch {
@@ -123,18 +131,23 @@ class AuthService: ObservableObject {
      - Authors: Benjamin Lefebvre
      */
     @MainActor
-    private func loadUserData() async -> String? {
+    func loadUserData() async -> String? {
+        var errorMessage: String? = nil
         // 1 - Safe guard for user to have current session active
         if let uid = self.userSession?.uid {
-            do {
-                // 2 - Update currentUser with user model attach to user session
-                self.currentUser = try await UserAPIService.shared.getUser(withUid: uid)
-                
-            } catch {
-                return error.localizedDescription
+            // 2 - Update currentUser with user model attach to user session
+            UserAPIService.shared.fetchUserById(withUid: uid) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let user):
+                        self?.currentUser = user
+                    case .failure(let error):
+                        errorMessage = error.localizedDescription
+                    }
+                }
             }
         }
         
-        return nil
+        return errorMessage
     }
 }

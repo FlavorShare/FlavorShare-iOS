@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Instruction: Hashable, Encodable {
+struct Instruction: Hashable, Codable {
     var step: Int
     var description: String
     

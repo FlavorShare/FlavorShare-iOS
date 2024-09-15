@@ -9,111 +9,36 @@ import Foundation
 
 class RecipeAPIService {
     static let shared = RecipeAPIService()
-    private let baseURL = "http://localhost:3000" // Adjust the base URL as necessary
-    
-    struct Recipe: Identifiable, Codable {
-        let id: String
-        let title: String
-        let imageURL: String
-        let ownerId: String
-        let createdAt: Date
-        let updatedAt: Date
-        let description: String
-        let ingredients: [Ingredient]
-        let instructions: [Instruction]
-        let cookTime: Int
-        let servings: Int
-        let likes: Int
-        let type: String
-        let nutritionalValues: NutritionalValues?
-        let user: User?
-        
-        enum CodingKeys: String, CodingKey {
-            case id = "_id"
-            case title
-            case imageURL
-            case ownerId
-            case createdAt
-            case updatedAt
-            case description
-            case ingredients
-            case instructions
-            case cookTime
-            case servings
-            case likes
-            case type
-            case nutritionalValues
-            case user
-        }
-    }
-    
-    struct Ingredient: Codable {
-        var name: String
-        var quantity: String
-        var imageURL: String?
-    }
-    
-    struct Instruction: Codable {
-        var step: Int
-        var description: String
-    }
-    
-    struct NutritionalValues: Codable {
-        let calories: Int
-        let protein: Int
-        let fat: Int
-        let carbohydrates: Int
-    }
-    
-    struct User: Codable {
-        let id: String
-        let email: String
-        let username: String
-        let firstName: String
-        let lastName: String
-        let phone: String
-        let dateOfBirth: Date
-        let profileImageURL: String?
-        let bio: String?
-        let isFollowed: Bool?
-        let stats: UserStats?
-        let isCurrentUser: Bool
-    }
-    
-    struct UserStats: Codable {
-        let followers: Int
-        let following: Int
-        let posts: Int
-    }
+    private let baseURL = "http://localhost:3000"
     
     func fetchCuisineTypes(completion: @escaping (Result<[String], Error>) -> Void) {
-            guard let url = URL(string: "\(baseURL)/cuisinetypes") else {
-                completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+        guard let url = URL(string: "\(baseURL)/cuisinetypes") else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
                 return
             }
-
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-
-                guard let data = data else {
-                    completion(.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                    return
-                }
-
-                do {
-                    let decoder = JSONDecoder()
-                    let cuisineTypes = try decoder.decode([String].self, from: data)
-                    completion(.success(cuisineTypes))
-                } catch {
-                    completion(.failure(error))
-                }
-            }.resume()
-        }
+            
+            guard let data = data else {
+                completion(.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let cuisineTypes = try decoder.decode([String].self, from: data)
+                completion(.success(cuisineTypes))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
     
-    func fetchRecipes(completion: @escaping (Result<[Recipe], Error>) -> Void) {
+    func fetchAllRecipes(completion: @escaping (Result<[Recipe], Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/recipes") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
             print("Invalid URL")

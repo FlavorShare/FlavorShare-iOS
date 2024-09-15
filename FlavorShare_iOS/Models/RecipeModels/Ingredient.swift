@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ingredient: Hashable, Encodable {
+struct Ingredient: Hashable, Codable {
     var name: String
     var quantity: Int?
     var imageURL: String?

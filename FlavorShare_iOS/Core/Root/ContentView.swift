@@ -8,23 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var authViewModel = AuthViewModel()
-
+    @StateObject var viewModel = ContentViewModel()
+    
     var body: some View {
         NavigationView {
-            if AuthService.shared.isAuthenticated {
-                RecipeListView()
-                    .environmentObject(authViewModel)
-            } else {
+            if viewModel.userSession == nil {
                 AuthView()
-                    .environmentObject(authViewModel)
+            } else if viewModel.currentUser != nil {
+                RecipeListView()
             }
         }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+#Preview {
+    ContentView()
 }

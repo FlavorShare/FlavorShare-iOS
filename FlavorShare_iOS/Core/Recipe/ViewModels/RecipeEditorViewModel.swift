@@ -24,15 +24,20 @@ class RecipeEditorViewModel: ObservableObject {
     @Published var nutritionalValues: NutritionalValues?
     @Published var user: User?
     @Published var cuisineTypes: [String] = []
-
+    
     @Published var errorMessage: String?
     @Published var isLoading: Bool = false
     @Published var isSuccess: Bool = false
-
+    
     init() {
         fetchCuisineTypes()
     }
     
+    // MARK: Load Existing Recipe
+    /**
+     Update the recipe properties with an existing recipe values
+     - Authors: Benjamin Lefebvre
+     */
     func loadRecipe(_ recipe: Recipe) {
         self.id = recipe.id
         self.title = recipe.title
@@ -50,7 +55,12 @@ class RecipeEditorViewModel: ObservableObject {
         self.nutritionalValues = recipe.nutritionalValues
         self.user = recipe.user
     }
-
+    
+    // MARK: Load Cuisine Types
+    /**
+     Update the cuisineTypes property with the API enum values
+     - Authors: Benjamin Lefebvre
+     */
     func fetchCuisineTypes() {
         RecipeAPIService.shared.fetchCuisineTypes { result in
             DispatchQueue.main.async {
@@ -63,7 +73,12 @@ class RecipeEditorViewModel: ObservableObject {
             }
         }
     }
-
+    
+    // MARK: Add Recipe
+    /**
+     Send the newRecipe object to the RecipeAPIService to add it to the database
+     - Authors: Benjamin Lefebvre
+     */
     func createRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
         let newRecipe = Recipe(
@@ -79,63 +94,32 @@ class RecipeEditorViewModel: ObservableObject {
             cookTime: cookTime,
             servings: servings,
             likes: likes,
-            type: type, // Convert to String
+            type: type,
             nutritionalValues: nutritionalValues,
             user: user
         )
-
-        guard let url = URL(string: "http://localhost:3000/recipes") else {
-            self.errorMessage = "Invalid URL"
-            self.isLoading = false
-            completion(false)
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        do {
-            let jsonData = try JSONEncoder().encode(newRecipe)
-            request.httpBody = jsonData
-            print("Request Payload: \(String(data: jsonData, encoding: .utf8) ?? "Invalid JSON")")
-        } catch {
-            self.errorMessage = "Failed to encode recipe"
-            self.isLoading = false
-            completion(false)
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        
+        RecipeAPIService.shared.createRecipe(recipe: newRecipe) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
-                if let error = error {
+                switch result {
+                case .success(let recipe):
+                    self.loadRecipe(recipe)
+                    self.isSuccess = true
+                    completion(true)
+                case .failure(let error):
                     self.errorMessage = error.localizedDescription
-                    print("Error: \(error.localizedDescription)")
                     completion(false)
-                    return
                 }
-
-                if let httpResponse = response as? HTTPURLResponse {
-                    print("Response Status Code: \(httpResponse.statusCode)")
-                }
-
-                if let data = data {
-                    print("Response Data: \(String(data: data, encoding: .utf8) ?? "No Data")")
-                }
-
-                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201 else {
-                    self.errorMessage = "Failed to create recipe"
-                    completion(false)
-                    return
-                }
-
-                self.isSuccess = true
-                completion(true)
             }
-        }.resume()
+        }
     }
-
+    
+    // MARK: Update Recipe
+    /**
+     Send the updatedRecipe object to the RecipeAPIService to update the existing object on the database
+     - Authors: Benjamin Lefebvre
+     */
     func updateRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
         let updatedRecipe = Recipe(
@@ -151,84 +135,47 @@ class RecipeEditorViewModel: ObservableObject {
             cookTime: cookTime,
             servings: servings,
             likes: likes,
-            type: type, // Convert to String
+            type: type,
             nutritionalValues: nutritionalValues,
             user: user
         )
         
-        func deleteRecipe(completion: @escaping (Bool) -> Void) {
-                isLoading = true
-
-                guard let url = URL(string: "http://localhost:3000/recipes/\(id)") else {
-                    self.errorMessage = "Invalid URL"
-                    self.isLoading = false
-                    completion(false)
-                    return
-                }
-
-                var request = URLRequest(url: url)
-                request.httpMethod = "DELETE"
-
-                URLSession.shared.dataTask(with: request) { data, response, error in
-                    DispatchQueue.main.async {
-                        self.isLoading = false
-                        if let error = error {
-                            self.errorMessage = error.localizedDescription
-                            completion(false)
-                            return
-                        }
-
-                        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                            self.errorMessage = "Failed to delete recipe"
-                            completion(false)
-                            return
-                        }
-
-                        self.isSuccess = true
-                        completion(true)
-                    }
-                }.resume()
-            }
-
-        guard let url = URL(string: "http://localhost:3000/recipes/\(id)") else {
-            self.errorMessage = "Invalid URL"
-            self.isLoading = false
-            completion(false)
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        do {
-            let jsonData = try JSONEncoder().encode(updatedRecipe)
-            request.httpBody = jsonData
-        } catch {
-            self.errorMessage = "Failed to encode recipe"
-            self.isLoading = false
-            completion(false)
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        RecipeAPIService.shared.updateRecipe(id: id, recipe: updatedRecipe) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
-                if let error = error {
+                switch result {
+                case .success(let recipe):
+                    self.loadRecipe(recipe)
+                    self.isSuccess = true
+                    completion(true)
+                case .failure(let error):
                     self.errorMessage = error.localizedDescription
                     completion(false)
-                    return
                 }
-
-                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                    self.errorMessage = "Failed to update recipe"
-                    completion(false)
-                    return
-                }
-
-                self.isSuccess = true
-                completion(true)
             }
-        }.resume()
+        }
+    }
+    
+    // MARK: Delete Recipe
+    /**
+     Send the deletion request to the RecipeAPIService for tthe currently displayed recipe
+     - Authors: Benjamin Lefebvre
+     */
+    func deleteRecipe(completion: @escaping (Bool) -> Void) {
+        isLoading = true
+        
+        RecipeAPIService.shared.deleteRecipe(id: id) { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success:
+                    self.isSuccess = true
+                    completion(true)
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                    completion(false)
+                }
+            }
+        }
     }
 }

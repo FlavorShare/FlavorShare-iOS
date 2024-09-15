@@ -21,8 +21,6 @@
 		8020480A2C94814900F07CE4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048092C94814900F07CE4 /* User.swift */; };
 		8020480C2C94946000F07CE4 /* RecipeAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8020480B2C94946000F07CE4 /* RecipeAPIService.swift */; };
 		8020480E2C94949000F07CE4 /* RecipeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8020480D2C94949000F07CE4 /* RecipeListViewModel.swift */; };
-		802048102C94954A00F07CE4 /* RecipeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8020480F2C94954A00F07CE4 /* RecipeModels.swift */; };
-		802048122C9498A200F07CE4 /* RecipeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048112C9498A200F07CE4 /* RecipeConversion.swift */; };
 		802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048132C949E9500F07CE4 /* DateFormatter.swift */; };
 		802048162C94A5C000F07CE4 /* RecipeEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048152C94A5C000F07CE4 /* RecipeEditorViewModel.swift */; };
 		802048182C9501A500F07CE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 802048172C9501A500F07CE4 /* GoogleService-Info.plist */; };
@@ -32,6 +30,7 @@
 		802048232C95042700F07CE4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048222C95042700F07CE4 /* AuthService.swift */; };
 		802048252C95055600F07CE4 /* UserAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048242C95055600F07CE4 /* UserAPIService.swift */; };
 		80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF12C95EF26009C40C4 /* UserListConfig.swift */; };
+		80326AF42C971AE8009C40C4 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF32C971AE8009C40C4 /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,8 +49,6 @@
 		802048092C94814900F07CE4 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8020480B2C94946000F07CE4 /* RecipeAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAPIService.swift; sourceTree = "<group>"; };
 		8020480D2C94949000F07CE4 /* RecipeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListViewModel.swift; sourceTree = "<group>"; };
-		8020480F2C94954A00F07CE4 /* RecipeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeModels.swift; sourceTree = "<group>"; };
-		802048112C9498A200F07CE4 /* RecipeConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeConversion.swift; sourceTree = "<group>"; };
 		802048132C949E9500F07CE4 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		802048152C94A5C000F07CE4 /* RecipeEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditorViewModel.swift; sourceTree = "<group>"; };
 		802048172C9501A500F07CE4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -60,6 +57,7 @@
 		802048222C95042700F07CE4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		802048242C95055600F07CE4 /* UserAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPIService.swift; sourceTree = "<group>"; };
 		80326AF12C95EF26009C40C4 /* UserListConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListConfig.swift; sourceTree = "<group>"; };
+		80326AF32C971AE8009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentViewModel.swift; path = ../../../../../../../../Applications/ContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,7 +168,6 @@
 		802047F22C93E03500F07CE4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				802048112C9498A200F07CE4 /* RecipeConversion.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -179,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				802047DF2C93DF1200F07CE4 /* ContentView.swift */,
+				80326AF32C971AE8009C40C4 /* ContentViewModel.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -227,7 +225,6 @@
 				802048032C94810500F07CE4 /* NutritionalValues.swift */,
 				802048052C94811D00F07CE4 /* Instruction.swift */,
 				802048072C94814100F07CE4 /* Ingredient.swift */,
-				8020480F2C94954A00F07CE4 /* RecipeModels.swift */,
 			);
 			path = RecipeModels;
 			sourceTree = "<group>";
@@ -318,11 +315,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				802048102C94954A00F07CE4 /* RecipeModels.swift in Sources */,
 				802048162C94A5C000F07CE4 /* RecipeEditorViewModel.swift in Sources */,
 				802048062C94811D00F07CE4 /* Instruction.swift in Sources */,
 				80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */,
 				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,
+				80326AF42C971AE8009C40C4 /* ContentViewModel.swift in Sources */,
 				802048082C94814100F07CE4 /* Ingredient.swift in Sources */,
 				802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */,
 				802048232C95042700F07CE4 /* AuthService.swift in Sources */,
@@ -330,7 +327,6 @@
 				8020481E2C9502FB00F07CE4 /* AuthViewModel.swift in Sources */,
 				802048202C95031C00F07CE4 /* AuthView.swift in Sources */,
 				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
-				802048122C9498A200F07CE4 /* RecipeConversion.swift in Sources */,
 				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,
 				802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */,
 				8020480C2C94946000F07CE4 /* RecipeAPIService.swift in Sources */,
