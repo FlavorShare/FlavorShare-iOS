@@ -9,10 +9,10 @@ import Foundation
 import Combine
 import FirebaseAuth
 
-class UserService {
+class UserAPIService {
     @Published var currentUser: User?
     
-    static let shared = UserService()
+    static let shared = UserAPIService()
     
     private let baseURL = "http://localhost:3000" 
 

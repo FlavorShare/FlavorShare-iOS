@@ -49,7 +49,7 @@ class AuthService: ObservableObject {
             self.isAuthenticated = true
             
             // 3 - Create new User Object in the Database
-            let feedback = await UserService.shared.uploadUserData(uid: result.user.uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+            let feedback = await UserAPIService.shared.uploadUserData(uid: result.user.uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
             if feedback != nil {
                 return feedback
             }
@@ -128,7 +128,7 @@ class AuthService: ObservableObject {
         if let uid = self.userSession?.uid {
             do {
                 // 2 - Update currentUser with user model attach to user session
-                self.currentUser = try await UserService.shared.getUser(withUid: uid)
+                self.currentUser = try await UserAPIService.shared.getUser(withUid: uid)
                 
             } catch {
                 return error.localizedDescription

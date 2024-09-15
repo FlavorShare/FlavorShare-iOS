@@ -5,26 +5,26 @@
 //  Created by Benjamin Lefebvre on 2024-09-13.
 //
 
-import SwiftUI
 import FirebaseAuth
 
+@MainActor
 class AuthViewModel: ObservableObject {
+    @Published var email = ""
+    @Published var password = ""
+    @Published var username = ""
+    @Published var firstName = ""
+    @Published var lastName = ""
+    @Published var phone = ""
+    @Published var dateOfBirth = Date()
     @Published var errorMessage: String?
 
     // MARK: Registration
     /**
      This function is used to handle the user registration
-     - parameter email: user email provided for registration
-     - parameter password: user password provided for registration
-     - parameter username: username provided for registration
-     - parameter firstName: user first name provided for registration
-     - parameter lastName: user first name provided for registration
-     - parameter phone: user phone number provided for registration
-     - parameter dateOfBirth: user date of birth provided for registration
      - Authors: Benjamin Lefebvre
      */
     @MainActor
-    func signUp(email: String, password: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async {
+    func signUp() async {
         // 1 - Reset Error Message
         self.errorMessage = nil
         
@@ -38,18 +38,16 @@ class AuthViewModel: ObservableObject {
         }
         
         // 4 - Login User
-        await self.signIn(email: email, password: password)
+        await self.signIn()
     }
 
     // MARK: Login
     /**
      This function is used to handle the user login
-     - parameter email: user email provided for registration
-     - parameter password: user password provided for registration
      - Authors: Benjamin Lefebvre
      */
     @MainActor
-    func signIn(email: String, password: String) async {
+    func signIn() async {
         // 1 - Reset Error Message
         self.errorMessage = nil
         
