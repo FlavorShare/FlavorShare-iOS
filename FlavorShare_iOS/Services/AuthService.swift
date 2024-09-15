@@ -19,79 +19,122 @@ class AuthService: ObservableObject {
     static let shared = AuthService()
     
     private let baseURL = "http://localhost:3000"
-
+    
     // MARK: - Initializer
     private init() {
         Task { await loadUserData() }
     }
     
-    // MARK: - Methods
+    // MARK: - signUp()
+    /**
+     This function is used to register a new user to the App using Firebase Authentification.
+     - parameter email: user email provided for registration
+     - parameter password: user password provided for registration
+     - parameter username: username provided for registration
+     - parameter firstName: user first name provided for registration
+     - parameter lastName: user first name provided for registration
+     - parameter phone: user phone number provided for registration
+     - parameter dateOfBirth: user date of birth provided for registration
+     - returns: String containing error if process failed
+     - Authors: Benjamin Lefebvre
+     */
     @MainActor
-    func signUp(email: String, password: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async {
+    func signUp(email: String, password: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async -> String? {
         do {
+            // 1 - Create new Firebase Auth
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            
+            // 2 - Assign the user session and the Authenticated property
             self.userSession = result.user
             self.isAuthenticated = true
-            await uploadUserData(uid: result.user.uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+            
+            // 3 - Create new User Object in the Database
+            let feedback = await UserService.shared.uploadUserData(uid: result.user.uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+            if feedback != nil {
+                return feedback
+            }
+            
         } catch {
-            self.errorMessage = error.localizedDescription
+            return error.localizedDescription
         }
+        
+        return nil
     }
     
+    // MARK: - signIn()
+    /**
+     This function is used to login an existing user to the App using Firebase Authentification.
+     - parameter email: user email provided for registration
+     - parameter password: user password provided for registration
+     - returns: String containing error if process failed
+     - Authors: Benjamin Lefebvre
+     */
     @MainActor
-    func signIn(email: String, password: String) async {
+    func signIn(email: String, password: String) async -> String? {
         do {
+            // 1 - Authenticate user with Firebase Auth
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
+            
+            // 2 - Assign the user session and the Authenticated property
             self.userSession = result.user
             self.isAuthenticated = true
-            await loadUserData()
+            
+            // 3 - Update current user details
+            let feedback = await loadUserData()
+            if feedback != nil {
+                return feedback
+            }
+            
         } catch {
-            self.errorMessage = error.localizedDescription
+            return error.localizedDescription
         }
+        
+        return nil
     }
     
+    // MARK: - signOut()
+    /**
+     This function is used to logout the current user.
+     - returns: String containing error if process failed
+     - Authors: Benjamin Lefebvre
+     */
     @MainActor
-    func signOut() {
+    func signOut() -> String? {
         do {
+            // 1 - Logout user
             try Auth.auth().signOut()
+            
+            // 2 - Update properties
             self.userSession = nil
             self.currentUser = nil
             self.isAuthenticated = false
+            
         } catch {
-            self.errorMessage = error.localizedDescription
+            return error.localizedDescription
         }
+        
+        return nil
     }
     
+    // MARK: - loadUserData()
+    /**
+     This function is used to load  the current user data.
+     - returns: String containing error if process failed
+     - Authors: Benjamin Lefebvre
+     */
     @MainActor
-    private func loadUserData() async {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        self.userSession = Auth.auth().currentUser
-        do {
-            self.currentUser = try await UserService.shared.getUser(withUid: uid)
-        } catch {
-            self.errorMessage = error.localizedDescription
-        }
-    }
-    
-    private func uploadUserData(uid: String, email: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async {
-        do {
-            let user = User(id: uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
-            
-            let url = URL(string: "\(baseURL)/register")!
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = try JSONEncoder().encode(user)
-            
-            let (_, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                print(response)
-                throw URLError(.badServerResponse)
+    private func loadUserData() async -> String? {
+        // 1 - Safe guard for user to have current session active
+        if let uid = self.userSession?.uid {
+            do {
+                // 2 - Update currentUser with user model attach to user session
+                self.currentUser = try await UserService.shared.getUser(withUid: uid)
+                
+            } catch {
+                return error.localizedDescription
             }
-            self.currentUser = user
-        } catch {
-            print(error)
-            self.errorMessage = error.localizedDescription
         }
+        
+        return nil
     }
 }

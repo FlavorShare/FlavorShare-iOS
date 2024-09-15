@@ -9,52 +9,57 @@ import SwiftUI
 import FirebaseAuth
 
 class AuthViewModel: ObservableObject {
-    @Published var isAuthenticated = false
     @Published var errorMessage: String?
 
-    init() {
-        // Check if the user is already authenticated
-        self.isAuthenticated = Auth.auth().currentUser != nil
-    }
-
-    func signUp(email: String, password: String) async {
-        await AuthService.shared.signUp(email: email, password: password, username: "Test", firstName: "John", lastName: "Doe", phone: "8192085173", dateOfBirth: Date())
+    // MARK: Registration
+    /**
+     This function is used to handle the user registration
+     - parameter email: user email provided for registration
+     - parameter password: user password provided for registration
+     - parameter username: username provided for registration
+     - parameter firstName: user first name provided for registration
+     - parameter lastName: user first name provided for registration
+     - parameter phone: user phone number provided for registration
+     - parameter dateOfBirth: user date of birth provided for registration
+     - Authors: Benjamin Lefebvre
+     */
+    @MainActor
+    func signUp(email: String, password: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async {
+        // 1 - Reset Error Message
+        self.errorMessage = nil
         
-//        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-//            if let error = error {
-//                DispatchQueue.main.async {
-//                    self.errorMessage = error.localizedDescription
-//                }
-//                return
-//            }
-            self.signIn(email: email, password: password) // Automatically sign in after registration
-//        }
-    }
-
-    func signIn(email: String, password: String) {
-        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.errorMessage = error.localizedDescription
-                }
-                return
-            }
-            DispatchQueue.main.async {
-                self.isAuthenticated = true
-            }
+        // 2 - Register
+        let error = await AuthService.shared.signUp(email: email, password: password, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+        
+        // 3 - Error Handling
+        if (error != nil) {
+            self.errorMessage = error
+            return
         }
+        
+        // 4 - Login User
+        await self.signIn(email: email, password: password)
     }
 
-    func signOut() {
-        do {
-            try Auth.auth().signOut()
-            DispatchQueue.main.async {
-                self.isAuthenticated = false
-            }
-        } catch let signOutError as NSError {
-            DispatchQueue.main.async {
-                self.errorMessage = signOutError.localizedDescription
-            }
+    // MARK: Login
+    /**
+     This function is used to handle the user login
+     - parameter email: user email provided for registration
+     - parameter password: user password provided for registration
+     - Authors: Benjamin Lefebvre
+     */
+    @MainActor
+    func signIn(email: String, password: String) async {
+        // 1 - Reset Error Message
+        self.errorMessage = nil
+        
+        // 2 - Login User
+        let error = await AuthService.shared.signIn(email: email, password: password)
+        
+        // 2 - Error Handling
+        if (error != nil) {
+            self.errorMessage = error
+            return
         }
     }
 }

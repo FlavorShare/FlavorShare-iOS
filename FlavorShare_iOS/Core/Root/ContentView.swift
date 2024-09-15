@@ -12,7 +12,7 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            if authViewModel.isAuthenticated {
+            if AuthService.shared.isAuthenticated {
                 RecipeListView()
                     .environmentObject(authViewModel)
             } else {

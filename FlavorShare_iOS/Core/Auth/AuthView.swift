@@ -12,18 +12,23 @@ struct AuthView: View {
     @EnvironmentObject var viewModel: AuthViewModel
     @State private var email = ""
     @State private var password = ""
+    @State private var username = ""
+    @State private var firstName = ""
+    @State private var lastName = ""
+    @State private var phone = ""
+    @State private var dateOfBirth = Date()
     @State private var isLoginMode = true
     
     var body: some View {
-        NavigationView {
-            VStack {
-                Picker(selection: $isLoginMode, label: Text("Picker here")) {
-                    Text("Login").tag(true)
-                    Text("Sign Up").tag(false)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                
+        VStack {
+            Picker(selection: $isLoginMode, label: Text("Picker here")) {
+                Text("Login").tag(true)
+                Text("Sign Up").tag(false)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+            
+            Group {
                 TextField("Email", text: $email)
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
@@ -36,35 +41,64 @@ struct AuthView: View {
                     .background(Color(.secondarySystemBackground))
                     .cornerRadius(5)
                 
-                Button(action: {
-                    if isLoginMode {
-                        viewModel.signIn(email: email, password: password)
-                    } else {
-                        Task {
-                            await viewModel.signUp(email: email, password: password)
-                            
-                        }
-                    }
-                }) {
-                    Text(isLoginMode ? "Login" : "Sign Up")
-                        .foregroundColor(.white)
+                if !isLoginMode {
+                    TextField("Username", text: $username)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(5)
+                    
+                    TextField("First Name", text: $firstName)
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(5)
+                    
+                    TextField("Last Name", text: $lastName)
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(5)
+                    
+                    TextField("Phone", text: $phone)
+                        .keyboardType(.phonePad)
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(5)
+                    
+                    DatePicker("Date of Birth", selection: $dateOfBirth, displayedComponents: .date)
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
                         .cornerRadius(5)
                 }
-                .padding()
-                
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
+            }
+            
+            Button(action: {
+                if isLoginMode {
+                    Task {
+                        await viewModel.signIn(email: email, password: password)
+                    }
+                } else {
+                    Task {
+                        await viewModel.signUp(email: email, password: password, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+                    }
                 }
-                
-                Spacer()
+            }) {
+                Text(isLoginMode ? "Login" : "Sign Up")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(5)
             }
             .padding()
-            .navigationTitle(isLoginMode ? "Login" : "Sign Up")
+            
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+            }
+            
+            Spacer()
         }
+        .padding()
+        .navigationTitle(isLoginMode ? "Login" : "Sign Up")
     }
 }
 

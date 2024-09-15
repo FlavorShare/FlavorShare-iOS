@@ -78,7 +78,7 @@ struct RecipeListView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    authViewModel.signOut()
+//                    authViewModel.signOut()
                 }) {
                     Text("Sign Out")
                 }

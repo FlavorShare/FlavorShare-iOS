@@ -117,4 +117,34 @@ class UserService {
         }
         return try JSONDecoder().decode(UserStats.self, from: data)
     }
+    
+    // MARK: - uploadUserData()
+    /**
+     This function is used to load the the current user data.
+     - returns: String containing error if process failed
+     - Authors: Benjamin Lefebvre
+     */
+    func uploadUserData(uid: String, email: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date) async -> String? {
+        do {
+            let user = User(id: uid, email: email, username: username, firstName: firstName, lastName: lastName, phone: phone, dateOfBirth: dateOfBirth)
+            
+            let url = URL(string: "\(baseURL)/register")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONEncoder().encode(user)
+            
+            let (_, response) = try await URLSession.shared.data(for: request)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                print(response)
+                throw URLError(.badServerResponse)
+            }
+            self.currentUser = user
+        } catch {
+            print(error)
+            return error.localizedDescription
+        }
+        
+        return nil
+    }
 }
