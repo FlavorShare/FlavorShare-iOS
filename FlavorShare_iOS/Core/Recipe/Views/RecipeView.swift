@@ -14,19 +14,10 @@ struct RecipeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 // Recipe Image
-                if (recipe.imageURL != "") {
-                    let url = URL(string: recipe.imageURL)
-                    AsyncImage(url: url) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 50, height: 50)
-                            .clipped()
-                    } placeholder: {
-                        ProgressView()
-                    }
-                }
-                
+                RemoteImageView(fileName: recipe.imageURL)
+                    .frame(width: 50, height: 50)
+                    .clipped()
+
                 // Recipe Title
                 Text(recipe.title)
                     .font(.largeTitle)
