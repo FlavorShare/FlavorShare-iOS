@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class RecipeEditorViewModel: ObservableObject {
     @Published var id: String = ""
@@ -29,11 +30,14 @@ class RecipeEditorViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var isSuccess: Bool = false
     
+    @Published var selectedImage: UIImage?
+    @Published var isImagePickerPresented: Bool = false
+    
     init() {
         fetchCuisineTypes()
     }
     
-    // MARK: Load Existing Recipe
+    // MARK: loadRecipe()
     /**
      Update the recipe properties with an existing recipe values
      */
@@ -55,7 +59,7 @@ class RecipeEditorViewModel: ObservableObject {
         self.user = recipe.user
     }
     
-    // MARK: Load Cuisine Types
+    // MARK: fetchCuisineTypes()
     /**
      Update the cuisineTypes property with the API enum values
      */
@@ -72,102 +76,174 @@ class RecipeEditorViewModel: ObservableObject {
         }
     }
     
-    // MARK: Add Recipe
+    // MARK: createRecipe()
     /**
      Send the newRecipe object to the RecipeAPIService to add it to the database
      */
     func createRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
-        let newRecipe = Recipe(
-            id: UUID().uuidString,
-            title: title,
-            imageURL: imageURL,
-            ownerId: ownerId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            description: description,
-            ingredients: ingredients,
-            instructions: instructions,
-            cookTime: cookTime,
-            servings: servings,
-            likes: likes,
-            type: type,
-            nutritionalValues: nutritionalValues,
-            user: user
-        )
         
-        RecipeAPIService.shared.createRecipe(recipe: newRecipe) { result in
+        // 1 - Confirm UIImage Picked
+        guard let selectedImage = selectedImage else {
+            self.errorMessage = "Please select an image."
+            self.isLoading = false
+            completion(false)
+            return
+        }
+        
+        // 2 - Convert Image
+        guard let heifData = ImageConverter.shared.convertUIImageToHEIF(image: selectedImage) else {
+            self.errorMessage = "Failed to convert image to HEIF."
+            self.isLoading = false
+            completion(false)
+            return
+        }
+        
+        let fileName = UUID().uuidString + ".heif"
+        
+        // 3 - Upload Image
+        ImageStorageService.shared.uploadImage(data: heifData, fileName: fileName) { result in
             DispatchQueue.main.async {
-                self.isLoading = false
                 switch result {
-                case .success(let recipe):
-                    self.loadRecipe(recipe)
-                    self.isSuccess = true
-                    completion(true)
+                case .success(_):
+                    // 4 - Save Recipe
+                    let newRecipe = Recipe(
+                        id: UUID().uuidString,
+                        title: self.title,
+                        imageURL: fileName,
+                        ownerId: self.ownerId,
+                        createdAt: self.createdAt,
+                        updatedAt: self.updatedAt,
+                        description: self.description,
+                        ingredients: self.ingredients,
+                        instructions: self.instructions,
+                        cookTime: self.cookTime,
+                        servings: self.servings,
+                        likes: self.likes,
+                        type: self.type,
+                        nutritionalValues: self.nutritionalValues,
+                        user: self.user
+                    )
+                    
+                    RecipeAPIService.shared.createRecipe(recipe: newRecipe) { result in
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            switch result {
+                            case .success(let recipe):
+                                self.loadRecipe(recipe)
+                                self.isSuccess = true
+                                completion(true)
+                            case .failure(let error):
+                                self.errorMessage = error.localizedDescription
+                                completion(false)
+                            }
+                        }
+                    }
+                    
                 case .failure(let error):
+                    // 4- Cancel Save Recipe
                     self.errorMessage = error.localizedDescription
+                    self.isLoading = false
                     completion(false)
                 }
             }
         }
     }
     
-    // MARK: Update Recipe
+    // MARK: updateRecipe()
     /**
      Send the updatedRecipe object to the RecipeAPIService to update the existing object on the database
      */
     func updateRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
-        let updatedRecipe = Recipe(
-            id: id,
-            title: title,
-            imageURL: imageURL,
-            ownerId: ownerId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            description: description,
-            ingredients: ingredients,
-            instructions: instructions,
-            cookTime: cookTime,
-            servings: servings,
-            likes: likes,
-            type: type,
-            nutritionalValues: nutritionalValues,
-            user: user
-        )
         
-        RecipeAPIService.shared.updateRecipe(id: id, recipe: updatedRecipe) { result in
+        guard let selectedImage = selectedImage else {
+            self.errorMessage = "Please select an image."
+            self.isLoading = false
+            completion(false)
+            return
+        }
+        
+        guard let heifData = ImageConverter.shared.convertUIImageToHEIF(image: selectedImage) else {
+            self.errorMessage = "Failed to convert image to HEIF."
+            self.isLoading = false
+            completion(false)
+            return
+        }
+                
+        ImageStorageService.shared.uploadImage(data: heifData, fileName: self.imageURL) { result in
             DispatchQueue.main.async {
-                self.isLoading = false
                 switch result {
-                case .success(let recipe):
-                    self.loadRecipe(recipe)
-                    self.isSuccess = true
-                    completion(true)
+                case .success(_):
+                    let updatedRecipe = Recipe(
+                        id: self.id,
+                        title: self.title,
+                        imageURL: self.imageURL,
+                        ownerId: self.ownerId,
+                        createdAt: self.createdAt,
+                        updatedAt: self.updatedAt,
+                        description: self.description,
+                        ingredients: self.ingredients,
+                        instructions: self.instructions,
+                        cookTime: self.cookTime,
+                        servings: self.servings,
+                        likes: self.likes,
+                        type: self.type,
+                        nutritionalValues: self.nutritionalValues,
+                        user: self.user
+                    )
+                    
+                    RecipeAPIService.shared.updateRecipe(id: self.id, recipe: updatedRecipe) { result in
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            switch result {
+                            case .success(let recipe):
+                                self.loadRecipe(recipe)
+                                self.isSuccess = true
+                                completion(true)
+                            case .failure(let error):
+                                self.errorMessage = error.localizedDescription
+                                completion(false)
+                            }
+                        }
+                    }
+                    
                 case .failure(let error):
                     self.errorMessage = error.localizedDescription
+                    self.isLoading = false
                     completion(false)
                 }
             }
         }
     }
     
-    // MARK: Delete Recipe
+    // MARK: deleteRecipe()
     /**
      Send the deletion request to the RecipeAPIService for tthe currently displayed recipe
      */
     func deleteRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
         
-        RecipeAPIService.shared.deleteRecipe(id: id) { result in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                switch result {
-                case .success:
-                    self.isSuccess = true
-                    completion(true)
-                case .failure(let error):
+        ImageStorageService.shared.deleteImage(fileName: imageURL) { result in
+            switch result {
+            case .success:
+                RecipeAPIService.shared.deleteRecipe(id: self.id) { result in
+                    DispatchQueue.main.async {
+                        self.isLoading = false
+                        switch result {
+                        case .success:
+                            self.isSuccess = true
+                            completion(true)
+                        case .failure(let error):
+                            self.errorMessage = error.localizedDescription
+                            completion(false)
+                        }
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
                     self.errorMessage = error.localizedDescription
+                    self.isLoading = false
                     completion(false)
                 }
             }

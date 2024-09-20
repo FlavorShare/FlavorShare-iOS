@@ -1,0 +1,16 @@
+//
+//  Config.xcconfig
+//  FlavorShare_iOS
+//
+//  Created by Benjamin Lefebvre on 2024-09-19.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+DO_ACCESS_KEY=DO002BQVTNH9JHCXJQZW
+DO_SECRET_KEY=eNR5u8y6CzpoShUVpsfbqws6U8EZgfIAi76W6er44vI
+DO_BUCKETNAME=flavorshare
+DO_REGION=nyc3
+DO_ENDPOINT=https:/$()/nyc3.digitaloceanspaces.com
+DO_TOKEN=dop_v1_5a9ec8c7a1fa8831d6dbaa2638c4a9e8aef674012a93bf0b309bec59992bf87f

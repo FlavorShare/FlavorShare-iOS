@@ -29,7 +29,6 @@ struct RecipeEditorView: View {
         Form {
             Section(header: Text("Recipe Details")) {
                 TextField("Title", text: $viewModel.title)
-                TextField("Image URL", text: $viewModel.imageURL)
                 TextField("Owner ID", text: $viewModel.ownerId)
                 DatePicker("Created At", selection: $viewModel.createdAt, displayedComponents: .date)
                 DatePicker("Updated At", selection: $viewModel.updatedAt, displayedComponents: .date)
@@ -47,6 +46,19 @@ struct RecipeEditorView: View {
                 }
                 Stepper(value: $viewModel.likes, in: 0...10000) {
                     Text("Likes: \(viewModel.likes)")
+                }
+                
+                if let selectedImage = viewModel.selectedImage {
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 200)
+                }
+                
+                Button(action: {
+                    viewModel.isImagePickerPresented = true
+                }) {
+                    Text("Select Image")
                 }
             }
             
@@ -159,10 +171,12 @@ struct RecipeEditorView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .sheet(isPresented: $viewModel.isImagePickerPresented) {
+            ImagePicker(image: $viewModel.selectedImage)
+        }
     }
 }
 
 #Preview {
     RecipeEditorView(isNewRecipe: true, recipe: .constant(MockData.shared.recipe[0]))
 }
-

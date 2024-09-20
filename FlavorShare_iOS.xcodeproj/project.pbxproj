@@ -32,6 +32,18 @@
 		80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF12C95EF26009C40C4 /* UserListConfig.swift */; };
 		80326AF42C971AE8009C40C4 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF32C971AE8009C40C4 /* ContentViewModel.swift */; };
 		80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF72C97A0FE009C40C4 /* MockData.swift */; };
+		80326B032C9B5E3D009C40C4 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B022C9B5E3D009C40C4 /* SDWebImageMapKit */; };
+		80326B062C9B5E50009C40C4 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B052C9B5E50009C40C4 /* SDWebImageWebPCoder */; };
+		80326B082C9B5EBA009C40C4 /* ImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326B072C9B5EBA009C40C4 /* ImageConverter.swift */; };
+		80326B0A2C9B66A9009C40C4 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326B092C9B66A9009C40C4 /* ImagePicker.swift */; };
+		80326B0C2C9B6832009C40C4 /* ImageStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326B0B2C9B6832009C40C4 /* ImageStorageService.swift */; };
+		80326B0E2C9B6A1A009C40C4 /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 80326B0D2C9B6A1A009C40C4 /* .env */; };
+		80326B102C9B6AD5009C40C4 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 80326B0F2C9B6AD5009C40C4 /* .gitignore */; };
+		80326B162C9C7209009C40C4 /* EnvironmentVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */; };
+		80326B222C9C9AB1009C40C4 /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B212C9C9AB1009C40C4 /* AWSCore */; };
+		80326B242C9C9AB1009C40C4 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B232C9C9AB1009C40C4 /* AWSS3 */; };
+		80326B262C9C9D55009C40C4 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B252C9C9D55009C40C4 /* SDWebImage */; };
+		8063530E2C9CC5F30021AAD2 /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +74,15 @@
 		80326AF72C97A0FE009C40C4 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		80326AFD2C97A279009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		80326AFE2C97A282009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentViewModel.swift; path = ../../../../../../../../../Applications/ContentViewModel.swift; sourceTree = "<group>"; };
+		80326B072C9B5EBA009C40C4 /* ImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConverter.swift; sourceTree = "<group>"; };
+		80326B092C9B66A9009C40C4 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		80326B0B2C9B6832009C40C4 /* ImageStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageService.swift; sourceTree = "<group>"; };
+		80326B0D2C9B6A1A009C40C4 /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
+		80326B0F2C9B6AD5009C40C4 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		80326B112C9C5114009C40C4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		80326B142C9C70A6009C40C4 /* FlavorShare-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlavorShare-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
+		80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentVariables.swift; sourceTree = "<group>"; };
+		8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +90,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80326B262C9C9D55009C40C4 /* SDWebImage in Frameworks */,
+				80326B242C9C9AB1009C40C4 /* AWSS3 in Frameworks */,
+				80326B032C9B5E3D009C40C4 /* SDWebImageMapKit in Frameworks */,
+				80326B062C9B5E50009C40C4 /* SDWebImageWebPCoder in Frameworks */,
 				8020481B2C95021C00F07CE4 /* FirebaseAuth in Frameworks */,
+				80326B222C9C9AB1009C40C4 /* AWSCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +107,7 @@
 			children = (
 				802047DC2C93DF1200F07CE4 /* FlavorShare_iOS */,
 				802047DB2C93DF1200F07CE4 /* Products */,
+				80326B1B2C9C9764009C40C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +122,7 @@
 		802047DC2C93DF1200F07CE4 /* FlavorShare_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				80326B142C9C70A6009C40C4 /* FlavorShare-iOS-Info.plist */,
 				802048172C9501A500F07CE4 /* GoogleService-Info.plist */,
 				802047E12C93DF1400F07CE4 /* Assets.xcassets */,
 				802047EB2C93DFE100F07CE4 /* App */,
@@ -105,6 +133,9 @@
 				802047E32C93DF1400F07CE4 /* Preview Content */,
 				802047F12C93E02E00F07CE4 /* Services */,
 				802047F22C93E03500F07CE4 /* Utils */,
+				80326B0D2C9B6A1A009C40C4 /* .env */,
+				80326B0F2C9B6AD5009C40C4 /* .gitignore */,
+				80326B112C9C5114009C40C4 /* Config.xcconfig */,
 			);
 			path = FlavorShare_iOS;
 			sourceTree = "<group>";
@@ -128,6 +159,8 @@
 		802047EC2C93E00300F07CE4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				80326B092C9B66A9009C40C4 /* ImagePicker.swift */,
+				8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -165,6 +198,7 @@
 				8020480B2C94946000F07CE4 /* RecipeAPIService.swift */,
 				802048222C95042700F07CE4 /* AuthService.swift */,
 				802048242C95055600F07CE4 /* UserAPIService.swift */,
+				80326B0B2C9B6832009C40C4 /* ImageStorageService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -173,6 +207,8 @@
 			isa = PBXGroup;
 			children = (
 				80326AF72C97A0FE009C40C4 /* MockData.swift */,
+				80326B072C9B5EBA009C40C4 /* ImageConverter.swift */,
+				80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -277,6 +313,13 @@
 			path = VIewModels;
 			sourceTree = "<group>";
 		};
+		80326B1B2C9C9764009C40C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -295,6 +338,11 @@
 			name = FlavorShare_iOS;
 			packageProductDependencies = (
 				8020481A2C95021C00F07CE4 /* FirebaseAuth */,
+				80326B022C9B5E3D009C40C4 /* SDWebImageMapKit */,
+				80326B052C9B5E50009C40C4 /* SDWebImageWebPCoder */,
+				80326B212C9C9AB1009C40C4 /* AWSCore */,
+				80326B232C9C9AB1009C40C4 /* AWSS3 */,
+				80326B252C9C9D55009C40C4 /* SDWebImage */,
 			);
 			productName = FlavorShare_iOS;
 			productReference = 802047DA2C93DF1200F07CE4 /* FlavorShare_iOS.app */;
@@ -326,6 +374,9 @@
 			mainGroup = 802047D12C93DF1200F07CE4;
 			packageReferences = (
 				802048192C95021C00F07CE4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				80326AFF2C9B5E3D009C40C4 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				80326B042C9B5E50009C40C4 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
+				80326B202C9C9AB1009C40C4 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
 			);
 			productRefGroup = 802047DB2C93DF1200F07CE4 /* Products */;
 			projectDirPath = "";
@@ -341,9 +392,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80326B102C9B6AD5009C40C4 /* .gitignore in Resources */,
 				802047E52C93DF1400F07CE4 /* Preview Assets.xcassets in Resources */,
 				802048182C9501A500F07CE4 /* GoogleService-Info.plist in Resources */,
 				802047E22C93DF1400F07CE4 /* Assets.xcassets in Resources */,
+				80326B0E2C9B6A1A009C40C4 /* .env in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,11 +420,16 @@
 				802048202C95031C00F07CE4 /* AuthView.swift in Sources */,
 				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
 				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,
+				80326B0A2C9B66A9009C40C4 /* ImagePicker.swift in Sources */,
 				802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */,
 				8020480C2C94946000F07CE4 /* RecipeAPIService.swift in Sources */,
 				8020480E2C94949000F07CE4 /* RecipeListViewModel.swift in Sources */,
+				80326B082C9B5EBA009C40C4 /* ImageConverter.swift in Sources */,
+				8063530E2C9CC5F30021AAD2 /* RemoteImageView.swift in Sources */,
 				80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */,
+				80326B162C9C7209009C40C4 /* EnvironmentVariables.swift in Sources */,
 				802048252C95055600F07CE4 /* UserAPIService.swift in Sources */,
+				80326B0C2C9B6832009C40C4 /* ImageStorageService.swift in Sources */,
 				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
 				802047DE2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift in Sources */,
 				8020480A2C94814900F07CE4 /* User.swift in Sources */,
@@ -383,6 +441,7 @@
 /* Begin XCBuildConfiguration section */
 		802047E62C93DF1400F07CE4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 80326B112C9C5114009C40C4 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -446,6 +505,7 @@
 		};
 		802047E72C93DF1400F07CE4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 80326B112C9C5114009C40C4 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -511,6 +571,7 @@
 				DEVELOPMENT_TEAM = 3TTC93JXA8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FlavorShare-iOS-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FlavorShare;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -523,9 +584,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "FS.FlavorShare-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -542,6 +605,7 @@
 				DEVELOPMENT_TEAM = 3TTC93JXA8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FlavorShare-iOS-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FlavorShare;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -554,9 +618,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "FS.FlavorShare-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -572,7 +638,7 @@
 				802047E72C93DF1400F07CE4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		802047E82C93DF1400F07CE4 /* Build configuration list for PBXNativeTarget "FlavorShare_iOS" */ = {
 			isa = XCConfigurationList;
@@ -581,7 +647,7 @@
 				802047EA2C93DF1400F07CE4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 
@@ -594,6 +660,30 @@
 				minimumVersion = 11.2.0;
 			};
 		};
+		80326AFF2C9B5E3D009C40C4 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.19.7;
+			};
+		};
+		80326B042C9B5E50009C40C4 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageWebPCoder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.6;
+			};
+		};
+		80326B202C9C9AB1009C40C4 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/aws-sdk-ios-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.37.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -601,6 +691,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 802048192C95021C00F07CE4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		80326B022C9B5E3D009C40C4 /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80326AFF2C9B5E3D009C40C4 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
+		};
+		80326B052C9B5E50009C40C4 /* SDWebImageWebPCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80326B042C9B5E50009C40C4 /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
+			productName = SDWebImageWebPCoder;
+		};
+		80326B212C9C9AB1009C40C4 /* AWSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80326B202C9C9AB1009C40C4 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCore;
+		};
+		80326B232C9C9AB1009C40C4 /* AWSS3 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80326B202C9C9AB1009C40C4 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSS3;
+		};
+		80326B252C9C9D55009C40C4 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80326AFF2C9B5E3D009C40C4 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

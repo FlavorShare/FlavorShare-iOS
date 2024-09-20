@@ -21,7 +21,7 @@ struct RecipeListView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) { // Adjust spacing to 0
+        VStack(spacing: 0) {
             // Horizontal Scroll Bar for Categories
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
@@ -36,9 +36,9 @@ struct RecipeListView: View {
                             }
                     }
                 }
-                .padding(.horizontal) // Only horizontal padding
+                .padding(.horizontal)
             }
-            .padding(.top, 10) // Add some top padding to the ScrollView
+            .padding(.top, 10)
             
             // Recipe List
             if viewModel.isLoading {
@@ -47,21 +47,13 @@ struct RecipeListView: View {
                 Text(errorMessage)
                     .foregroundColor(.red)
             } else {
-                
                 List(filteredRecipes) { recipe in
                     NavigationLink(destination: RecipeView(recipe: recipe)) {
                         HStack {
-                            if let url = URL(string: recipe.imageURL) {
-                                AsyncImage(url: url) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 50, height: 50)
-                                        .clipped()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                            }
+                            RemoteImageView(fileName: recipe.imageURL)
+                                .frame(width: 50, height: 50)
+                                .clipped()
+                            
                             VStack(alignment: .leading) {
                                 Text(recipe.title)
                                     .font(.headline)
@@ -72,8 +64,7 @@ struct RecipeListView: View {
                         }
                     }
                 }
-                //                .onDelete(perform: viewModel.deleteRecipe)
-                .listStyle(PlainListStyle()) // Use plain list style to reduce padding
+                .listStyle(PlainListStyle())
             }
         }
         .navigationTitle("Recipes")
@@ -102,4 +93,3 @@ struct RecipeListView: View {
     RecipeListView()
         .environmentObject(AuthViewModel())
 }
-

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DO_ACCESS_KEY</key>
+	<string>$(DO_ACCESS_KEY)</string>
+	<key>DO_BUCKETNAME</key>
+	<string>$(DO_BUCKETNAME)</string>
+	<key>DO_ENDPOINT</key>
+	<string>$(DO_ENDPOINT)</string>
+	<key>DO_REGION</key>
+	<string>$(DO_REGION)</string>
+	<key>DO_SECRET_KEY</key>
+	<string>$(DO_SECRET_KEY)</string>
+	<key>DO_TOKEN</key>
+	<string>$(DO_TOKEN)</string>
+</dict>
+</plist>

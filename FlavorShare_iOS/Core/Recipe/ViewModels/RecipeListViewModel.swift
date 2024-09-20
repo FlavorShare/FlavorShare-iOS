@@ -18,7 +18,7 @@ class RecipeListViewModel: ObservableObject {
         fetchCuisineTypes()
     }
     
-    // MARK: Get Recipe List
+    // MARK: fetchRecipes()
     /**
      This function updates the recipes property for the RecipeListViewModel
      */
@@ -37,7 +37,7 @@ class RecipeListViewModel: ObservableObject {
         }
     }
     
-    // MARK: Get Cuisine Categories
+    // MARK: fetchCuisineTypes()
     /**
      This function updates the cuisineTypes property for the RecipeListViewModel
      */
