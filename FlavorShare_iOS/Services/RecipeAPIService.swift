@@ -167,7 +167,7 @@ class RecipeAPIService {
     /**
      Update the existing recipe with the edited data
      - parameter id: The ID for the edited recipe
-     - parameter recipe: The new recipe to add to the database
+     - parameter recipe: The new recipe to update to the database
      - returns: The edited recipe OR the encoutered error
      */
     func updateRecipe(id: String, recipe: Recipe, completion: @escaping (Result<Recipe, Error>) -> Void) {
