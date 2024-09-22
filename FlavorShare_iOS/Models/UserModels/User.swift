@@ -18,6 +18,9 @@ struct User: Identifiable, Codable {
     var phone: String
     var dateOfBirth: Date
     
+    var createdAt: Date?
+    var updatedAt: Date?
+    
     var profileImageURL: String?
     var bio: String?
     
@@ -26,7 +29,20 @@ struct User: Identifiable, Codable {
     
     var isCurrentUser: Bool?
     
-    init(id: String, email: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date, profileImageURL: String? = nil, bio: String? = nil, isFollowed: Bool? = nil, stats: UserStats? = nil, isCurrentUser: Bool? = nil) {
+    init(id: String, 
+         email: String,
+         username: String,
+         firstName: String,
+         lastName: String,
+         phone: String,
+         dateOfBirth: Date,
+         createdAt: Date?,
+         updatedAt: Date?,
+         profileImageURL: String? = nil,
+         bio: String? = nil,
+         isFollowed: Bool? = nil,
+         stats: UserStats? = nil,
+         isCurrentUser: Bool? = nil) {
         self.id = id
         self.email = email
         self.username = username
@@ -34,6 +50,8 @@ struct User: Identifiable, Codable {
         self.lastName = lastName
         self.phone = phone
         self.dateOfBirth = dateOfBirth
+        self.createdAt =
+        self.updatedAt =
         self.profileImageURL = profileImageURL
         self.bio = bio
         self.isFollowed = isFollowed
