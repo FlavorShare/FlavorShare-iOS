@@ -36,8 +36,8 @@ struct User: Identifiable, Codable {
          lastName: String,
          phone: String,
          dateOfBirth: Date,
-         createdAt: Date?,
-         updatedAt: Date?,
+         createdAt: Date? = Date(),
+         updatedAt: Date? = Date(),
          profileImageURL: String? = nil,
          bio: String? = nil,
          isFollowed: Bool? = nil,
@@ -50,8 +50,8 @@ struct User: Identifiable, Codable {
         self.lastName = lastName
         self.phone = phone
         self.dateOfBirth = dateOfBirth
-        self.createdAt =
-        self.updatedAt =
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
         self.profileImageURL = profileImageURL
         self.bio = bio
         self.isFollowed = isFollowed

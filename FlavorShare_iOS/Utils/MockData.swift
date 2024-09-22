@@ -44,6 +44,8 @@ class MockData {
                 lastName: "Doe",
                 phone: "123-456-7890",
                 dateOfBirth: Date(),
+                createdAt: Date(),
+                updatedAt: Date(),
                 profileImageURL: nil,
                 bio: "This is a bio",
                 isFollowed: false,
