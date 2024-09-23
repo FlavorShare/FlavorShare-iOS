@@ -44,6 +44,7 @@
 		80326B242C9C9AB1009C40C4 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B232C9C9AB1009C40C4 /* AWSS3 */; };
 		80326B262C9C9D55009C40C4 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B252C9C9D55009C40C4 /* SDWebImage */; };
 		8063530E2C9CC5F30021AAD2 /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */; };
+		806353112CA1CB990021AAD2 /* AppAPIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806353102CA1CB990021AAD2 /* AppAPIHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +84,7 @@
 		80326B142C9C70A6009C40C4 /* FlavorShare-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlavorShare-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
 		80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentVariables.swift; sourceTree = "<group>"; };
 		8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
+		806353102CA1CB990021AAD2 /* AppAPIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAPIHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +211,7 @@
 				80326AF72C97A0FE009C40C4 /* MockData.swift */,
 				80326B072C9B5EBA009C40C4 /* ImageConverter.swift */,
 				80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */,
+				806353102CA1CB990021AAD2 /* AppAPIHandler.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,
 				80326B0A2C9B66A9009C40C4 /* ImagePicker.swift in Sources */,
 				802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */,
+				806353112CA1CB990021AAD2 /* AppAPIHandler.swift in Sources */,
 				8020480C2C94946000F07CE4 /* RecipeAPIService.swift in Sources */,
 				8020480E2C94949000F07CE4 /* RecipeListViewModel.swift in Sources */,
 				80326B082C9B5EBA009C40C4 /* ImageConverter.swift in Sources */,
