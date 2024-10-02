@@ -8,31 +8,33 @@
 import SwiftUI
 
 struct UserView: View {
-    @State var user: User
-    @State var recipes: [Recipe]
+    @StateObject private var viewModel: UserViewModel
     
-    init(user: User, recipes: [Recipe]) {
-        self.user = user
-        self.recipes = recipes
-        print(recipes)
+    init(user: User) {
+        _viewModel = StateObject(wrappedValue: UserViewModel(user: user))
     }
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 // User Image
-                RemoteImageView(fileName: user.profileImageURL ?? "Image")
+                RemoteImageView(fileName: viewModel.user.profileImageURL ?? "Image")
                     .frame(width: 50, height: 50)
                     .clipped()
                 
                 // User Name
-                Text(user.username)
+                Text(viewModel.user.username)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.horizontal)
                 
+                // User First Name
+                Text(viewModel.user.firstName)
+                    .font(.headline)
+                    .padding(.horizontal)
+                
                 // User Bio
-                Text(user.bio ?? "Bio")
+                Text(viewModel.user.bio ?? "Bio")
                     .font(.body)
                     .padding(.horizontal)
                 
@@ -42,7 +44,7 @@ struct UserView: View {
                     .padding(.horizontal)
                 
                 // Recipe Lists
-                List(recipes) { recipe in
+                List(viewModel.recipes) { recipe in
                     NavigationLink(destination: RecipeView(recipe: recipe)) {
                         HStack {
                             RemoteImageView(fileName: recipe.imageURL)
@@ -74,5 +76,5 @@ struct UserView: View {
 }
 
 #Preview {
-    UserView(user: MockData.shared.user, recipes: MockData.shared.recipe)
+    UserView(user: MockData.shared.user)
 }

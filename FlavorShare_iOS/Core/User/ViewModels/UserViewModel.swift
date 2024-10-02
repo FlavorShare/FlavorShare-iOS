@@ -9,11 +9,11 @@ import Foundation
 
 class UserViewModel: ObservableObject {
     @Published var user: User
-    @Published var recipes: [Recipe]
+    @Published var recipes: [Recipe] = []
     
     init(user: User) {
         self.user = user
-        self.recipes = []
+        self.fetchRecipes()
     }
     
     /**

@@ -13,7 +13,7 @@ class MockData {
     let user = User(
         id: "1",
         email: "test_email@gmail.com",
-        username: "PreviewAccount",
+        username: "BengeeL",
         firstName: "John",
         lastName: "Doe",
         phone: "1233211234",
