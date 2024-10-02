@@ -38,6 +38,16 @@ class RecipeAPIService {
         AppAPIHandler.shared.performRequest(endpoint: "/recipes/\(id)", completion: completion)
     }
     
+    // MARK: fetchRecipes(for user: User)
+    /**
+     Get the recipes for a specific user
+     - parameter user: The user to get the recipes for
+     - returns: Recipe array of all the user's recipes OR the error encoutered
+     */
+    func fetchRecipes(for user: User, completion: @escaping (Result<[Recipe], Error>) -> Void) {
+        AppAPIHandler.shared.performRequest(endpoint: "/recipes/user/\(user.id)", completion: completion)
+    }
+    
     // MARK: - createRecipe()
     /**
      Post new recipe to the server
