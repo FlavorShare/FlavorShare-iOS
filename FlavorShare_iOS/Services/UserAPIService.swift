@@ -11,10 +11,7 @@ import FirebaseAuth
 
 class UserAPIService {
     @Published var currentUser: User?
-    
     static let shared = UserAPIService()
-    
-    private let baseURL = "http://localhost:3000"
     
     // MARK: - fetchCurrentUser()
     /**
@@ -23,21 +20,21 @@ class UserAPIService {
      */
     @MainActor
     func fetchCurrentUser() async throws -> String? {
-        var errorMessage: String? = nil
-        
         guard let uid = Auth.auth().currentUser?.uid else { return "No user authenticated" }
         
-        fetchUserById(withUid: uid) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let user):
-                    self?.currentUser = user
-                case .failure(let error):
-                    errorMessage = error.localizedDescription
+        return try await withCheckedThrowingContinuation { continuation in
+            fetchUserById(withUid: uid) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let user):
+                        self?.currentUser = user
+                        continuation.resume(returning: nil)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
                 }
             }
         }
-        return errorMessage
     }
     
     // MARK: - fetchUserById()
@@ -47,60 +44,34 @@ class UserAPIService {
      - returns: The user found OR the error encountered
      */
     func fetchUserById(withUid id: String, completion: @escaping (Result<User, Error>) -> Void) {
-        
-        guard let url = URL(string: "\(baseURL)/user/\(id)") else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
-                let user = try decoder.decode(User.self, from: data)
-                completion(.success(user))
-            } catch {
-                print(error)
-                completion(.failure(error))
-            }
-        }.resume()
+        AppAPIHandler.shared.performRequest(endpoint: "/user/\(id)", completion: completion)
     }
     
     // MARK: - uploadUserData()
     /**
      This function is used to register the the new user data.
+     - parameter user: The new user to add to the database
      - returns: String containing error if process failed
      */
     func uploadUserData(user: User) async -> String? {
         do {
-            let url = URL(string: "\(baseURL)/user")!
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = try JSONEncoder().encode(user)
-            
-            let (_, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                print(response)
-                throw URLError(.badServerResponse)
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
+            let data = try encoder.encode(user)
+            return try await withCheckedThrowingContinuation { continuation in
+                AppAPIHandler.shared.performRequest(endpoint: "/user", method: "POST", body: data) { (result: Result<User, Error>) in
+                    switch result {
+                    case .success(let user):
+                        self.currentUser = user
+                        continuation.resume(returning: nil)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
-            self.currentUser = user
         } catch {
-            print(error)
             return error.localizedDescription
         }
-        
-        return nil
     }
     
     // MARK: - updateUser()
@@ -111,45 +82,14 @@ class UserAPIService {
      - returns: The edited user OR the encoutered error
      */
     func updateUser(id: String, user: User, completion: @escaping (Result<User, Error>) -> Void) {
-        guard let url = URL(string: "\(baseURL)/user/\(id)") else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
             let data = try encoder.encode(user)
-            request.httpBody = data
+            AppAPIHandler.shared.performRequest(endpoint: "/user/\(id)", method: "PUT", body: data, completion: completion)
         } catch {
             completion(.failure(error))
-            return
         }
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NSError(domain: "No data", code: 0, userInfo: nil)))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
-                let updatedUser = try decoder.decode(User.self, from: data)
-                completion(.success(updatedUser))
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
     }
     
     // MARK: - deleteUser()
@@ -157,24 +97,17 @@ class UserAPIService {
      Delete an existing user
      - parameter id: The ID for the user to delete
      - returns: Nothing OR the encoutered error
+     
      */
     func deleteUser(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let url = URL(string: "\(baseURL)/user/\(id)") else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+        AppAPIHandler.shared.performRequest(endpoint: "/user/\(id)", method: "DELETE") { (result: Result<EmptyResponse, Error>) in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
                 completion(.failure(error))
-                return
             }
-            
-            completion(.success(()))
-        }.resume()
+        }
     }
 }
 

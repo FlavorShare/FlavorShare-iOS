@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>APP_API_Key</key>
+	<string>VwETHNzwJV4HLDUkl6jKxQJPbO5Fj4SxsldQJK95DFJysV0YSK0YEuEjCiW5YYEiVs4iu2lC6NENMwybJ99o6T529LVlCGzLHXdx8DT2SxsPkpkFI3mX3O6mt9NngzT6</string>
+	<key>APP_API_Secret</key>
+	<string>c6jp1dlLFzMLwKLXdimECTBhWoLCrUwUBQsFsWK0sIK7niKPrsM2GkL7rsjSlOVF4kINbbjaA8BGjIpbVuwBFDwNGTi6XNn8SP2xN70HU7pmF21Phl8WVB1QOsNUtglq</string>
 	<key>DO_ACCESS_KEY</key>
 	<string>$(DO_ACCESS_KEY)</string>
 	<key>DO_BUCKETNAME</key>

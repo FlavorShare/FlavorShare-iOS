@@ -9,6 +9,9 @@ import Foundation
 
 public struct EnvironmentVariables {
     enum Keys {
+        static let appAPIKey = "APP_API_Key"
+        static let appAPISecret = "APP_API_Secret"
+        
         static let doAccessKey = "DO_ACCESS_KEY"
         static let doSecretKey = "DO_SECRET_KEY"
         static let doBucketName = "DO_BUCKETNAME"
@@ -16,6 +19,26 @@ public struct EnvironmentVariables {
         static let doEndPoint = "DO_ENDPOINT"
         static let doToken = "DO_TOKEN"
     }
+    
+    // Get the APP_API_Key
+    static let appAPIKey: String = {
+        guard let appAPIKeyProperty = Bundle.main.object(
+            forInfoDictionaryKey: Keys.appAPIKey
+        ) as? String else {
+            fatalError("APP_API_Key not found in Info.plist")
+        }
+        return appAPIKeyProperty
+    }()
+    
+    // Get the APP_API_Secret
+    static let appAPISecret: String = {
+        guard let appAPISecretProperty = Bundle.main.object(
+            forInfoDictionaryKey: Keys.appAPISecret
+        ) as? String else {
+            fatalError("APP_API_Secret not found in Info.plist")
+        }
+        return appAPISecretProperty
+    }()
     
     // Get the DO_ACCESS_KEY
     static let doAccessKey: String = {
