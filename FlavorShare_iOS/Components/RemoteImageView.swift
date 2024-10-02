@@ -35,6 +35,9 @@ struct RemoteImageView: View {
         }
     }
     
+    /**
+     Downloads the image from the server
+     */
     private func loadImage() {
         ImageStorageService.shared.downloadImage(fileName: fileName) { result in
             DispatchQueue.main.async {

@@ -29,8 +29,8 @@
 		802048202C95031C00F07CE4 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8020481F2C95031C00F07CE4 /* AuthView.swift */; };
 		802048232C95042700F07CE4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048222C95042700F07CE4 /* AuthService.swift */; };
 		802048252C95055600F07CE4 /* UserAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048242C95055600F07CE4 /* UserAPIService.swift */; };
+		802B1F742CACDA4C00798F6D /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AFD2C97A279009C40C4 /* ContentViewModel.swift */; };
 		80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF12C95EF26009C40C4 /* UserListConfig.swift */; };
-		80326AF42C971AE8009C40C4 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF32C971AE8009C40C4 /* ContentViewModel.swift */; };
 		80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF72C97A0FE009C40C4 /* MockData.swift */; };
 		80326B032C9B5E3D009C40C4 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B022C9B5E3D009C40C4 /* SDWebImageMapKit */; };
 		80326B062C9B5E50009C40C4 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B052C9B5E50009C40C4 /* SDWebImageWebPCoder */; };
@@ -71,10 +71,8 @@
 		802048222C95042700F07CE4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		802048242C95055600F07CE4 /* UserAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPIService.swift; sourceTree = "<group>"; };
 		80326AF12C95EF26009C40C4 /* UserListConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListConfig.swift; sourceTree = "<group>"; };
-		80326AF32C971AE8009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentViewModel.swift; path = ../../../../../../../../Applications/ContentViewModel.swift; sourceTree = "<group>"; };
 		80326AF72C97A0FE009C40C4 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		80326AFD2C97A279009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
-		80326AFE2C97A282009C40C4 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentViewModel.swift; path = ../../../../../../../../../Applications/ContentViewModel.swift; sourceTree = "<group>"; };
 		80326B072C9B5EBA009C40C4 /* ImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConverter.swift; sourceTree = "<group>"; };
 		80326B092C9B66A9009C40C4 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		80326B0B2C9B6832009C40C4 /* ImageStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageService.swift; sourceTree = "<group>"; };
@@ -221,7 +219,6 @@
 			children = (
 				80326AFC2C97A273009C40C4 /* VIewModels */,
 				80326AFB2C97A26D009C40C4 /* Views */,
-				80326AF32C971AE8009C40C4 /* ContentViewModel.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -310,7 +307,6 @@
 		80326AFC2C97A273009C40C4 /* VIewModels */ = {
 			isa = PBXGroup;
 			children = (
-				80326AFE2C97A282009C40C4 /* ContentViewModel.swift */,
 				80326AFD2C97A279009C40C4 /* ContentViewModel.swift */,
 			);
 			path = VIewModels;
@@ -414,8 +410,8 @@
 				802048062C94811D00F07CE4 /* Instruction.swift in Sources */,
 				80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */,
 				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,
-				80326AF42C971AE8009C40C4 /* ContentViewModel.swift in Sources */,
 				802048082C94814100F07CE4 /* Ingredient.swift in Sources */,
+				802B1F742CACDA4C00798F6D /* ContentViewModel.swift in Sources */,
 				802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */,
 				802048232C95042700F07CE4 /* AuthService.swift in Sources */,
 				802048042C94810500F07CE4 /* NutritionalValues.swift in Sources */,

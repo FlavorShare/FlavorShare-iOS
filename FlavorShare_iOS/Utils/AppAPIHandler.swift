@@ -16,6 +16,14 @@ class AppAPIHandler {
     
     private let baseURL = "http://localhost:3000"
     
+    /**
+        Perform a request to the App API
+        - Parameters:
+            - endpoint: The endpoint to call on the API
+            - method: The HTTP method to use (default is GET)
+            - body: The body of the request
+            - completion: The completion handler to call when the request is complete
+     */
     func performRequest<T: Decodable>(
         endpoint: String,
         method: String = "GET",
@@ -56,6 +64,11 @@ class AppAPIHandler {
         }
     }
     
+    /**
+        Build the request to the App API
+        - Parameters:
+            - url: The URL to call on the API
+     */
     func requestBuilder(url: URL) async throws -> URLRequest {
         guard let user = Auth.auth().currentUser else {
             throw NSError(domain: "No authenticated user", code: 0, userInfo: nil)

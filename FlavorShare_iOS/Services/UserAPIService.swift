@@ -50,6 +50,7 @@ class UserAPIService {
     // MARK: - uploadUserData()
     /**
      This function is used to register the the new user data.
+     - parameter user: The new user to add to the database
      - returns: String containing error if process failed
      */
     func uploadUserData(user: User) async -> String? {
@@ -96,6 +97,7 @@ class UserAPIService {
      Delete an existing user
      - parameter id: The ID for the user to delete
      - returns: Nothing OR the encoutered error
+     
      */
     func deleteUser(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
         AppAPIHandler.shared.performRequest(endpoint: "/user/\(id)", method: "DELETE") { (result: Result<EmptyResponse, Error>) in

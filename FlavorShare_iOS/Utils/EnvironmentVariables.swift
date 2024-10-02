@@ -19,6 +19,7 @@ public struct EnvironmentVariables {
         static let doEndPoint = "DO_ENDPOINT"
         static let doToken = "DO_TOKEN"
     }
+    
     // Get the APP_API_Key
     static let appAPIKey: String = {
         guard let appAPIKeyProperty = Bundle.main.object(
