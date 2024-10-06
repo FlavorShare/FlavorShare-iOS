@@ -13,7 +13,7 @@ class MockData {
     let user = User(
         id: "1",
         email: "test_email@gmail.com",
-        username: "PreviewAccount",
+        username: "BengeeL",
         firstName: "John",
         lastName: "Doe",
         phone: "1233211234",
@@ -47,10 +47,7 @@ class MockData {
                 createdAt: Date(),
                 updatedAt: Date(),
                 profileImageURL: nil,
-                bio: "This is a bio",
-                isFollowed: false,
-                stats: UserStats(followers: 100, following: 50, posts: 10),
-                isCurrentUser: false
+                bio: "This is a bio"
             )
         )
     ]
