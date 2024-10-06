@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		800424242CB349540070BACC /* NavbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800424232CB349540070BACC /* NavbarView.swift */; };
 		802047DE2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047DD2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift */; };
 		802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802047DF2C93DF1200F07CE4 /* ContentView.swift */; };
 		802047E22C93DF1400F07CE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 802047E12C93DF1400F07CE4 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		800424232CB349540070BACC /* NavbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavbarView.swift; sourceTree = "<group>"; };
 		802047DA2C93DF1200F07CE4 /* FlavorShare_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlavorShare_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		802047DD2C93DF1200F07CE4 /* FlavorShare_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlavorShare_iOSApp.swift; sourceTree = "<group>"; };
 		802047DF2C93DF1200F07CE4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -106,6 +108,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		800424222CB349420070BACC /* Navbar */ = {
+			isa = PBXGroup;
+			children = (
+				800424232CB349540070BACC /* NavbarView.swift */,
+			);
+			path = Navbar;
+			sourceTree = "<group>";
+		};
 		802047D12C93DF1200F07CE4 = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +182,7 @@
 		802047ED2C93E01000F07CE4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				800424222CB349420070BACC /* Navbar */,
 				802B1F752CACDD6000798F6D /* User */,
 				8020481C2C9502D900F07CE4 /* Auth */,
 				802047F42C93E0BE00F07CE4 /* Recipe */,
@@ -438,6 +449,7 @@
 			files = (
 				802048162C94A5C000F07CE4 /* RecipeEditorViewModel.swift in Sources */,
 				8030CEE92CACE49F00F5A6BD /* UserViewModel.swift in Sources */,
+				800424242CB349540070BACC /* NavbarView.swift in Sources */,
 				802048062C94811D00F07CE4 /* Instruction.swift in Sources */,
 				80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */,
 				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,

@@ -14,8 +14,8 @@ struct ContentView: View {
         NavigationView {
             if viewModel.userSession == nil {
                 AuthView()
-            } else if viewModel.currentUser != nil {
-                RecipeListView()
+            } else if let user = viewModel.currentUser {
+                NavbarView(user: user)
             }
         }
     }
