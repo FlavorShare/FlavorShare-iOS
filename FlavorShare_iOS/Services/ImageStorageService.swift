@@ -52,6 +52,7 @@ class ImageStorageService {
      */
     func uploadImage(data: Data, fileName: String, completion: @escaping (Result<String, Error>) -> Void) {
         let transferUtility = AWSS3TransferUtility.default()
+        print("Uploading image to DigitalOcean S3 Storage")
         
         transferUtility.uploadData(
             data,

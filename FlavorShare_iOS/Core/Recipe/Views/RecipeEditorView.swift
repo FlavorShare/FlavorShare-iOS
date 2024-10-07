@@ -16,7 +16,8 @@ struct RecipeEditorView: View {
     
     @State private var showAlert = false
     @State private var alertMessage = ""
-    
+    @State private var isImagePickerPresented = false
+
     var isNewRecipe: Bool
     @Binding var recipe: Recipe?
     
@@ -172,7 +173,7 @@ struct RecipeEditorView: View {
             )
         }
         .sheet(isPresented: $viewModel.isImagePickerPresented) {
-            ImagePicker(image: $viewModel.selectedImage)
+            ImagePicker(image: $viewModel.selectedImage, isPresented: $viewModel.isImagePickerPresented)
         }
     }
 }

@@ -15,60 +15,66 @@ struct UserView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                // User Image
-                RemoteImageView(fileName: viewModel.user.profileImageURL ?? "Image")
-                    .frame(width: 50, height: 50)
-                    .clipped()
-                
-                // User Name
-                Text(viewModel.user.username)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.horizontal)
-                
-                // User First Name
-                Text(viewModel.user.firstName)
-                    .font(.headline)
-                    .padding(.horizontal)
-                
-                // User Bio
-                Text(viewModel.user.bio ?? "Bio")
-                    .font(.body)
-                    .padding(.horizontal)
-                
-                // User Recipes
-                Text("Recipes")
-                    .font(.headline)
-                    .padding(.horizontal)
-                
-                // Recipe Lists
-                List(viewModel.recipes) { recipe in
-                    NavigationLink(destination: RecipeView(recipe: recipe)) {
-                        HStack {
-                            RemoteImageView(fileName: recipe.imageURL)
-                                .frame(width: 50, height: 50)
-                                .clipped()
-                            
-                            VStack(alignment: .leading) {
-                                Text(recipe.title)
-                                    .font(.headline)
-                                Text(recipe.description)
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
+        NavigationStack{
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    NavigationLink(destination: UserEditView(user: $viewModel.user)) {
+                        Text("Edit")
+                    }
+                    
+                    // User Image
+                    RemoteImageView(fileName: viewModel.user.profileImageURL ?? "Image")
+                        .frame(width: 50, height: 50)
+                        .clipped()
+                    
+                    // User Name
+                    Text(viewModel.user.username)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding(.horizontal)
+                    
+                    // User First Name
+                    Text(viewModel.user.firstName)
+                        .font(.headline)
+                        .padding(.horizontal)
+                    
+                    // User Bio
+                    Text(viewModel.user.bio ?? "Bio")
+                        .font(.body)
+                        .padding(.horizontal)
+                    
+                    // User Recipes
+                    Text("Recipes")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    
+                    // Recipe Lists
+                    List(viewModel.recipes) { recipe in
+                        NavigationLink(destination: RecipeView(recipe: recipe)) {
+                            HStack {
+                                RemoteImageView(fileName: recipe.imageURL)
+                                    .frame(width: 50, height: 50)
+                                    .clipped()
+                                
+                                VStack(alignment: .leading) {
+                                    Text(recipe.title)
+                                        .font(.headline)
+                                    Text(recipe.description)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
+                        .listStyle(PlainListStyle())
                     }
-                    .listStyle(PlainListStyle())
                 }
             }
-        }
-        .navigationTitle("Profile")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Edit") {
-                    // Edit user profile
+            .navigationTitle("Profile")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: UserEditView(user: $viewModel.user)) {
+                        Text("Edit")
+                    }
                 }
             }
         }
