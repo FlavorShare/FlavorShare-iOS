@@ -9,10 +9,9 @@ import SwiftUI
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
+    @Binding var isPresented: Bool  // Add this binding to control the dismissal
     
-    /**
-        Coordinator class to manage the image picker
-     */
+    // Coordinator to manage the picker
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         let parent: ImagePicker
         
@@ -20,50 +19,36 @@ struct ImagePicker: UIViewControllerRepresentable {
             self.parent = parent
         }
         
-        // MARK: - imagePickerController()
-        /**
-         Called when the user has selected an image
-         - Parameter picker: the image picker
-         - Parameter info: the image info
-         */
+        // When the user selects an image
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.image = uiImage
             }
-            picker.dismiss(animated: true)
+            parent.isPresented = false  // Explicitly dismiss the picker
+        }
+        
+        // If the user cancels
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.isPresented = false  // Explicitly dismiss the picker
         }
     }
     
-    // MARK: - makeCoordinator()
-    /**
-     Creates a coordinator instance to manage the image picker
-     - Returns: a Coordinator instance
-     */
+    // Coordinator instance
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
     }
     
-    // MARK: - makeUIViewController()
-    /**
-     Creates a UIImagePickerController instance
-     - Parameter context: the context
-     - Returns: a UIImagePickerController instance
-     */
+    // Create the picker controller
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
         return picker
     }
     
-    // MARK: - updateUIViewControllers()
-    /**
-     Updates the UIImagePickerController instance
-     - Parameter uiViewController: the UIImagePickerController instance
-     - Parameter context: the context
-     */
+    // Update method (not needed here)
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 }
 
 #Preview {
-    ImagePicker(image: .constant(nil))
+    ImagePicker(image: .constant(nil), isPresented: .constant(true))
 }

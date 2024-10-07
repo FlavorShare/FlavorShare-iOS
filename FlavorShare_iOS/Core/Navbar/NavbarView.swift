@@ -32,7 +32,6 @@ struct NavbarView: View {
                     Image(systemName: "person")
                 }
                 .tag(1)
-            
         }
     }
 }
