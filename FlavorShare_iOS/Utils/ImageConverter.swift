@@ -23,7 +23,7 @@ class ImageConverter {
     
     // MARK: - convertUIImageToWebp()
     /**
-     This function is used to convert UIImage to webP format allowing smaller image size.
+     This function is used to convert UIImage to webP format allowing smaller image size. This function is using SDWebImage library. and the conversion is very slow.
      - parameter image: Image to convert
      - returns: Converted webp image OR nil if unsuccessful.
      */
@@ -33,12 +33,24 @@ class ImageConverter {
     
     // MARK: - convertUIImageToHEIF()
     /**
-     This function is used to convert UIImage to HEIF format allowing smaller image size.
-     - parameter image: Image to convert
-     - returns: Converted HEIF image OR nil if unsuccessful.
+     This function is used to resize and convert UIImage to HEIF format with optional quality adjustment for smaller image size.
+     - parameter image: Image to convert.
+     - parameter targetSize: The target size to resize the image to (default keeps the original size).
+     - parameter quality: The quality of the resulting HEIF image, ranging from 0.0 to 1.0 (default is 0.7 for compression).
+     - returns: Compressed and resized HEIF image data or nil if unsuccessful.
      */
-    func convertUIImageToHEIF(image: UIImage) -> Data? {
-        guard let cgImage = image.cgImage else { return nil }
+    func convertUIImageToHEIF(image: UIImage, targetSize: CGSize? = nil, quality: CGFloat = 0.7) -> Data? {
+        var resizedImage = image
+        
+        // Resize image if targetSize is provided
+        if let targetSize = targetSize {
+            let renderer = UIGraphicsImageRenderer(size: targetSize)
+            resizedImage = renderer.image { _ in
+                image.draw(in: CGRect(origin: .zero, size: targetSize))
+            }
+        }
+        
+        guard let cgImage = resizedImage.cgImage else { return nil }
         
         let data = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(data, UTType.heic.identifier as CFString, 1, nil) else {
@@ -46,7 +58,11 @@ class ImageConverter {
             return nil
         }
         
-        CGImageDestinationAddImage(destination, cgImage, nil)
+        // Set image compression quality (0.0 is max compression, 1.0 is no compression)
+        let options: [NSString: Any] = [kCGImageDestinationLossyCompressionQuality: quality]
+        
+        // Add image to destination with options for compression
+        CGImageDestinationAddImage(destination, cgImage, options as CFDictionary)
         
         if CGImageDestinationFinalize(destination) {
             return data as Data
@@ -55,4 +71,6 @@ class ImageConverter {
             return nil
         }
     }
+
+
 }
