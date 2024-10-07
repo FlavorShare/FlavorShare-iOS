@@ -103,7 +103,11 @@ class UserAPIService {
         AppAPIHandler.shared.performRequest(endpoint: "/user/\(id)", method: "DELETE") { (result: Result<EmptyResponse, Error>) in
             switch result {
             case .success:
+                Task {
+                   await AuthService.shared.deleteAccount()
+                }
                 completion(.success(()))
+                
             case .failure(let error):
                 completion(.failure(error))
             }
