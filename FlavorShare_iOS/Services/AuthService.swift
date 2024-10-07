@@ -121,6 +121,24 @@ class AuthService: ObservableObject {
         return nil
     }
     
+    
+    func deleteAccount() async -> String? {
+        do {
+            // 1 - Delete user from Firebase Auth
+            try await Auth.auth().currentUser?.delete()
+            
+            // 2 - Update properties
+            self.userSession = nil
+            self.currentUser = nil
+            self.isAuthenticated = false
+            
+        } catch {
+            return error.localizedDescription
+        }
+        
+        return nil
+    }
+    
     // MARK: - loadUserData()
     /**
      This function is used to load  the current user data.
