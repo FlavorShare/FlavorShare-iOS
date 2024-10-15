@@ -18,9 +18,9 @@ struct User: Identifiable, Codable {
     var phone: String
     var dateOfBirth: Date
     
-    var recipes: [String]
-    var followers: [String]
-    var following: [String]
+    var recipes: [Recipe]
+    var followers: [User]
+    var following: [User]
     
     var createdAt: Date?
     var updatedAt: Date?
@@ -35,9 +35,9 @@ struct User: Identifiable, Codable {
          lastName: String,
          phone: String,
          dateOfBirth: Date,
-         recipes: [String] = [],
-         followers: [String] = [],
-         following: [String] = [],
+         recipes: [Recipe] = [],
+         followers: [User] = [],
+         following: [User] = [],
          createdAt: Date? = Date(),
          updatedAt: Date? = Date(),
          profileImageURL: String? = nil,
@@ -83,11 +83,44 @@ struct User: Identifiable, Codable {
         self.lastName = try container.decode(String.self, forKey: .lastName)
         self.phone = try container.decode(String.self, forKey: .phone)
         self.dateOfBirth = try container.decode(Date.self, forKey: .dateOfBirth)
-        self.recipes = try container.decode([String].self, forKey: .recipes)
-        self.followers = try container.decode([String].self, forKey: .followers)
-        self.following = try container.decode([String].self, forKey: .following)
+        
+        do {
+            self.recipes = try container.decode([Recipe].self, forKey: .recipes)
+        } catch {
+            print("Failed to decode recipes: \(error)")
+            self.recipes = []
+        }
+        
+        do {
+            self.followers = try container.decode([User].self, forKey: .followers)
+        } catch {
+            print("Failed to decode followers: \(error)")
+            self.followers = []
+        }
+        
+        do {
+            self.following = try container.decode([User].self, forKey: .following)
+        } catch {
+            print("Failed to decode following: \(error)")
+            self.following = []
+        }
         self.profileImageURL = try container.decodeIfPresent(String.self, forKey: .profileImageURL)
         self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
     }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(email, forKey: .email)
+        try container.encode(username, forKey: .username)
+        try container.encode(firstName, forKey: .firstName)
+        try container.encode(lastName, forKey: .lastName)
+        try container.encode(phone, forKey: .phone)
+        try container.encode(dateOfBirth, forKey: .dateOfBirth)
+        try container.encode(recipes, forKey: .recipes)
+        try container.encode(followers, forKey: .followers)
+        try container.encode(following, forKey: .following)
+        try container.encodeIfPresent(profileImageURL, forKey: .profileImageURL)
+        try container.encodeIfPresent(bio, forKey: .bio)
+    }
 }
-

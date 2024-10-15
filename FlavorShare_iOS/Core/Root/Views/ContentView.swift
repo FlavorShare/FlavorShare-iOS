@@ -16,6 +16,12 @@ struct ContentView: View {
                 AuthView()
             } else if let user = viewModel.currentUser {
                 NavbarView(user: user)
+            } else {
+                // Try to retrieve user
+                ProgressView()
+                    .onAppear {
+                        viewModel.checkAuthState()
+                    }
             }
         }
     }

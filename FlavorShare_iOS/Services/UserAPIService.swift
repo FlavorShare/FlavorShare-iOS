@@ -57,7 +57,10 @@ class UserAPIService {
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
+            
             let data = try encoder.encode(user)
+            print("Encoded user data:", String(data: data, encoding: .utf8)!) // Add this line to log the encoded data
+
             return try await withCheckedThrowingContinuation { continuation in
                 AppAPIHandler.shared.performRequest(endpoint: "/user", method: "POST", body: data) { (result: Result<User, Error>) in
                     switch result {

@@ -46,6 +46,7 @@ class AuthService: ObservableObject {
         do {
             // 1 - Create new Firebase Auth
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            print(result)
             
             // 2 - Assign the user session and the Authenticated property
             self.userSession = result.user
@@ -121,7 +122,11 @@ class AuthService: ObservableObject {
         return nil
     }
     
-    
+    // MARK: - deleteAccount()
+    /**
+     This function is used to delete the current user account.
+     - returns: String containing error if process failed
+     */
     func deleteAccount() async -> String? {
         do {
             // 1 - Delete user from Firebase Auth

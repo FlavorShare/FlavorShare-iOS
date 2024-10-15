@@ -12,6 +12,7 @@ class RecipeListViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var cuisineTypes: [String] = ["All"]
+    @Published var searchText: String = ""
     
     init() {
         fetchRecipes()

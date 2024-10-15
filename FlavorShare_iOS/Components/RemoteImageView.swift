@@ -9,11 +9,16 @@ import SwiftUI
 
 struct RemoteImageView: View {
     let fileName: String
+    var width: CGFloat
+    var height: CGFloat
+    
     @State private var image: UIImage? = nil
     @State private var isLoading: Bool = true
     @State private var error: String? = nil
     
     var body: some View {
+ 
+        
         if isLoading {
             ProgressView()
                 .onAppear(perform: loadImage)
@@ -21,16 +26,16 @@ struct RemoteImageView: View {
             Image(uiImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 50, height: 50)
+                .frame(width: width, height: height)
                 .clipped()
         } else {
             Image(systemName: "photo")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 50, height: 50)
+                .frame(width: width, height: height)
                 .clipped()
                 .onTapGesture {
-                    loadImage() // Retry on tap
+                    loadImage() 
                 }
         }
     }
