@@ -51,6 +51,9 @@
 		80326B262C9C9D55009C40C4 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B252C9C9D55009C40C4 /* SDWebImage */; };
 		8063530E2C9CC5F30021AAD2 /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */; };
 		806353112CA1CB990021AAD2 /* AppAPIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806353102CA1CB990021AAD2 /* AppAPIHandler.swift */; };
+		80D7DB432CBC1EA10080B59F /* RecipeSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7DB422CBC1EA10080B59F /* RecipeSquare.swift */; };
+		80D7DB462CBC2AE00080B59F /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7DB452CBC2AE00080B59F /* BlurView.swift */; };
+		80D7DB4B2CBC3F390080B59F /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7DB4A2CBC3F390080B59F /* SearchBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +97,9 @@
 		80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentVariables.swift; sourceTree = "<group>"; };
 		8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
 		806353102CA1CB990021AAD2 /* AppAPIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAPIHandler.swift; sourceTree = "<group>"; };
+		80D7DB422CBC1EA10080B59F /* RecipeSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSquare.swift; sourceTree = "<group>"; };
+		80D7DB452CBC2AE00080B59F /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		80D7DB4A2CBC3F390080B59F /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,8 +185,11 @@
 		802047EC2C93E00300F07CE4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				80D7DB422CBC1EA10080B59F /* RecipeSquare.swift */,
 				80326B092C9B66A9009C40C4 /* ImagePicker.swift */,
 				8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */,
+				80D7DB452CBC2AE00080B59F /* BlurView.swift */,
+				80D7DB4A2CBC3F390080B59F /* SearchBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -464,12 +473,15 @@
 				80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */,
 				802047F82C93E0FB00F07CE4 /* RecipeView.swift in Sources */,
 				802048082C94814100F07CE4 /* Ingredient.swift in Sources */,
+				80D7DB4B2CBC3F390080B59F /* SearchBar.swift in Sources */,
 				802B1F742CACDA4C00798F6D /* ContentViewModel.swift in Sources */,
 				802047E02C93DF1200F07CE4 /* ContentView.swift in Sources */,
 				802048232C95042700F07CE4 /* AuthService.swift in Sources */,
 				802048042C94810500F07CE4 /* NutritionalValues.swift in Sources */,
 				8020481E2C9502FB00F07CE4 /* AuthViewModel.swift in Sources */,
 				802048202C95031C00F07CE4 /* AuthView.swift in Sources */,
+				80D7DB462CBC2AE00080B59F /* BlurView.swift in Sources */,
+				80D7DB432CBC1EA10080B59F /* RecipeSquare.swift in Sources */,
 				800424282CB34E610070BACC /* UserEditView.swift in Sources */,
 				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
 				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,

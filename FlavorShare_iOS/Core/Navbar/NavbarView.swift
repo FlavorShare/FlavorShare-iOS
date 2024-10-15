@@ -1,9 +1,58 @@
 //
-//  NavbarView.swift
-//  FlavorShare_iOS
 //
-//  Created by Benjamin Lefebvre on 2024-10-06.
+////  NavbarView.swift
+////  FlavorShare_iOS
+////
+////  Created by Benjamin Lefebvre on 2024-10-06.
+////
 //
+//import SwiftUI
+//
+//struct NavbarView: View {
+//    // MARK: VARIABLES
+//    let user: User
+//    @State private var selectedIndex = 0
+//
+//    init(user: User) {
+//        self.user = user
+//        // Set the background color of the tab bar
+//        let tabBarAppearance = UITabBarAppearance()
+//        tabBarAppearance.configureWithOpaqueBackground()
+//        tabBarAppearance.backgroundColor = UIColor.white
+//        UITabBar.appearance().standardAppearance = tabBarAppearance
+//        if #available(iOS 15.0, *) {
+//            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+//        }
+//    }
+//
+//    // MARK: BODY
+//    var body: some View {
+//        TabView(selection: $selectedIndex) {
+//            RecipeListView()
+//                .onAppear() {
+//                    selectedIndex = 0
+//                }
+//                .tabItem {
+//                    Image(systemName: "house")
+//                }
+//                .tag(0)
+//
+//            UserView(user: user)
+//                .onAppear() {
+//                    selectedIndex = 1
+//                }
+//                .tabItem {
+//                    Image(systemName: "person")
+//                }
+//                .tag(1)
+//        }
+//        .accentColor(.black)
+//    }
+//}
+//
+//#Preview {
+//    NavbarView(user: MockData.shared.user)
+//}
 
 import SwiftUI
 
@@ -12,27 +61,64 @@ struct NavbarView: View {
     let user: User
     @State private var selectedIndex = 0
     
+    init(user: User) {
+        self.user = user
+    }
+    
     // MARK: BODY
     var body: some View {
-        TabView (selection: $selectedIndex) {
-            RecipeListView()
-                .onAppear() {
+        ZStack(alignment: .bottom) {
+            ZStack {
+                RecipeListView()
+                    .opacity(selectedIndex == 0 ? 1 : 0)
+                    .animation(.easeInOut, value: selectedIndex)
+                UserView(user: user)
+                    .opacity(selectedIndex == 1 ? 1 : 0)
+                    .animation(.easeInOut, value: selectedIndex)
+            }
+            .animation(.easeInOut, value: selectedIndex)
+            
+            CustomTabBar(selectedIndex: $selectedIndex)
+        }
+    }
+}
+
+struct CustomTabBar: View {
+    @Binding var selectedIndex: Int
+    
+    var body: some View {
+        HStack {
+            // ******* RecipeListView *******
+            Button(action: {
+                withAnimation {
                     selectedIndex = 0
                 }
-                .tabItem {
-                    Image(systemName: "house")
+            }) {
+                VStack {
+                    Image(systemName: "house.fill")
                 }
-                .tag(0)
+            }
+            .foregroundColor(selectedIndex == 0 ? .mint : .gray)
+            .padding(.horizontal)
             
-            UserView(user: user)
-                .onAppear() {
+            // ********** UserView **********
+            Button(action: {
+                withAnimation {
                     selectedIndex = 1
                 }
-                .tabItem {
-                    Image(systemName: "person")
+            }) {
+                VStack {
+                    Image(systemName: "person.fill")
                 }
-                .tag(1)
+            }
+            .foregroundColor(selectedIndex == 1 ? .mint : .gray)
+            .padding(.horizontal)
+            
         }
+        .padding()
+        .background(Color.white.opacity(0.8))
+        .cornerRadius(25)
+        .shadow(radius: 5)
     }
 }
 
