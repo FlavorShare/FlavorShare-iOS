@@ -9,21 +9,29 @@ import Foundation
 import SwiftUI
 
 class RecipeEditorViewModel: ObservableObject {
-    @Published var id: String = ""
+    // MARK: Properties
+    // ***** RECIPE PROPERTIES *****
+    @Published var id: String = UUID().uuidString
+    
     @Published var title: String = ""
     @Published var imageURL: String = ""
     @Published var ownerId: String = ""
+    
     @Published var createdAt: Date = Date()
     @Published var updatedAt: Date = Date()
+    
     @Published var description: String = ""
     @Published var ingredients: [Ingredient] = []
     @Published var instructions: [Instruction] = []
     @Published var cookTime: Int = 0
     @Published var servings: Int = 0
+    
     @Published var likes: Int = 0
-    @Published var type: String = "Italian" // Default value
+    @Published var type: String = "Italian"
     @Published var nutritionalValues: NutritionalValues?
     @Published var user: User?
+    
+    // ****** OTHER PROPERTIES ******
     @Published var cuisineTypes: [String] = []
     
     @Published var errorMessage: String?
@@ -35,6 +43,15 @@ class RecipeEditorViewModel: ObservableObject {
     
     init() {
         fetchCuisineTypes()
+        assignOwnerID()
+    }
+    
+    // MARK: assignOwnerID()
+    /**
+     Assign the current user's ID to the ownerId property
+     */
+    func assignOwnerID() {
+        self.ownerId = AuthService.shared.currentUser?.id ?? ""
     }
     
     // MARK: loadRecipe()
@@ -43,16 +60,20 @@ class RecipeEditorViewModel: ObservableObject {
      */
     func loadRecipe(_ recipe: Recipe) {
         self.id = recipe.id
+        
         self.title = recipe.title
         self.imageURL = recipe.imageURL
         self.ownerId = recipe.ownerId
+        
         self.createdAt = recipe.createdAt
         self.updatedAt = recipe.updatedAt
+        
         self.description = recipe.description
         self.ingredients = recipe.ingredients
         self.instructions = recipe.instructions
         self.cookTime = recipe.cookTime
         self.servings = recipe.servings
+        
         self.likes = recipe.likes
         self.type = recipe.type
         self.nutritionalValues = recipe.nutritionalValues

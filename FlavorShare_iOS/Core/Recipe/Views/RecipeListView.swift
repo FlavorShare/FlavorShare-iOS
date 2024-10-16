@@ -23,14 +23,14 @@ struct RecipeListView: View {
                     .resizable()
                     .blur(radius: 20)
                     .frame(width: screenWidth, height: screenHeight)
-
+                
                 BlurView(style: .regular)
                     .frame(width: screenWidth, height: screenHeight)
-
+                
                 Rectangle()
                     .fill(Color.black.opacity(0.4))
                     .frame(width: screenWidth, height: screenHeight)
-
+                
                 ScrollView {
                     VStack(spacing: 0) {
                         
@@ -118,18 +118,20 @@ struct RecipeListView: View {
                             }
                             .padding(.horizontal)
                             .padding(.top, screenHeight / 15)
-                            .padding(.bottom, screenHeight / 5)
                         }
                         
                         Spacer()
                     } // VStack
+                    .padding(.bottom, 150)
                     
                 } // ScrollView
-                .ignoresSafeArea(.container, edges: .top)
+                .refreshable {
+                    viewModel.fetchRecipes()
+                }
+                
             } // ZStack
             .ignoresSafeArea(.container, edges: .top)
         } // NavigationStack
-        .ignoresSafeArea(.container, edges: .top)
     } // Body
 }
 

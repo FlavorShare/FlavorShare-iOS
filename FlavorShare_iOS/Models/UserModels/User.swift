@@ -28,33 +28,44 @@ struct User: Identifiable, Codable {
     var profileImageURL: String?
     var bio: String?
     
-    init(id: String,
+    init(
+        id: String,
          email: String,
          username: String,
+        
          firstName: String,
          lastName: String,
+        
          phone: String,
          dateOfBirth: Date,
+        
          recipes: [Recipe] = [],
          followers: [User] = [],
          following: [User] = [],
+        
          createdAt: Date? = Date(),
          updatedAt: Date? = Date(),
+        
          profileImageURL: String? = nil,
          bio: String = "Hi! I'm new to FlavorShare!")
     {
         self.id = id
         self.email = email
         self.username = username
+        
         self.firstName = firstName
         self.lastName = lastName
+        
         self.phone = phone
         self.dateOfBirth = dateOfBirth
+        
         self.recipes = recipes
         self.followers = followers
         self.following = following
+        
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        
         self.profileImageURL = profileImageURL
         self.bio = bio
     }

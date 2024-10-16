@@ -30,30 +30,36 @@ struct RecipeEditorView: View {
         Form {
             Section(header: Text("Recipe Details")) {
                 TextField("Title", text: $viewModel.title)
-                TextField("Owner ID", text: $viewModel.ownerId)
-                DatePicker("Created At", selection: $viewModel.createdAt, displayedComponents: .date)
-                DatePicker("Updated At", selection: $viewModel.updatedAt, displayedComponents: .date)
                 TextField("Description", text: $viewModel.description)
                 Picker("Cuisine Type", selection: $viewModel.type) {
                     ForEach(viewModel.cuisineTypes, id: \.self) { type in
                         Text(type).tag(type)
                     }
                 }
+                
                 Stepper(value: $viewModel.cookTime, in: 0...240) {
                     Text("Cook Time: \(viewModel.cookTime) minutes")
                 }
                 Stepper(value: $viewModel.servings, in: 1...20) {
                     Text("Servings: \(viewModel.servings)")
                 }
-                Stepper(value: $viewModel.likes, in: 0...10000) {
-                    Text("Likes: \(viewModel.likes)")
+                
+                if (viewModel.imageURL != "") {
+                    VStack {
+                        Text("Current Image")
+                        RemoteImageView(fileName: viewModel.imageURL, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                    }
                 }
                 
                 if let selectedImage = viewModel.selectedImage {
-                    Image(uiImage: selectedImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 200)
+                    VStack {
+                        Text("New Image")
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                            .clipped()
+                    }
                 }
                 
                 Button(action: {
@@ -158,13 +164,14 @@ struct RecipeEditorView: View {
                     Text(isNewRecipe ? "Create Recipe" : "Update Recipe")
                 }
             }
-        }
+        } // end of Form
         .navigationTitle(isNewRecipe ? "New Recipe" : "Edit Recipe")
         .onAppear {
             if let recipe = recipe, !isNewRecipe {
                 viewModel.loadRecipe(recipe)
             }
         }
+        .padding(.bottom, 150)
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("Error"),

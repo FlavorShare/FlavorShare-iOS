@@ -27,11 +27,23 @@ struct UserEditView: View {
     var body: some View {
         Form {
             Section(header: Text("Details")) {
+                
+                if (viewModel.imageURL != "") {
+                    VStack {
+                        Text("Current Image")
+                        RemoteImageView(fileName: viewModel.imageURL, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                    }
+                }
+                
                 if let selectedImage = viewModel.selectedImage {
-                    Image(uiImage: selectedImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 200)
+                    VStack {
+                        Text("New Image")
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                            .clipped()
+                    }
                 }
                 
                 Button(action: {
@@ -113,9 +125,9 @@ struct UserEditView: View {
                 }) {
                     Text("Delete Account")
                         .foregroundColor(.red)
-                }
-            }
-        }
+                } // end of Button
+            } // end of Section
+        } // end of Form
         .navigationTitle("Edit Profile")
         .onAppear {
             viewModel.loadUserData(user: user)
@@ -127,10 +139,11 @@ struct UserEditView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .padding(.bottom, 150)
         .sheet(isPresented: $viewModel.isImagePickerPresented) {
             ImagePicker(image: $viewModel.selectedImage, isPresented: $viewModel.isImagePickerPresented)
         }
-    }
+    } // end of body
 }
 
 #Preview {

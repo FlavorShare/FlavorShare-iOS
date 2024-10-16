@@ -22,8 +22,6 @@ class ContentViewModel: ObservableObject {
     init() {
         setupSubscribers()
         checkAuthState()
-//        let _ = AuthService.shared.signOut()
-
     }
     
     // MARK: FUNCTIONS

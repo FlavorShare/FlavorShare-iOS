@@ -10,20 +10,34 @@ import UIKit
 import _PhotosUI_SwiftUI
 
 class UserEditViewModel: ObservableObject {
+    // MARK: PROPERTIES
+    // ********** USER PROPERTIES **********
     @Published var id: String = ""
-    @Published var imageURL: String = ""
-    @Published var bio: String = ""
+    @Published var email: String = ""
     @Published var username: String = ""
+
     @Published var firstName: String = ""
     @Published var lastName: String = ""
-    @Published var dateOfBirth: Date = Date()
-    @Published var email: String = ""
-    @Published var phoneNumber: String = ""
     
+    @Published var phoneNumber: String = ""
+    @Published var dateOfBirth: Date = Date()
+
+    var recipes: [Recipe] = []
+    var followers: [User] = []
+    var following: [User] = []
+    
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
+    
+    @Published var imageURL: String = ""
+    @Published var bio: String = ""
+
+    // ********* PASSWORD RESET *************
     @Published var password: String = ""
     @Published var newPassword: String = ""
     @Published var confirmPassword: String = ""
     
+    // ********* OTHER PROPERIES *************
     @Published var errorMessage: String?
     @Published var isLoading: Bool = false
     @Published var isSuccess: Bool = false
@@ -37,19 +51,35 @@ class UserEditViewModel: ObservableObject {
      */
     func loadUserData(user: User) {
         self.id = user.id
-        self.imageURL = user.profileImageURL ?? ""
-        
-        self.bio = user.bio ?? ""
+        self.email = user.email
         self.username = user.username
+
         self.firstName = user.firstName
         self.lastName = user.lastName
-        self.dateOfBirth = user.dateOfBirth
-        self.email = user.email
+        
         self.phoneNumber = user.phone
+        self.dateOfBirth = user.dateOfBirth
+        
+        self.recipes = user.recipes
+        self.followers = user.followers
+        self.following = user.following
+        
+        self.createdAt = user.createdAt ?? Date()
+        self.updatedAt = user.updatedAt ?? Date()
+        
+        self.imageURL = user.profileImageURL ?? ""
+        self.bio = user.bio ?? ""
                 
         self.password = ""
         self.newPassword = ""
         self.confirmPassword = ""
+        
+        print("User data loaded")
+        print("Recipes: \(recipes.count)")
+        print("Recipe: \(recipes)")
+        print("Followers: \(followers.count)")
+        print("Following: \(following.count)")
+        
     }
     
     // MARK: updateUser()
@@ -58,6 +88,8 @@ class UserEditViewModel: ObservableObject {
      */
     func updateUser(completion: @escaping (Bool) -> Void) {
         isLoading = true
+        
+        self.updatedAt = Date()
         
         // Upload image
         if let image = selectedImage {
@@ -84,10 +116,20 @@ class UserEditViewModel: ObservableObject {
                             id: self.id,
                             email: self.email,
                             username: self.username,
+                            
                             firstName: self.firstName,
                             lastName: self.lastName,
+                            
                             phone: self.phoneNumber,
                             dateOfBirth: self.dateOfBirth,
+                            
+                            recipes: self.recipes,
+                            followers: self.followers,
+                            following: self.following,
+                            
+                            createdAt: self.createdAt,
+                            updatedAt: self.updatedAt,
+                            
                             profileImageURL: self.imageURL,
                             bio: self.bio
                         )
@@ -122,11 +164,21 @@ class UserEditViewModel: ObservableObject {
                 id: self.id,
                 email: self.email,
                 username: self.username,
+                
                 firstName: self.firstName,
                 lastName: self.lastName,
+                
                 phone: self.phoneNumber,
                 dateOfBirth: self.dateOfBirth,
-                profileImageURL: self.imageURL, 
+                
+                recipes: self.recipes,
+                followers: self.followers,
+                following: self.following,
+                
+                createdAt: self.createdAt,
+                updatedAt: self.updatedAt,
+                
+                profileImageURL: self.imageURL,
                 bio: self.bio
             )
             

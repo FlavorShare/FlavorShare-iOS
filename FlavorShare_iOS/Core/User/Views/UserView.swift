@@ -127,12 +127,14 @@ struct UserView: View {
                             }
                             .padding(.horizontal)
                             .padding(.top)
-                            .padding(.bottom, screenHeight / 5)
                         }
                         Spacer()
                     } // VStack end
-                    .padding(.bottom, 100)
+                    .padding(.bottom, 150)
                 } // ScrollView end
+                .refreshable {
+                    viewModel.fetchRecipes()
+                }
                 .ignoresSafeArea(.all)
             }
         } // Navigation
