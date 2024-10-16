@@ -47,7 +47,8 @@ struct Recipe: Identifiable, Codable {
         likes: Int,
         type: String,
         nutritionalValues: NutritionalValues?,
-        user: User?
+        
+        user: User? = nil
     ) {
         self.id = id
         

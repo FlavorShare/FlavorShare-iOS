@@ -18,7 +18,7 @@ class AuthService: ObservableObject {
     
     static let shared = AuthService()
     
-    private let baseURL = "http://localhost:3000"
+    private let baseURL = EnvironmentVariables.APIBaseURL
     
     // MARK: - Init
     init() {

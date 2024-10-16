@@ -8,33 +8,76 @@
 import SwiftUI
 
 struct RecipeView: View {
-    @State var recipe: Recipe
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @StateObject var viewModel: RecipeViewModel
     @State var viewDetails = "Ingredients"
+    
+    init (recipe: Recipe) {
+        _viewModel = StateObject(wrappedValue: RecipeViewModel(recipe: recipe))
+    }
     
     var body: some View {
         ZStack(alignment: .top) {
-            BackgroundView(imageURL: recipe.imageURL)
+            BackgroundView(imageURL: viewModel.recipe.imageURL)
             
             ScrollView {
                 VStack {
-                    RecipeImageView(imageURL: recipe.imageURL)
-                    RecipeHeader(recipe: recipe)
+                    RecipeImageView(imageURL: viewModel.recipe.imageURL)
+                    RecipeHeader(recipe: viewModel.recipe)
                         .padding(.top, -(UIScreen.main.bounds.height / 9))
-                    RecipeDetailsView(recipe: recipe, viewDetails: $viewDetails)
+                    RecipeDetailsView(recipe: viewModel.recipe, viewDetails: $viewDetails)
                         .padding(.horizontal)
                         .padding(.top)
                     Spacer()
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: RecipeEditorView(isNewRecipe: false, recipe: Binding(get: { Optional(recipe) }, set: { recipe = $0! }))) {
-                        Text("Edit")
+            
+            HStack {
+                // Back button to go back in navigation stack
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.white)
+                        Text("Back")
+                            .foregroundColor(.white)
                     }
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 10)
+                    .background(Color.black.opacity(0.5))
+                    .cornerRadius(10)
+                    .clipped()
+                    .shadow(radius: 3)
+                }
+                
+                Spacer()
+                
+                NavigationLink(destination: RecipeEditorView(isNewRecipe: false, recipe: Binding(get: { Optional(viewModel.recipe) }, set: { viewModel.recipe = $0! }))) {
+                    Text("Edit")
+                        .foregroundStyle(.white)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .background(Color.black.opacity(0.5))
+                        .cornerRadius(10)
+                        .clipped()
+                        .shadow(radius: 3)
+                }
+                
+            }
+            .padding(.top, 60)
+            .padding(.horizontal)
+        }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
+        .ignoresSafeArea(.all)
+        .gesture(
+            DragGesture().onEnded { value in
+                if value.location.x - value.startLocation.x > 150 {
+                    presentationMode.wrappedValue.dismiss()
                 }
             }
-        }
-        .ignoresSafeArea(.all)
+        )
     }
 }
 
@@ -91,9 +134,9 @@ struct RecipeHeader: View {
             Text("\(recipe.type) | Serving \(recipe.servings) | \(recipe.cookTime) minutes")
                 .padding(.bottom, 5)
             
-            Text("\(recipe.likes) people liked this recipe")
-                .font(.footnote)
-                .padding(.bottom, 5)
+//            Text("\(recipe.likes) people liked this recipe")
+//                .font(.footnote)
+//                .padding(.bottom, 5)
             
             VStack (alignment: .leading) {
                 // Recipe Owner
@@ -127,13 +170,13 @@ struct RecipeDetailsView: View {
     var body: some View {
         VStack(alignment: .center) {
             // TabView for Ingredients/Instructions
-            HStack {
+            HStack (spacing: 0) {
                 Button(action: {
                     viewDetails = "Ingredients"
                 }) {
                     Text("Ingredients")
                         .foregroundColor(viewDetails == "Ingredients" ? .black : .white)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
                         .padding(.vertical, 5)
                         .background(viewDetails == "Ingredients" ? Color.white : Color.clear)
                         .cornerRadius(10)
@@ -144,7 +187,7 @@ struct RecipeDetailsView: View {
                 }) {
                     Text("Instructions")
                         .foregroundColor(viewDetails == "Instructions" ? .black : .white)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
                         .padding(.vertical, 5)
                         .background(viewDetails == "Instructions" ? Color.white : Color.clear)
                         .cornerRadius(10)

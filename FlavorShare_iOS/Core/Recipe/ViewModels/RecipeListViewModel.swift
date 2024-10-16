@@ -9,14 +9,32 @@ import Foundation
 
 class RecipeListViewModel: ObservableObject {
     @Published var recipes: [Recipe] = []
+    @Published var filteredRecipes: [Recipe] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var cuisineTypes: [String] = ["All"]
     @Published var searchText: String = ""
-    
+    @Published var selectedCategory: String = "All"
+
     init() {
         fetchRecipes()
         fetchCuisineTypes()
+    }
+    
+    // MARK: filterRecipes()
+    /**
+     This function filters the recipes based on the selected category and search text
+     */
+    func filterRecipes() {
+        if selectedCategory == "All" {
+            filteredRecipes = recipes
+        } else {
+            filteredRecipes = recipes.filter { $0.type == selectedCategory }
+        }
+        
+        if !searchText.isEmpty {
+            filteredRecipes = filteredRecipes.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        }
     }
     
     // MARK: fetchRecipes()
@@ -31,6 +49,7 @@ class RecipeListViewModel: ObservableObject {
                 switch result {
                 case .success(let recipes):
                     self?.recipes = recipes
+                    self?.filteredRecipes = recipes
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                 }

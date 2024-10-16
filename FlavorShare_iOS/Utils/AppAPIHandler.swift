@@ -14,7 +14,7 @@ class AppAPIHandler {
     
     static let shared = AppAPIHandler()
     
-    private let baseURL = "http://localhost:3000"
+    private let baseURL = EnvironmentVariables.APIBaseURL
     
     /**
         Perform a request to the App API

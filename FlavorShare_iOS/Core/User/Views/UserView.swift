@@ -65,7 +65,6 @@ struct UserView: View {
                                 Text(viewModel.user.username)
                                     .font(.largeTitle)
                                     .fontWeight(.heavy)
-                                    .colorInvert()
                                     .shadow(radius: 5)
                                 
                                 // User Bio
@@ -74,7 +73,6 @@ struct UserView: View {
                                     .fontWeight(.bold)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .multilineTextAlignment(.center)
-                                    .colorInvert()
                                     .shadow(radius: 5)
                             }
                             
@@ -82,7 +80,6 @@ struct UserView: View {
                                 Spacer()
                                 NavigationLink(destination: UserEditView(user: $viewModel.user)) {
                                     Image(systemName: "pencil")
-                                        .foregroundColor(.white)
                                         .padding(.top, 8)
                                         .padding(.trailing)
                                         .font(.title)
@@ -91,7 +88,7 @@ struct UserView: View {
                             }
                         }
                         .padding(.vertical, screenHeight/20)
-                        
+                        .foregroundColor(.white)
                         
                         VStack (alignment: .leading) {
                             // User Recipes
@@ -99,7 +96,7 @@ struct UserView: View {
                                 Text("Recipes")
                                     .font(.title)
                                     .fontWeight(.bold)
-                                    .colorInvert()
+                                    .foregroundColor(.white)
                                     .shadow(radius: 5)
                                 
                                 Spacer()
@@ -134,6 +131,7 @@ struct UserView: View {
                         }
                         Spacer()
                     } // VStack end
+                    .padding(.bottom, 100)
                 } // ScrollView end
                 .ignoresSafeArea(.all)
             }

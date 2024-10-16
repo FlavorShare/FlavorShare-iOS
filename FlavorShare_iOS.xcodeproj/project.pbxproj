@@ -35,6 +35,7 @@
 		802048252C95055600F07CE4 /* UserAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048242C95055600F07CE4 /* UserAPIService.swift */; };
 		802B1F742CACDA4C00798F6D /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AFD2C97A279009C40C4 /* ContentViewModel.swift */; };
 		802B1F792CACDDF700798F6D /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802B1F782CACDDF700798F6D /* UserView.swift */; };
+		802B6F3B2CBF65F600125F88 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802B6F3A2CBF65F600125F88 /* RecipeViewModel.swift */; };
 		8030CEE92CACE49F00F5A6BD /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8030CEE82CACE49F00F5A6BD /* UserViewModel.swift */; };
 		80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF12C95EF26009C40C4 /* UserListConfig.swift */; };
 		80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF72C97A0FE009C40C4 /* MockData.swift */; };
@@ -83,6 +84,7 @@
 		802048222C95042700F07CE4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		802048242C95055600F07CE4 /* UserAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPIService.swift; sourceTree = "<group>"; };
 		802B1F782CACDDF700798F6D /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		802B6F3A2CBF65F600125F88 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		8030CEE82CACE49F00F5A6BD /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		80326AF12C95EF26009C40C4 /* UserListConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListConfig.swift; sourceTree = "<group>"; };
 		80326AF72C97A0FE009C40C4 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
@@ -276,8 +278,9 @@
 		802047F62C93E0DC00F07CE4 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				8020480D2C94949000F07CE4 /* RecipeListViewModel.swift */,
 				802048152C94A5C000F07CE4 /* RecipeEditorViewModel.swift */,
+				802B6F3A2CBF65F600125F88 /* RecipeViewModel.swift */,
+				8020480D2C94949000F07CE4 /* RecipeListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				8063530E2C9CC5F30021AAD2 /* RemoteImageView.swift in Sources */,
 				80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */,
 				80326B162C9C7209009C40C4 /* EnvironmentVariables.swift in Sources */,
+				802B6F3B2CBF65F600125F88 /* RecipeViewModel.swift in Sources */,
 				802048252C95055600F07CE4 /* UserAPIService.swift in Sources */,
 				80326B0C2C9B6832009C40C4 /* ImageStorageService.swift in Sources */,
 				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
@@ -645,8 +649,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -679,8 +682,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
