@@ -54,11 +54,13 @@ class AppAPIHandler {
                 }
                 
                 if T.self == EmptyResponse.self {
+                    print("Request completed")
                     completion(.success(EmptyResponse() as! T))
                 } else {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
                     let decodedResponse = try decoder.decode(T.self, from: data)
+                    print("Request completed")
                     completion(.success(decodedResponse))
                 }
             } catch {

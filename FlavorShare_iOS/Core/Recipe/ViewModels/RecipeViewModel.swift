@@ -119,4 +119,6 @@ class RecipeViewModel: ObservableObject {
         self.recipe!.likes -= 1
         self.recipe!.peopleWhoLiked?.removeAll { $0 == AuthService.shared.currentUser?.id }
     }
+    
+   
 }

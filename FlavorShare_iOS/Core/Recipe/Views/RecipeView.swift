@@ -165,24 +165,6 @@ struct RecipeView: View {
     }
 }
 
-struct BackgroundView: View {
-    let imageURL: String
-    
-    var body: some View {
-        ZStack {
-            RemoteImageView(fileName: imageURL, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                .blur(radius: 20)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea(.all)
-            BlurView(style: .regular)
-                .ignoresSafeArea(.all)
-            Rectangle()
-                .fill(Color.black.opacity(0.4))
-                .ignoresSafeArea(.all)
-        }
-    }
-}
-
 struct RecipeImageView: View {
     let imageURL: String
     
@@ -246,15 +228,21 @@ struct RecipeDetailsView: View {
                         ForEach(recipe.ingredients, id: \.self) { ingredient in
                             HStack {
                                 Text(ingredient.name)
+                                
                                 Spacer()
+                                
                                 if let quantity = ingredient.quantity {
-                                    Text("\(quantity)")
+                                    Text(quantity.truncatingRemainder(dividingBy: 1) == 0
+                                        ? String(format: "%.0f", quantity) // For round numbers, show no decimals
+                                        : String(format: "%.1f", quantity) // For decimal numbers, show one decimal
+                                    )
                                     
-                                    if (quantity == 1) {
-                                        Text(ingredient.unit != nil ? "\(ingredient.unit!)" : "unit")
-                                    } else {
-                                        Text(ingredient.unit != nil ? "\(ingredient.unit!)s" : "units")
-                                        
+                                    if let unit = ingredient.unit {
+                                        if (quantity == 1) {
+                                            Text( "\(unit)")
+                                        } else {
+                                            Text( "\(unit)s")
+                                        }
                                     }
                                 }
                             }
@@ -285,24 +273,34 @@ struct RecipeDetailsView: View {
                                     Text("\(recipe.instructions[index].description)")
                                         .font(.body)
                                         .multilineTextAlignment(.leading)
+                                        .padding(.bottom)
                                     
-                                    ForEach(recipe.instructions[index].ingredients ?? [], id: \.self) { ingredient in
+                                    let ingredients = getInstructionIngredients(instruction: recipe.instructions[index])
+                                    ForEach(ingredients, id: \.self) { ingredient in
                                         HStack {
+                                            Text(ingredient.name)
+
+                                            Spacer()
+                                            
                                             if let quantity = ingredient.quantity {
-                                                Text("\(quantity)")
-                                                    .font(.footnote)
-                                                if (quantity == 1) {
-                                                    Text(ingredient.unit != nil ? "\(ingredient.unit!)" : "unit")
-                                                        .font(.footnote)
-                                                } else {
-                                                    Text(ingredient.unit != nil ? "\(ingredient.unit!)s" : "units")
-                                                        .font(.footnote)
+                                                Text(quantity.truncatingRemainder(dividingBy: 1) == 0
+                                                    ? String(format: "%.0f", quantity) // For round numbers, show no decimals
+                                                    : String(format: "%.1f", quantity) // For decimal numbers, show one decimal
+                                                )
+                                                
+                                                if let unit = ingredient.unit {
+                                                    if (quantity == 1) {
+                                                        Text( "\(unit)")
+                                                    } else {
+                                                        Text( "\(unit)s")
+                                                    }
                                                 }
                                             }
                                             
-                                            Text(ingredient.name)
-                                                .font(.footnote)
                                         }
+                                        .font(.footnote)
+                                        .padding(.horizontal)
+    
                                     }
                                 }
                             }
@@ -322,6 +320,17 @@ struct RecipeDetailsView: View {
         }
         .foregroundStyle(.white)
         .shadow(radius: 3)
+    }
+    
+    // MARK: - FUNCTIONS
+    func getInstructionIngredients(instruction: Instruction) -> [Ingredient] {
+        if let listIngredientID = instruction.ingredients {
+            return listIngredientID.compactMap { ingredientID in
+                return recipe.ingredients.first { $0._id == ingredientID }
+            }
+        }
+        
+        return []
     }
 }
 

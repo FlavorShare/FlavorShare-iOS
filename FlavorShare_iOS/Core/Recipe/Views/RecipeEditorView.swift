@@ -35,7 +35,7 @@ struct RecipeEditorView: View {
             },
             set: {
                 // Convert the String back to an Int when the user types a new value
-                newIngredient.quantity = Int($0)
+                newIngredient.quantity = Float($0)
             }
         )
     }
@@ -43,26 +43,76 @@ struct RecipeEditorView: View {
     init(isNewRecipe: Bool, recipe: Binding<Recipe?> = .constant(nil)) {
         self.isNewRecipe = isNewRecipe
         self._recipe = recipe
+        
+        UIStepper.appearance().setDecrementImage(UIImage(systemName: "minus"), for: .normal)
+        UIStepper.appearance().setIncrementImage(UIImage(systemName: "plus"), for: .normal)
     }
     
     var body: some View {
-        ZStack {
+        ZStack (alignment: .top) {
+            if let recipe = recipe {
+                BackgroundView(imageURL: recipe.imageURL)
+            }
             
-            Form {
-                recipeDetails
-                ingredients
-                instructions
+            ScrollView {
+                Text(isNewRecipe ? "New Recipe" : "Edit Recipe")
+                    .font(.title)
+                    .padding(.top, 60)
+                    .padding(.horizontal)
+                    .shadow(radius: 3)
                 
-                actionButtons
+                VStack (alignment: .leading) {
+                    Text("Recipe Details")
+                        .font(.headline)
+                        .shadow(radius: 3)
+                    
+                    recipeDetails
+                    
+                    Text("Recipe Ingredients")
+                        .font(.headline)
+                        .shadow(radius: 3)
+                        .padding(.top, 40)
+                    
+                    ingredients
+                    
+                    Text("Recipe Instructions")
+                        .font(.headline)
+                        .shadow(radius: 3)
+                        .padding(.top, 40)
+                    
+                    instructions
+                    
+                    actionButtons
+                } // end of Form
+                .padding(.top)
+                .padding(.bottom, 150)
+                .padding(.horizontal)
+            }
+            .foregroundStyle(.white)
+            
+            HStack (alignment: .top) {
+                // Back button to go back in navigation stack
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.white)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .background(Color.black.opacity(0.5))
+                        .cornerRadius(10)
+                        .clipped()
+                        .shadow(radius: 3)
+                }
                 
-                // MARK: - PADDING FOR BOTTOM
-                Divider()
-                    .background(Color.clear)
-                    .padding(.vertical, 15)
-                
-            } // end of Form
+                Spacer()
+            }
+            .padding(.top, 60)
+            .padding(.horizontal)
         }
-        .navigationTitle(isNewRecipe ? "New Recipe" : "Edit Recipe")
+        .background(.gray)
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             if let recipe = recipe, !isNewRecipe {
                 viewModel.loadRecipe(recipe)
@@ -82,385 +132,257 @@ struct RecipeEditorView: View {
     
     var recipeDetails: some View {
         // MARK: - Recipe Details
-        Section(header: Text("Recipe Details")) {
-            TextField("Title", text: $viewModel.title)
-            TextField("Description", text: $viewModel.description)
-            Picker("Cuisine Type", selection: $viewModel.type) {
-                ForEach(viewModel.cuisineTypes, id: \.self) { type in
-                    Text(type).tag(type)
+        VStack (alignment: .leading) {
+            VStack {
+                TextField("", text: $viewModel.title, prompt: Text("Recipe Title").foregroundColor(.white.opacity(0.5))
+                )
+                
+                Divider()
+                    .overlay(.black)
+                    .padding(.vertical, 5)
+
+                TextField("", text: $viewModel.description, prompt: Text("Description").foregroundColor(.white.opacity(0.5)), axis: .vertical)
+                
+                Divider()
+                    .overlay(.black)
+                    .padding(.vertical, 5)
+
+                Picker("Cuisine Type", selection: $viewModel.type) {
+                    ForEach(viewModel.cuisineTypes, id: \.self) { type in
+                        Text(type).tag(type)
+                    }
                 }
-            }
-            
-            Stepper(value: $viewModel.cookTime, in: 0...240) {
-                Text("Cook Time: \(viewModel.cookTime) minutes")
-            }
-            Stepper(value: $viewModel.servings, in: 1...20) {
-                Text("Servings: \(viewModel.servings)")
-            }
-            
-            if (viewModel.imageURL != "") {
-                VStack {
-                    Text("Current Image")
-                    RemoteImageView(fileName: viewModel.imageURL, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                
+                Divider()
+                    .overlay(.black)
+                    .padding(.vertical, 5)
+
+                Stepper(value: $viewModel.cookTime, in: 0...240) {
+                    Text("Cook Time: \(viewModel.cookTime) minutes")
                 }
-            }
-            
-            if let selectedImage = viewModel.selectedImage {
-                VStack {
-                    Text("New Image")
-                    Image(uiImage: selectedImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-                        .clipped()
+                
+                Divider()
+                    .overlay(.black)
+                    .padding(.vertical, 5)
+
+                Stepper(value: $viewModel.servings, in: 1...20) {
+                    Text("Servings: \(viewModel.servings)")
                 }
+                
+                if (viewModel.imageURL != "") {
+                    Divider()
+                        .overlay(.black)
+                        .padding(.vertical, 5)
+
+                    VStack (alignment: .center) {
+                        Text("Current Image")
+                        RemoteImageView(fileName: viewModel.imageURL, width: UIScreen.main.bounds.width / 1.2, height: UIScreen.main.bounds.width / 1.2)
+                    }
+                }
+                
+                
+                if let selectedImage = viewModel.selectedImage {
+                    Divider()
+                        .overlay(.black)
+                        .padding(.vertical, 5)
+
+                    VStack (alignment: .center) {
+                        Text("New Image")
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: UIScreen.main.bounds.width / 1.2, height: UIScreen.main.bounds.width / 1.2)
+                            .clipped()
+                    }
+                }
+                
+                Divider()
+                    .overlay(.black)
+                    .padding(.top)
+
+                Button(action: {
+                    viewModel.isImagePickerPresented = true
+                }) {
+                    Text("Select New Image")
+                }
+                .padding()
             }
-            
-            Button(action: {
-                viewModel.isImagePickerPresented = true
-            }) {
-                Text("Select Image")
-            }
+            .padding()
         }
+        .background(.black.opacity(0.5))
+        .cornerRadius(10)
+        .clipped()
+        .padding(.top, 10)
+        .tint(.white)
     }
     
     var ingredients: some View {
         // MARK: - Ingredients
-        Section(header: Text("Ingredients")) {
-            
-            // *************** Existing ingredient ***************
-            ForEach(viewModel.ingredients.indices, id: \.self) { index in
+        VStack {
+            VStack {
+                // *************** Existing ingredient ***************
+                ForEach(viewModel.ingredients.indices, id: \.self) { index in
+                    VStack {
+                        TextField("", text: Binding(
+                            get: { viewModel.ingredients[index].name },
+                            set: { viewModel.ingredients[index].name = $0 }
+                        ), prompt: Text("Ingredient Name").foregroundColor(.white.opacity(0.5))
+                        )
+                        
+                        HStack {
+                            TextField("", text: Binding<String>(
+                                get: {
+                                    if let quantity = viewModel.ingredients[index].quantity {
+                                        return quantity.truncatingRemainder(dividingBy: 1) == 0
+                                        ? String(format: "%.0f", quantity) // Show no decimals for round numbers
+                                        : String(format: "%.1f", quantity) // Show one decimal for decimal numbers
+                                    } else {
+                                        return ""
+                                    }
+                                },
+                                set: { newValue in
+                                    if let floatValue = Float(newValue) {
+                                        viewModel.ingredients[index].quantity = floatValue
+                                    } else {
+                                        viewModel.ingredients[index].quantity = nil
+                                    }
+                                }
+                            ), prompt: Text("Quantity").foregroundColor(.white.opacity(0.5))
+                            )
+                            .keyboardType(.decimalPad)
+                            
+                            Spacer()
+                            
+                            Picker("Unit", selection: Binding(
+                                get: { viewModel.ingredients[index].unit ?? "" },
+                                set: { viewModel.ingredients[index].unit = $0.isEmpty ? nil : $0 }
+                            )) {
+                                ForEach(viewModel.units, id: \.self) { unit in
+                                    Text(unit).tag(unit)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                        }
+                        
+                        Divider()
+                            .overlay(.black)
+                            .padding(.vertical, 5)
+                    }
+                }
+                .onDelete { indexSet in
+                    viewModel.ingredients.remove(atOffsets: indexSet)
+                }
+                
+                // *************** New ingredient ***************
                 VStack {
-                    TextField("Ingredient Name", text: Binding(
-                        get: { viewModel.ingredients[index].name },
-                        set: { viewModel.ingredients[index].name = $0 }
-                    ))
+                    TextField("", text: $newIngredient.name, prompt: Text("New Ingredient").foregroundColor(.white.opacity(0.5))
+                    )
                     
                     HStack {
-                        TextField("Quantity", text: Binding(
-                            get: { viewModel.ingredients[index].quantity.map(String.init) ?? "" },
-                            set: { viewModel.ingredients[index].quantity = Int($0) }
-                        ))
-                        .keyboardType(.numberPad)
+                        TextField("", text: quantityBinding, prompt: Text("Quantity").foregroundColor(.white.opacity(0.5)))
+                            .keyboardType(.decimalPad)
                         
                         Spacer()
                         
-                        Picker("Unit", selection: Binding(
-                            get: { viewModel.ingredients[index].unit ?? "" },
-                            set: { viewModel.ingredients[index].unit = $0.isEmpty ? nil : $0 }
-                        )) {
+                        Picker("Unit", selection: $newIngredient.unit) {
                             ForEach(viewModel.units, id: \.self) { unit in
                                 Text(unit).tag(unit)
                             }
                         }
                         .pickerStyle(MenuPickerStyle())
-                        .frame(width: 110)
+                        //                        .frame(width: 110)
+                        .padding(.bottom, 5)
                     }
-                }
-            }
-            .onDelete { indexSet in
-                viewModel.ingredients.remove(atOffsets: indexSet)
-            }
-            
-            // *************** New ingredient ***************
-            VStack {
-                TextField("New Ingredient", text: $newIngredient.name)
-                
-                HStack {
-                    TextField("Quantity", text: quantityBinding)
-                        .keyboardType(.numberPad)
                     
-                    Spacer()
-                    
-                    Picker("Unit", selection: $newIngredient.unit) {
-                        ForEach(viewModel.units, id: \.self) { unit in
-                            Text(unit).tag(unit)
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                            if !newIngredient.name.isEmpty {
+                                viewModel.ingredients.append(newIngredient)
+                                newIngredient = Ingredient(name: "", quantity: nil, unit: nil)
+                            }
+                        }) {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title2)
                         }
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .frame(width: 110)
-                    .padding(.bottom, 5)
-                }
-                
-                HStack {
-                    Spacer()
-                    
-                    Button(action: {
-                        if !newIngredient.name.isEmpty {
-                            viewModel.ingredients.append(newIngredient)
-                            newIngredient = Ingredient(name: "", quantity: nil, unit: nil)
-                        }
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                    }
+                    .padding(.top, 10)
+
                 }
             }
+            .padding()
         }
+        .background(.black.opacity(0.5))
+        .cornerRadius(10)
+        .clipped()
+        .padding(.top, 10)
+        .tint(.white)
     }
     
     
     var instructions: some View {
         // MARK: - Instructions
-        Section(header: Text("Instruction")) {
-            
-            // *************** Existing instruction ***************
-            ForEach(viewModel.instructions.indices, id: \.self) { index in
+        VStack (spacing: 0) {
+            VStack (spacing: 0) {
+                // *************** Existing instruction ***************
+                ForEach(viewModel.instructions.indices, id: \.self) { index in
+                    InstructionView(
+                        instruction: $viewModel.instructions[index],
+                        ingredients: $viewModel.ingredients
+                    )
+                    
+                    Divider()
+                        .overlay(.black)
+                        .padding(.vertical)
+                }
+                .onDelete { indexSet in
+                    viewModel.ingredients.remove(atOffsets: indexSet)
+                    updateInstructionSteps()
+                    
+                }
+                //            .onMove { indices, newOffset in
+                //                viewModel.instructions.move(fromOffsets: indices, toOffset: newOffset)
+                //                updateInstructionSteps()
+                //            }
+                
+                // *************** New Instructions ***************
                 VStack (alignment: .leading) {
-                    Text("Step \(viewModel.instructions[index].step)")
+                    Text("Step \(viewModel.instructions.count + 1)")
                         .font(.headline)
                     
-                    TextField("Description", text: Binding(
-                        get: { viewModel.instructions[index].description },
-                        set: { viewModel.instructions[index].description = $0 }
-                    ), axis: .vertical)
+                    TextField("", text: $newInstruction.description, prompt: Text("New Instruction").foregroundColor(.white.opacity(0.5)), axis: .vertical)
                     
-                    
-                    //
-                    //                    Picker("Ingredients", selection: Binding(
-                    //                        get: { viewModel.instructions[index].ingredients ?? [] },
-                    //                        set: { viewModel.instructions[index].ingredients = $0.isEmpty ? [] : $0 }
-                    //                    )) {
-                    //                        ForEach(viewModel.recipe.ingredients, id: \.self) { ingredients in
-                    //                            Text(ingredients).tag(ingredients)
-                    //                        }
-                    //                    }
-                    //                    .pickerStyle(.inline)
-                    //                    .frame(width: 110)
-                    
-                }
-            }
-            .onDelete { indexSet in
-                viewModel.ingredients.remove(atOffsets: indexSet)
-                updateInstructionSteps()
-                
-            }
-            .onMove { indices, newOffset in
-                viewModel.instructions.move(fromOffsets: indices, toOffset: newOffset)
-                updateInstructionSteps()
-            }
-            
-            // *************** New Instructions ***************
-            VStack (alignment: .leading) {
-                Text("Step \(viewModel.instructions.count + 1)")
-                    .font(.headline)
-                
-                TextField("New Instruction", text: $newInstruction.description, axis: .vertical)
-
-                HStack {
-                    Spacer()
-                    
-                    Button(action: {
-                        if !newInstruction.description.isEmpty {
-                            let nextIndex = viewModel.instructions.count + 1
-                            newInstruction.step = nextIndex
-                            viewModel.instructions.append(newInstruction)
-                            newInstruction = Instruction(step: 0, description: "")
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                            if !newInstruction.description.isEmpty {
+                                let nextIndex = viewModel.instructions.count + 1
+                                newInstruction.step = nextIndex
+                                viewModel.instructions.append(newInstruction)
+                                newInstruction = Instruction(step: 0, description: "")
+                            }
+                        }) {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title2)
                         }
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title2)
                     }
+                    .padding(.top, 10)
                 }
-                .padding(.top, 10)
             }
+            .padding()
         }
+        .background(.black.opacity(0.5))
+        .cornerRadius(10)
+        .clipped()
+        .padding(.top, 10)
+        .tint(.white)
     }
-    
-    
-    //    var instructions: some View {
-    //        // MARK: - Instructions
-    //        Section(header: Text("Instructions")) {
-    //
-    //            // *************** Existing Instructions ***************
-    //            ForEach(viewModel.instructions) { instruction in
-    //                VStack {
-    //                    Text("Step \(instruction.step)")
-    //                        .font(.headline)
-    //
-    //                    TextField("Step Description", text: Binding(
-    //                        get: { instruction.description },
-    //                        set: { newValue in
-    //                            if let index = viewModel.instructions.firstIndex(where: { $0.id == instruction.id }) {
-    //                                viewModel.instructions[index].description = newValue
-    //                            }
-    //                        }
-    //                    ), axis: .vertical)
-    //
-    ////                    ForEach(instruction.ingredients ?? [], id: \.self) { ingredient in
-    ////                        Button(action: {
-    ////                            if let index = viewModel.instructions.firstIndex(where: { $0.id == instruction.id }) {
-    ////                                viewModel.instructions[index].ingredients?.removeAll(where: { $0 == ingredient })
-    ////                            } else {
-    ////                                viewModel.instructions[index].ingredients?.append(ingredient)
-    ////                            })
-    ////                        }) {
-    ////                            Text(ingredient.name)
-    ////                        }
-    ////                    }
-    //                    LazyVStack {
-    //                        if let ingredients = viewModel.recipe?.ingredients {
-    //                            ForEach(0..<ingredients.count, id: \.self) { index in
-    //                                let ingredient = ingredients[index]
-    //                                Button(action: {
-    //                                    if let instructionIndex = viewModel.instructions.firstIndex(where: { $0.id == instruction.id }) {
-    //                                        if let ingredientIndex = viewModel.instructions[instructionIndex].ingredients?.firstIndex(of: ingredient) {
-    //                                            viewModel.instructions[instructionIndex].ingredients?.remove(at: ingredientIndex)
-    //                                        } else {
-    //                                            viewModel.instructions[instructionIndex].ingredients?.append(ingredient)
-    //                                        }
-    //                                    }
-    //                                }) {
-    //                                    Text(ingredient.name)
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-    //                }
-    ////
-    ////                Picker("Ingredients", selection: Binding(
-    ////                    get: {
-    ////                        Set(instruction.ingredients ?? [])
-    ////                    },
-    ////                    set: { selectedIngredients in
-    ////                        if let index = viewModel.instructions.firstIndex(where: { $0.id == instruction.id }) {
-    ////                            viewModel.instructions[index].ingredients = Array(selectedIngredients)
-    ////                        }
-    ////                    }
-    ////                )) {
-    ////                    ForEach(viewModel.ingredients, id: \.self) { ingredient in
-    ////                        Text(ingredient.name).tag(ingredient)
-    ////                    }
-    ////                }
-    ////                .pickerStyle(.inline)
-    ////                .padding(.top, 5)
-    //
-    //            }
-    //            .onDelete { indexSet in
-    //                viewModel.instructions.remove(atOffsets: indexSet)
-    //                updateInstructionSteps()
-    //            }
-    //
-    //            .onMove { indices, newOffset in
-    //                viewModel.instructions.move(fromOffsets: indices, toOffset: newOffset)
-    //                updateInstructionSteps()
-    //            }
-    //
-    //
-    //            // *************** New Instructions ***************
-    //            HStack {
-    //                TextField("New Instruction", text: $newInstruction.description)
-    //                    .textFieldStyle(RoundedBorderTextFieldStyle())
-    //
-    //                Button(action: {
-    //                    if !newInstruction.description.isEmpty {
-    //                        let nextIndex = viewModel.instructions.count + 1
-    //                        newInstruction.step = nextIndex
-    //                        viewModel.instructions.append(newInstruction)
-    //                        newInstruction = Instruction(step: 0, description: "")
-    //                    }
-    //                }) {
-    //                    Image(systemName: "plus.circle.fill")
-    //                        .font(.title2)
-    //                }
-    //            }
-    //            .padding(.top, 10)
-    //        }
-    //    }
-    //
-    //    var instructions: some View {
-    //        // MARK: - Instructions
-    //        Section(header: Text("Instructions")) {
-    //
-    //            // *************** Existing Instructions ***************
-    //            ForEach($viewModel.instructions) { $instruction in
-    //                VStack(alignment: .leading) {
-    //                    Text("Step \(instruction.step)")
-    //                        .font(.headline)
-    //
-    //                    TextField(
-    //                        "Step Description",
-    //                        text: $instruction.description,
-    //                        axis: .vertical
-    //                    )
-    //
-    ////                    Picker("Unit", selection: $instruction.ingredients) {
-    ////                        ForEach(viewModel.recipe.ingredients, id: \.self) { ingredients in
-    ////                            Text(ingredients).tag(ingredients)
-    ////                        }
-    ////                    }
-    ////                    .pickerStyle(.navigationLink)
-    ////                    .frame(width: 110)
-    ////                    .padding(.bottom, 5)
-    //
-    //                    // Display ingredients using LazyVStack for better performance
-    ////                    LazyVStack {
-    ////                        if let ingredients = viewModel.recipe?.ingredients {
-    ////                            ForEach(ingredients.indices, id: \.self) { index in
-    ////                                let ingredient = ingredients[index]
-    ////                                Button(action: {
-    ////                                    // Toggle the selection of the ingredient
-    ////                                    if let ingredientIndex = instruction.ingredients?.firstIndex(of: ingredient) {
-    ////                                        instruction.ingredients?.remove(at: ingredientIndex)
-    ////                                    } else {
-    ////                                        instruction.ingredients?.append(ingredient)
-    ////                                    }
-    ////                                }) {
-    ////                                    HStack {
-    ////                                        Text(ingredient.name)
-    ////                                            .foregroundColor(.primary)
-    ////
-    ////                                        Spacer()
-    ////
-    ////                                        if instruction.ingredients?.contains(ingredient) == true {
-    ////                                            Image(systemName: "checkmark")
-    ////                                                .foregroundColor(.green)
-    ////                                        }
-    ////                                    }
-    ////                                    .padding(.vertical, 5)
-    ////                                    .padding(.horizontal)
-    ////                                    .background(Color(UIColor.systemGray6))
-    ////                                    .cornerRadius(5)
-    ////                                }
-    ////                            }
-    ////                        }
-    ////                    }
-    ////                    .padding(.top, 5)
-    //                }
-    //                .padding(.vertical, 10)
-    //            }
-    //            .onDelete { indexSet in
-    //                viewModel.instructions.remove(atOffsets: indexSet)
-    //                updateInstructionSteps()
-    //            }
-    //            .onMove { indices, newOffset in
-    //                viewModel.instructions.move(fromOffsets: indices, toOffset: newOffset)
-    //                updateInstructionSteps()
-    //            }
-    //
-    //            // *************** New Instructions ***************
-    //            HStack {
-    //                TextField("New Instruction", text: $newInstruction.description)
-    //
-    //                Button(action: {
-    //                    if !newInstruction.description.isEmpty {
-    //                        let nextIndex = viewModel.instructions.count + 1
-    //                        newInstruction.step = nextIndex
-    //                        viewModel.instructions.append(newInstruction)
-    //                        newInstruction = Instruction(step: 0, description: "")
-    //                    }
-    //                }) {
-    //                    Image(systemName: "plus.circle.fill")
-    //                        .font(.title2)
-    //                }
-    //            }
-    //            .padding(.top, 10)
-    //        }
-    //    }
-    
     
     var actionButtons: some View {
         // MARK: - Save / Delete Buttons
-        Section {
+        VStack (spacing: 0) {
             if !isNewRecipe {
                 Button(action: {
                     viewModel.deleteRecipe { success in
@@ -476,7 +398,12 @@ struct RecipeEditorView: View {
                     Text("Delete Recipe")
                         .foregroundColor(.red)
                 }
+                .padding()
             }
+            
+            Divider()
+                .overlay(.black)
+                .padding(0)
             
             Button(action: {
                 if isNewRecipe {
@@ -519,7 +446,15 @@ struct RecipeEditorView: View {
             }) {
                 Text(isNewRecipe ? "Create Recipe" : "Update Recipe")
             }
+            .padding()
+            
         } // end of Section
+        .background(.black.opacity(0.5))
+        .cornerRadius(10)
+        .clipped()
+        .padding(.top, 10)
+        .tint(.white)
+        .frame(maxWidth: .infinity)
     }
     
     // MARK: - Helper Functions
@@ -529,6 +464,51 @@ struct RecipeEditorView: View {
         }
     }
 }
+
+struct InstructionView: View {
+    @Binding var instruction: Instruction
+    @Binding var ingredients: [Ingredient]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Step \(instruction.step)")
+                .font(.headline)
+            
+            TextField("Description", text: $instruction.description, axis: .vertical)
+            
+            // Custom list for multiple selection
+            VStack(alignment: .leading) {
+                Text("Ingredients")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+                
+                ForEach($ingredients, id: \.self) { ingredient in
+                    HStack {
+                        Text(ingredient.name.wrappedValue)
+                        
+                        Spacer()
+                        
+                        Image(systemName: instruction.ingredients?.contains(ingredient._id.wrappedValue) == true ? "checkmark.circle.fill" : "circle")
+                    }
+                    .onTapGesture {
+                        toggleIngredientSelection(ingredient.wrappedValue)
+                    }
+                    .contentShape(Rectangle()) // Make the whole row tappable
+                }
+            }
+            .padding(.vertical, 5)
+        }
+    }
+    
+    private func toggleIngredientSelection(_ ingredient: Ingredient) {
+        if instruction.ingredients?.contains(ingredient._id) == true {
+            instruction.ingredients?.removeAll { $0 == ingredient._id }
+        } else {
+            instruction.ingredients?.append(ingredient._id)
+        }
+    }
+}
+
 
 #Preview {
     RecipeEditorView(isNewRecipe: true, recipe: .constant(MockData.shared.recipe[0]))

@@ -33,7 +33,7 @@ class RecipeEditorViewModel: ObservableObject {
     
     // ****** OTHER PROPERTIES ******
     @Published var cuisineTypes: [String] = []
-    @Published var units: [String] = ["g", "kg", "ml", "l", "tsp", "tbsp", "cup", "oz", "lb", "unit"]
+    @Published var units: [String] = ["", "g", "kg", "ml", "l", "tsp", "tbsp", "cup", "oz", "lb", "unit"]
     
     @Published var errorMessage: String?
     @Published var isLoading: Bool = false
@@ -128,6 +128,8 @@ class RecipeEditorViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(_):
+                    self.cleanInstructionsIngredients()
+                    
                     // 4 - Save Recipe
                     let newRecipe = Recipe(
                         id: UUID().uuidString,
@@ -214,6 +216,7 @@ class RecipeEditorViewModel: ObservableObject {
             }
         }
         
+        cleanInstructionsIngredients()
         
         let updatedRecipe = Recipe(
             id: self.id,
@@ -280,6 +283,16 @@ class RecipeEditorViewModel: ObservableObject {
                     self.isLoading = false
                     completion(false)
                 }
+            }
+        }
+    }
+    
+    func cleanInstructionsIngredients() {
+        // Iterate through the indices of each instruction
+        for index in instructions.indices {
+            // Filter the ingredients to only keep those that exist in the ingredients list
+            instructions[index].ingredients = instructions[index].ingredients?.filter { ingredient in
+                ingredients.contains(where: { $0._id == ingredient })
             }
         }
     }

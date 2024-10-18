@@ -25,6 +25,7 @@ class RecipeAPIService {
      - returns: Recipe array of all recipe  OR the error encoutered
      */
     func fetchAllRecipes(completion: @escaping (Result<[Recipe], Error>) -> Void) {
+        print("Fetching all recipes")
         AppAPIHandler.shared.performRequest(endpoint: "/recipes", completion: completion)
     }
     
@@ -45,6 +46,7 @@ class RecipeAPIService {
      - returns: Recipe array of all the user's recipes OR the error encoutered
      */
     func fetchRecipes(for user: User, completion: @escaping (Result<[Recipe], Error>) -> Void) {
+        print("Fetching recipes for user")
         AppAPIHandler.shared.performRequest(endpoint: "/recipes/user/\(user.id)", completion: completion)
     }
     
@@ -81,6 +83,7 @@ class RecipeAPIService {
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
             let data = try encoder.encode(recipe)
             AppAPIHandler.shared.performRequest(endpoint: "/recipes/\(id)", method: "PUT", body: data, completion: completion)
+            print("Update completed")
         } catch {
             print(error.localizedDescription)
             completion(.failure(error))

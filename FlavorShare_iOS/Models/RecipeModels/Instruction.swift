@@ -9,12 +9,13 @@ import Foundation
 
 struct Instruction: Identifiable, Hashable, Codable {
     let id = UUID()
-
+    
+    
     var step: Int
     var description: String
-    var ingredients: [Ingredient]? = []
+    var ingredients: [String]?
     
-    init(step: Int, description: String, ingredients: [Ingredient]? = []) {
+    init(step: Int, description: String, ingredients: [String]? = nil) {
         self.step = step
         self.description = description
         self.ingredients = ingredients
@@ -30,7 +31,7 @@ struct Instruction: Identifiable, Hashable, Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.step = try container.decode(Int.self, forKey: .step)
         self.description = try container.decode(String.self, forKey: .description)
-        self.ingredients = try container.decodeIfPresent([Ingredient].self, forKey: .ingredients)
+        self.ingredients = try container.decodeIfPresent([String].self, forKey: .ingredients)
     }
     
     func encode(to encoder: Encoder) throws {
