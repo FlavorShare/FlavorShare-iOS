@@ -18,56 +18,133 @@ struct RecipeView: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            BackgroundView(imageURL: viewModel.recipe.imageURL)
-            
-            ScrollView {
-                VStack {
-                    RecipeImageView(imageURL: viewModel.recipe.imageURL)
-                    RecipeHeader(recipe: viewModel.recipe)
-                        .padding(.top, -(UIScreen.main.bounds.height / 9))
-                    RecipeDetailsView(recipe: viewModel.recipe, viewDetails: $viewDetails)
-                        .padding(.horizontal)
-                        .padding(.top)
-                    Spacer()
+            if let recipe = viewModel.recipe {
+                BackgroundView(imageURL: recipe.imageURL)
+                
+                ScrollView {
+                    VStack {
+                        RecipeImageView(imageURL: recipe.imageURL)
+                        //                        RecipeHeader(recipe: recipe, viewModel: $viewModel)
+                        //                            .padding(.top, -(UIScreen.main.bounds.height / 9))
+                        VStack {
+                            ZStack (alignment: .bottom) {
+                                VStack (alignment: .center) {
+                                    // Recipe Title
+                                    Text(recipe.title)
+                                        .font(.largeTitle)
+                                        .fontWeight(.bold)
+                                        .padding(.horizontal)
+                                        .padding(.bottom, 2)
+                                    
+                                    // Recipe Details
+                                    Text("\(recipe.type) | Serving \(recipe.servings) | \(recipe.cookTime) minutes")
+                                        .padding(.bottom, 5)
+                                    
+                                    Text("\(recipe.likes) people liked this recipe")
+                                        .font(.footnote)
+                                        .padding(.bottom, 5)
+                                    
+                                    
+                                }
+                                .padding(.horizontal)
+                                .shadow(radius: 3)
+                                
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        if viewModel.isLiked {
+                                            viewModel.unlikeRecipe()
+                                        } else {
+                                            viewModel.likeRecipe()
+                                        }
+                                    }) {
+                                        Image(systemName: (viewModel.isLiked ? "heart.fill" : "heart"))
+                                    }
+                                    .font(.title2)
+                                    .padding()
+                                }
+                            }
+                            VStack (alignment: .leading) {
+                                // Recipe Owner
+                                if let user = recipe.user {
+                                    NavigationLink(destination: UserView(user: user)) {
+                                        Text("By: \(user.username)")
+                                            .font(.footnote)
+                                    }
+                                }
+                                
+                                Text("Last Updated: \(recipe.updatedAt.formatted(date: .numeric, time: .omitted))")
+                                    .font(.footnote)
+                                
+                                // Recipe Description
+                                Text(recipe.description)
+                                    .font(.body)
+                                    .padding(.vertical, 5)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .foregroundStyle(.white)
+                        
+                        
+                        
+                        
+                        RecipeDetailsView(recipe: recipe, viewDetails: $viewDetails)
+                            .padding(.horizontal)
+                            .padding(.top)
+                        Spacer()
+                    }
                 }
-            }
-            
-            HStack {
-                // Back button to go back in navigation stack
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    HStack {
+                
+                HStack (alignment: .top) {
+                    // Back button to go back in navigation stack
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.white)
-                        Text("Back")
-                            .foregroundColor(.white)
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 10)
+                            .background(Color.black.opacity(0.5))
+                            .cornerRadius(10)
+                            .clipped()
+                            .shadow(radius: 3)
                     }
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 10)
-                    .background(Color.black.opacity(0.5))
-                    .cornerRadius(10)
-                    .clipped()
-                    .shadow(radius: 3)
+                    
+                    Spacer()
+                    
+                    if let user = viewModel.recipe?.user {
+                        if user.id == AuthService.shared.currentUser?.id {
+                            NavigationLink(destination: RecipeEditorView(isNewRecipe: false, recipe: $viewModel.recipe)) {
+                                Text("Edit")
+                                    .foregroundStyle(.white)
+                                    .padding(.vertical, 5)
+                                    .padding(.horizontal, 10)
+                                    .background(Color.black.opacity(0.5))
+                                    .cornerRadius(10)
+                                    .clipped()
+                                    .shadow(radius: 3)
+                            }
+                        } else {
+                            NavigationLink(destination: UserView(user: user)) {
+                                // Profile Picture
+                                if let imageURL = user.profileImageURL {
+                                    if imageURL != "" {
+                                        RemoteImageView(fileName: imageURL, width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                                            .shadow(radius: 5)
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
                 }
-                
-                Spacer()
-                
-                NavigationLink(destination: RecipeEditorView(isNewRecipe: false, recipe: Binding(get: { Optional(viewModel.recipe) }, set: { viewModel.recipe = $0! }))) {
-                    Text("Edit")
-                        .foregroundStyle(.white)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 10)
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(10)
-                        .clipped()
-                        .shadow(radius: 3)
-                }
-                
-            }
-            .padding(.top, 60)
-            .padding(.horizontal)
-        }
+                .padding(.top, 60)
+                .padding(.horizontal)
+            } // if let recipe
+        } // ZStack
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
         .ignoresSafeArea(.all)
@@ -78,6 +155,13 @@ struct RecipeView: View {
                 }
             }
         )
+        .onAppear() {
+            if viewModel.recipe == nil {
+                presentationMode.wrappedValue.dismiss()
+            } else {
+                viewModel.getUser()
+            }
+        }
     }
 }
 
@@ -117,51 +201,6 @@ struct RecipeImageView: View {
             )
     }
 }
-
-struct RecipeHeader: View {
-    var recipe: Recipe
-    
-    var body: some View {
-        VStack (alignment: .center) {
-            // Recipe Title
-            Text(recipe.title)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.horizontal)
-                .padding(.bottom, 2)
-            
-            // Recipe Details
-            Text("\(recipe.type) | Serving \(recipe.servings) | \(recipe.cookTime) minutes")
-                .padding(.bottom, 5)
-            
-//            Text("\(recipe.likes) people liked this recipe")
-//                .font(.footnote)
-//                .padding(.bottom, 5)
-            
-            VStack (alignment: .leading) {
-                // Recipe Owner
-                if let user = recipe.user {
-                    Text("By: \(user.username)")
-                        .font(.footnote)
-                }
-                
-                Text("Last Updated: \(recipe.updatedAt.formatted(date: .numeric, time: .omitted))")
-                    .font(.footnote)
-                
-                // Recipe Description
-                Text(recipe.description)
-                    .font(.body)
-                    .padding(.vertical, 5)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .foregroundStyle(.white)
-        .padding(.horizontal)
-        .shadow(radius: 3)
-    }
-    
-}
-
 
 struct RecipeDetailsView: View {
     var recipe: Recipe

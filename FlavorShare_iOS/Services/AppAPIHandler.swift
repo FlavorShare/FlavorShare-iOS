@@ -30,6 +30,8 @@ class AppAPIHandler {
         body: Data? = nil,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
+        print("Performing request to \(endpoint)")
+        
         guard let url = URL(string: "\(baseURL)\(endpoint)") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
             return
@@ -46,7 +48,8 @@ class AppAPIHandler {
                 
                 let (data, response) = try await URLSession.shared.data(for: request)
                 
-                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 || httpResponse.statusCode == 201 else {
+                    print("Error: \(response)")
                     throw URLError(.badServerResponse)
                 }
                 
@@ -59,6 +62,7 @@ class AppAPIHandler {
                     completion(.success(decodedResponse))
                 }
             } catch {
+                print(error.localizedDescription)
                 completion(.failure(error))
             }
         }

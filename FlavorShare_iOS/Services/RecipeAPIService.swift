@@ -56,11 +56,13 @@ class RecipeAPIService {
      */
     func createRecipe(recipe: Recipe, completion: @escaping (Result<Recipe, Error>) -> Void) {
         do {
+            print("Creating recipe")
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
             let data = try encoder.encode(recipe)
             AppAPIHandler.shared.performRequest(endpoint: "/recipes", method: "POST", body: data, completion: completion)
         } catch {
+            print(error.localizedDescription)
             completion(.failure(error))
         }
     }
@@ -74,11 +76,13 @@ class RecipeAPIService {
      */
     func updateRecipe(id: String, recipe: Recipe, completion: @escaping (Result<Recipe, Error>) -> Void) {
         do {
+            print("Updating recipe")
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
             let data = try encoder.encode(recipe)
             AppAPIHandler.shared.performRequest(endpoint: "/recipes/\(id)", method: "PUT", body: data, completion: completion)
         } catch {
+            print(error.localizedDescription)
             completion(.failure(error))
         }
     }

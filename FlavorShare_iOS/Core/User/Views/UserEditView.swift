@@ -127,6 +127,11 @@ struct UserEditView: View {
                         .foregroundColor(.red)
                 } // end of Button
             } // end of Section
+            
+            Divider()
+                .background(Color.clear)
+                .padding(.vertical, 15)
+            
         } // end of Form
         .navigationTitle("Edit Profile")
         .onAppear {
@@ -139,7 +144,6 @@ struct UserEditView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
-        .padding(.bottom, 150)
         .sheet(isPresented: $viewModel.isImagePickerPresented) {
             ImagePicker(image: $viewModel.selectedImage, isPresented: $viewModel.isImagePickerPresented)
         }

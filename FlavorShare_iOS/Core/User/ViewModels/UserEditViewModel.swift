@@ -22,9 +22,9 @@ class UserEditViewModel: ObservableObject {
     @Published var phoneNumber: String = ""
     @Published var dateOfBirth: Date = Date()
 
-    var recipes: [Recipe] = []
-    var followers: [User] = []
-    var following: [User] = []
+    var recipes: [String] = []
+    var followers: [String] = []
+    var following: [String] = []
     
     var createdAt: Date = Date()
     var updatedAt: Date = Date()
@@ -74,12 +74,36 @@ class UserEditViewModel: ObservableObject {
         self.newPassword = ""
         self.confirmPassword = ""
         
+
         print("User data loaded")
+        print("Created at: \(createdAt)")
+        print("Updated at: \(updatedAt)")
+        
         print("Recipes: \(recipes.count)")
         print("Recipe: \(recipes)")
         print("Followers: \(followers.count)")
         print("Following: \(following.count)")
         
+    }
+    
+    func refreshUser() {
+        self.isLoading = false
+        
+        UserAPIService.shared.fetchUserById(withUid: id) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let user):
+                    print(user)
+                    self.loadUserData(user: user)
+                    self.isSuccess = true
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                }
+            }
+        }
+        
+        self.isSuccess = false
+        self.errorMessage = nil
     }
     
     // MARK: updateUser()

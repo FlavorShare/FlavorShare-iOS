@@ -50,7 +50,7 @@ struct CustomTabBar: View {
                     Image(systemName: "house.fill")
                 }
             }
-            .foregroundColor(selectedIndex == 0 ? .mint : .gray)
+            .foregroundColor(selectedIndex == 0 ? .black.opacity(0.8) : .gray)
             .padding(.horizontal)
             
             // ********** UserView **********
@@ -63,7 +63,7 @@ struct CustomTabBar: View {
                     Image(systemName: "person.fill")
                 }
             }
-            .foregroundColor(selectedIndex == 1 ? .mint : .gray)
+            .foregroundColor(selectedIndex == 1 ? .black.opacity(0.8) : .gray)
             .padding(.horizontal)
             
         }

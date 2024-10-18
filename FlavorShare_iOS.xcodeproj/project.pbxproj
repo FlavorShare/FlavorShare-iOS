@@ -232,6 +232,7 @@
 				802048222C95042700F07CE4 /* AuthService.swift */,
 				802048242C95055600F07CE4 /* UserAPIService.swift */,
 				80326B0B2C9B6832009C40C4 /* ImageStorageService.swift */,
+				806353102CA1CB990021AAD2 /* AppAPIHandler.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -242,7 +243,6 @@
 				80326AF72C97A0FE009C40C4 /* MockData.swift */,
 				80326B072C9B5EBA009C40C4 /* ImageConverter.swift */,
 				80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */,
-				806353102CA1CB990021AAD2 /* AppAPIHandler.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

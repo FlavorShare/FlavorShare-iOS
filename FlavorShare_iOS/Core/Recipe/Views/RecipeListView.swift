@@ -16,7 +16,7 @@ struct RecipeListView: View {
     let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
-        NavigationStack{
+        NavigationStack (){
             ZStack {
                 // Background Image
                 Image("Background")
@@ -43,12 +43,18 @@ struct RecipeListView: View {
                         // Welcome Message
                         let userFirstName = AuthService.shared.currentUser?.firstName ?? "User"
                         HStack {
-                            RemoteImageView(fileName: AuthService.shared.currentUser?.profileImageURL ?? "Image", width: screenWidth / 5, height: screenWidth / 5)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.white, lineWidth: 3))
-                                .shadow(radius: 5)
-                                .padding(.leading)
-                                .padding(.trailing, 5)
+                            if let imageURL = AuthService.shared.currentUser?.profileImageURL {
+                                if imageURL != "" {
+                                    RemoteImageView(fileName: imageURL, width: screenWidth / 5, height: screenWidth / 5)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                                        .shadow(radius: 5)
+                                        .padding(.trailing, 5)
+                                }
+                                
+                               
+                                
+                            }
                             
                             VStack (alignment: .leading) {
                                 Spacer()
@@ -65,6 +71,7 @@ struct RecipeListView: View {
                             
                             Spacer()
                         }
+                        .padding(.leading)
                         
                         // Custom SearchBar
                         SearchBar(searchText: $viewModel.searchText)
@@ -126,6 +133,9 @@ struct RecipeListView: View {
                     
                 } // ScrollView
                 .refreshable {
+                    viewModel.fetchRecipes()
+                }
+                .onAppear() {
                     viewModel.fetchRecipes()
                 }
                 

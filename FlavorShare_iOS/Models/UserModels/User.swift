@@ -18,9 +18,9 @@ struct User: Identifiable, Codable {
     var phone: String
     var dateOfBirth: Date
     
-    var recipes: [Recipe]
-    var followers: [User]
-    var following: [User]
+    var recipes: [String]
+    var followers: [String]
+    var following: [String]
     
     var createdAt: Date?
     var updatedAt: Date?
@@ -30,24 +30,24 @@ struct User: Identifiable, Codable {
     
     init(
         id: String,
-         email: String,
-         username: String,
+        email: String,
+        username: String,
         
-         firstName: String,
-         lastName: String,
+        firstName: String,
+        lastName: String,
         
-         phone: String,
-         dateOfBirth: Date,
+        phone: String,
+        dateOfBirth: Date,
         
-         recipes: [Recipe] = [],
-         followers: [User] = [],
-         following: [User] = [],
+        recipes: [String] = [],
+        followers: [String] = [],
+        following: [String] = [],
         
-         createdAt: Date? = Date(),
-         updatedAt: Date? = Date(),
+        createdAt: Date? = Date(),
+        updatedAt: Date? = Date(),
         
-         profileImageURL: String? = nil,
-         bio: String = "Hi! I'm new to FlavorShare!")
+        profileImageURL: String? = nil,
+        bio: String = "Hi! I'm new to FlavorShare!")
     {
         self.id = id
         self.email = email
@@ -74,13 +74,20 @@ struct User: Identifiable, Codable {
         case id = "_id"
         case email
         case username
+        
         case firstName
         case lastName
+        
         case phone
         case dateOfBirth
+        
         case recipes
         case followers
         case following
+        
+        case createdAt
+        case updatedAt
+        
         case profileImageURL
         case bio
     }
@@ -90,31 +97,51 @@ struct User: Identifiable, Codable {
         self.id = try container.decode(String.self, forKey: .id)
         self.email = try container.decode(String.self, forKey: .email)
         self.username = try container.decode(String.self, forKey: .username)
+        
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
+        
         self.phone = try container.decode(String.self, forKey: .phone)
         self.dateOfBirth = try container.decode(Date.self, forKey: .dateOfBirth)
         
         do {
-            self.recipes = try container.decode([Recipe].self, forKey: .recipes)
-        } catch {
-            print("Failed to decode recipes: \(error)")
+            self.recipes = try container.decode([String].self, forKey: .recipes)
+        } catch let error {
+            print("Failed to decode recipes: \(error.localizedDescription)")
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .typeMismatch(let type, let context):
+                    print("Type Mismatch: \(type), Context: \(context)")
+                case .valueNotFound(let type, let context):
+                    print("Value Not Found: \(type), Context: \(context)")
+                case .keyNotFound(let key, let context):
+                    print("Key Not Found: \(key), Context: \(context)")
+                case .dataCorrupted(let context):
+                    print("Data Corrupted: \(context)")
+                @unknown default:
+                    print("Unknown Decoding Error")
+                }
+            }
             self.recipes = []
         }
         
         do {
-            self.followers = try container.decode([User].self, forKey: .followers)
+            self.followers = try container.decode([String].self, forKey: .followers)
         } catch {
             print("Failed to decode followers: \(error)")
             self.followers = []
         }
         
         do {
-            self.following = try container.decode([User].self, forKey: .following)
+            self.following = try container.decode([String].self, forKey: .following)
         } catch {
             print("Failed to decode following: \(error)")
             self.following = []
         }
+        
+        self.createdAt = try container.decode(Date.self, forKey: .createdAt)
+        self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+
         self.profileImageURL = try container.decodeIfPresent(String.self, forKey: .profileImageURL)
         self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
     }
@@ -124,13 +151,18 @@ struct User: Identifiable, Codable {
         try container.encode(id, forKey: .id)
         try container.encode(email, forKey: .email)
         try container.encode(username, forKey: .username)
+        
         try container.encode(firstName, forKey: .firstName)
         try container.encode(lastName, forKey: .lastName)
+        
         try container.encode(phone, forKey: .phone)
         try container.encode(dateOfBirth, forKey: .dateOfBirth)
+        
         try container.encode(recipes, forKey: .recipes)
         try container.encode(followers, forKey: .followers)
         try container.encode(following, forKey: .following)
+        
+        // Created and Updated at are handled in the backend
         try container.encodeIfPresent(profileImageURL, forKey: .profileImageURL)
         try container.encodeIfPresent(bio, forKey: .bio)
     }
