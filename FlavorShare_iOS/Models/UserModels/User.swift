@@ -28,6 +28,8 @@ struct User: Identifiable, Codable {
     var profileImageURL: String?
     var bio: String?
     
+    var likedRecipes: [String]?
+    
     init(
         id: String,
         email: String,
@@ -47,7 +49,10 @@ struct User: Identifiable, Codable {
         updatedAt: Date? = Date(),
         
         profileImageURL: String? = nil,
-        bio: String = "Hi! I'm new to FlavorShare!")
+        bio: String = "Hi! I'm new to FlavorShare!",
+    
+        likedRecipes: [String]? = []
+    )
     {
         self.id = id
         self.email = email
@@ -68,6 +73,8 @@ struct User: Identifiable, Codable {
         
         self.profileImageURL = profileImageURL
         self.bio = bio
+        
+        self.likedRecipes = likedRecipes
     }
     
     enum CodingKeys: String, CodingKey {
@@ -90,6 +97,8 @@ struct User: Identifiable, Codable {
         
         case profileImageURL
         case bio
+        
+        case likedRecipes
     }
     
     init(from decoder: Decoder) throws {
@@ -144,6 +153,8 @@ struct User: Identifiable, Codable {
 
         self.profileImageURL = try container.decodeIfPresent(String.self, forKey: .profileImageURL)
         self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
+        
+        self.likedRecipes = try container.decodeIfPresent([String].self, forKey: .likedRecipes)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -165,5 +176,7 @@ struct User: Identifiable, Codable {
         // Created and Updated at are handled in the backend
         try container.encodeIfPresent(profileImageURL, forKey: .profileImageURL)
         try container.encodeIfPresent(bio, forKey: .bio)
+            
+        try container.encodeIfPresent(likedRecipes, forKey: .likedRecipes)
     }
 }

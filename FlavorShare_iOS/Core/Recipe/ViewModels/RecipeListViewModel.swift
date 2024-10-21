@@ -15,7 +15,8 @@ class RecipeListViewModel: ObservableObject {
     @Published var cuisineTypes: [String] = ["All"]
     @Published var searchText: String = ""
     @Published var selectedCategory: String = "All"
-
+    @Published var likeFilter: Bool = false
+    
     init() {
         fetchRecipes()
         fetchCuisineTypes()
@@ -26,10 +27,17 @@ class RecipeListViewModel: ObservableObject {
      This function filters the recipes based on the selected category and search text
      */
     func filterRecipes() {
-        if selectedCategory == "All" {
-            filteredRecipes = recipes
+        // Liked Filter
+        if likeFilter {
+            filteredRecipes = recipes.filter { AuthService.shared.currentUser?.likedRecipes?.contains( $0.id ) ?? false }
         } else {
-            filteredRecipes = recipes.filter { $0.type == selectedCategory }
+            filteredRecipes = recipes
+        }
+        
+        if selectedCategory == "All" {
+            filteredRecipes = filteredRecipes
+        } else {
+            filteredRecipes = filteredRecipes.filter { $0.type == selectedCategory }
         }
         
         if !searchText.isEmpty {

@@ -60,10 +60,22 @@ class RecipeViewModel: ObservableObject {
         RecipeAPIService.shared.updateRecipe(id: self.recipe!.id, recipe: self.recipe!) { result in
             switch result {
             case .success:
-                break
+                print("Recipe liked updated")
             case .failure(let error):
                 print(error.localizedDescription)
                 self.unlikeRecipeUI()
+                return
+            }
+        }
+        
+        AuthService.shared.currentUser?.likedRecipes?.append(self.recipe!.id)
+        
+        UserAPIService.shared.updateUser(id: AuthService.shared.currentUser!.id, user: AuthService.shared.currentUser!) { result in
+            switch result {
+            case .success:
+                break
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }
@@ -80,10 +92,21 @@ class RecipeViewModel: ObservableObject {
         RecipeAPIService.shared.updateRecipe(id: self.recipe!.id, recipe: self.recipe!) { result in
             switch result {
             case .success:
-                break
+                print("Recipe unliked updated")
             case .failure(let error):
                 print(error.localizedDescription)
                 self.likeRecipeUI()
+            }
+        }
+        
+        AuthService.shared.currentUser?.likedRecipes?.removeAll { $0 == self.recipe!.id }
+        
+        UserAPIService.shared.updateUser(id: AuthService.shared.currentUser!.id, user: AuthService.shared.currentUser!) { result in
+            switch result {
+            case .success:
+                break
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }

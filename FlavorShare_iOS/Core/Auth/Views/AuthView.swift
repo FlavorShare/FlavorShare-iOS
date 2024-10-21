@@ -70,7 +70,8 @@ struct AuthView: View {
                         .padding()
                         
                         Group {
-                            TextField("Email", text: $viewModel.email)
+                            TextField("Email", text: $viewModel.email, prompt: Text("Email").foregroundColor(.secondary.opacity(0.5))
+                            )
                                 .keyboardType(.emailAddress)
                                 .autocapitalization(.none)
                                 .padding()

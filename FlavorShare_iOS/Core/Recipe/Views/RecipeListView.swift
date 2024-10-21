@@ -74,11 +74,23 @@ struct RecipeListView: View {
                         .padding(.leading)
                         
                         // Custom SearchBar
-                        SearchBar(searchText: $viewModel.searchText)
-                            .padding()
-                            .onChange(of: viewModel.searchText) {
+                        HStack (alignment: .center, spacing: 0) {
+                            SearchBar(searchText: $viewModel.searchText)
+                                .padding()
+                                .onChange(of: viewModel.searchText) {
+                                    viewModel.filterRecipes()
+                                }
+                            
+                            Button(action: {
+                                viewModel.likeFilter.toggle()
                                 viewModel.filterRecipes()
+                            }) {
+                                Image(systemName: viewModel.likeFilter ? "heart.fill" : "heart")
+                                    .foregroundColor(.white)
+                                    .padding(.trailing)
+                                    .font(.title)
                             }
+                        }
                         
                         // Horizontal Scroll Bar for Categories
                         ScrollView(.horizontal, showsIndicators: false) {

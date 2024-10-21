@@ -11,9 +11,11 @@ struct RecipeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject var viewModel: RecipeViewModel
     @State var viewDetails = "Ingredients"
+    @State private var selectedServings: Int
     
     init (recipe: Recipe) {
         _viewModel = StateObject(wrappedValue: RecipeViewModel(recipe: recipe))
+        _selectedServings = State(initialValue: recipe.servings)
     }
     
     var body: some View {
@@ -36,9 +38,24 @@ struct RecipeView: View {
                                         .padding(.horizontal)
                                         .padding(.bottom, 2)
                                     
+                                    //                                    // Recipe Details
+                                    //                                    Text("\(recipe.type) | Serving \(recipe.servings) | \(recipe.cookTime) minutes")
+                                    //                                        .padding(.bottom, 5)
                                     // Recipe Details
-                                    Text("\(recipe.type) | Serving \(recipe.servings) | \(recipe.cookTime) minutes")
-                                        .padding(.bottom, 5)
+                                    Text("\(recipe.type) | \(recipe.cookTime) minutes")
+                                    
+                                    HStack (alignment: .center, spacing: 0) {
+                                        Picker("Servings", selection: $selectedServings) {
+                                            ForEach(1...20, id: \.self) { serving in
+                                                Text("\(serving)").tag(serving)
+                                            }
+                                        }
+                                        .pickerStyle(MenuPickerStyle())
+                                        Text("Serving\(selectedServings > 1 ? "s" : "")")
+                                    }
+                                    .tint(.white)
+                                    .padding(.bottom, 5)
+                                    .padding(.top, -10)
                                     
                                     Text("\(recipe.likes) people liked this recipe")
                                         .font(.footnote)
@@ -48,6 +65,9 @@ struct RecipeView: View {
                                 }
                                 .padding(.horizontal)
                                 .shadow(radius: 3)
+                                .onChange(of: selectedServings) {
+                                    print(selectedServings)
+                                }
                                 
                                 HStack {
                                     Spacer()
@@ -89,7 +109,7 @@ struct RecipeView: View {
                         
                         
                         
-                        RecipeDetailsView(recipe: recipe, viewDetails: $viewDetails)
+                        RecipeDetailsView(recipe: recipe, viewDetails: $viewDetails, selectedServings: $selectedServings)
                             .padding(.horizontal)
                             .padding(.top)
                         Spacer()
@@ -187,6 +207,7 @@ struct RecipeImageView: View {
 struct RecipeDetailsView: View {
     var recipe: Recipe
     @Binding var viewDetails: String
+    @Binding var selectedServings: Int
     
     var body: some View {
         VStack(alignment: .center) {
@@ -233,8 +254,8 @@ struct RecipeDetailsView: View {
                                 
                                 if let quantity = ingredient.quantity {
                                     Text(quantity.truncatingRemainder(dividingBy: 1) == 0
-                                        ? String(format: "%.0f", quantity) // For round numbers, show no decimals
-                                        : String(format: "%.1f", quantity) // For decimal numbers, show one decimal
+                                         ? String(format: "%.0f", getQuantity(quantity)) // For round numbers, show no decimals
+                                         : String(format: "%.1f", getQuantity(quantity)) // For decimal numbers, show one decimal
                                     )
                                     
                                     if let unit = ingredient.unit {
@@ -279,13 +300,13 @@ struct RecipeDetailsView: View {
                                     ForEach(ingredients, id: \.self) { ingredient in
                                         HStack {
                                             Text(ingredient.name)
-
+                                            
                                             Spacer()
                                             
                                             if let quantity = ingredient.quantity {
                                                 Text(quantity.truncatingRemainder(dividingBy: 1) == 0
-                                                    ? String(format: "%.0f", quantity) // For round numbers, show no decimals
-                                                    : String(format: "%.1f", quantity) // For decimal numbers, show one decimal
+                                                     ? String(format: "%.0f", getQuantity(quantity)) // For round numbers, show no decimals
+                                                     : String(format: "%.1f", getQuantity(quantity)) // For decimal numbers, show one decimal
                                                 )
                                                 
                                                 if let unit = ingredient.unit {
@@ -300,7 +321,7 @@ struct RecipeDetailsView: View {
                                         }
                                         .font(.footnote)
                                         .padding(.horizontal)
-    
+                                        
                                     }
                                 }
                             }
@@ -331,6 +352,11 @@ struct RecipeDetailsView: View {
         }
         
         return []
+    }
+    
+    func getQuantity(_ quantity: Float) -> Float {
+        return quantity * Float(Float(selectedServings) / Float(recipe.servings))
+
     }
 }
 

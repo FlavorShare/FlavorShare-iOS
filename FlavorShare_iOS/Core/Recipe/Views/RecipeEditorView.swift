@@ -71,15 +71,15 @@ struct RecipeEditorView: View {
                     Text("Recipe Ingredients")
                         .font(.headline)
                         .shadow(radius: 3)
-                        .padding(.top, 40)
-                    
+                        .padding(.top, 20)
+
                     ingredients
                     
                     Text("Recipe Instructions")
                         .font(.headline)
                         .shadow(radius: 3)
-                        .padding(.top, 40)
-                    
+                        .padding(.top, 20)
+
                     instructions
                     
                     actionButtons
@@ -106,10 +106,10 @@ struct RecipeEditorView: View {
                 }
                 
                 Spacer()
-            }
+            } // end of HStack
             .padding(.top, 60)
             .padding(.horizontal)
-        }
+        } // end of ZStack
         .background(.gray)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -212,7 +212,6 @@ struct RecipeEditorView: View {
         .background(.black.opacity(0.5))
         .cornerRadius(10)
         .clipped()
-        .padding(.top, 10)
         .tint(.white)
     }
     
@@ -316,7 +315,6 @@ struct RecipeEditorView: View {
         .background(.black.opacity(0.5))
         .cornerRadius(10)
         .clipped()
-        .padding(.top, 10)
         .tint(.white)
     }
     
@@ -376,7 +374,6 @@ struct RecipeEditorView: View {
         .background(.black.opacity(0.5))
         .cornerRadius(10)
         .clipped()
-        .padding(.top, 10)
         .tint(.white)
     }
     
@@ -452,7 +449,7 @@ struct RecipeEditorView: View {
         .background(.black.opacity(0.5))
         .cornerRadius(10)
         .clipped()
-        .padding(.top, 10)
+        .padding(.top)
         .tint(.white)
         .frame(maxWidth: .infinity)
     }
