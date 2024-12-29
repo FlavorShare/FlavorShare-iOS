@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,6 +35,7 @@
 		802048252C95055600F07CE4 /* UserAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802048242C95055600F07CE4 /* UserAPIService.swift */; };
 		802B1F742CACDA4C00798F6D /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AFD2C97A279009C40C4 /* ContentViewModel.swift */; };
 		802B1F792CACDDF700798F6D /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802B1F782CACDDF700798F6D /* UserView.swift */; };
+		802B6F3B2CBF65F600125F88 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802B6F3A2CBF65F600125F88 /* RecipeViewModel.swift */; };
 		8030CEE92CACE49F00F5A6BD /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8030CEE82CACE49F00F5A6BD /* UserViewModel.swift */; };
 		80326AF22C95EF26009C40C4 /* UserListConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF12C95EF26009C40C4 /* UserListConfig.swift */; };
 		80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80326AF72C97A0FE009C40C4 /* MockData.swift */; };
@@ -49,8 +50,10 @@
 		80326B222C9C9AB1009C40C4 /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B212C9C9AB1009C40C4 /* AWSCore */; };
 		80326B242C9C9AB1009C40C4 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B232C9C9AB1009C40C4 /* AWSS3 */; };
 		80326B262C9C9D55009C40C4 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 80326B252C9C9D55009C40C4 /* SDWebImage */; };
+		8052188D2D1F333500A9B8DB /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052188C2D1F332F00A9B8DB /* Review.swift */; };
 		8063530E2C9CC5F30021AAD2 /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */; };
 		806353112CA1CB990021AAD2 /* AppAPIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806353102CA1CB990021AAD2 /* AppAPIHandler.swift */; };
+		80B777302CC2A59700B2B48C /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B7772F2CC2A59700B2B48C /* BackgroundView.swift */; };
 		80D7DB432CBC1EA10080B59F /* RecipeSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7DB422CBC1EA10080B59F /* RecipeSquare.swift */; };
 		80D7DB462CBC2AE00080B59F /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7DB452CBC2AE00080B59F /* BlurView.swift */; };
 		80D7DB4B2CBC3F390080B59F /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7DB4A2CBC3F390080B59F /* SearchBar.swift */; };
@@ -83,6 +86,7 @@
 		802048222C95042700F07CE4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		802048242C95055600F07CE4 /* UserAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPIService.swift; sourceTree = "<group>"; };
 		802B1F782CACDDF700798F6D /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		802B6F3A2CBF65F600125F88 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		8030CEE82CACE49F00F5A6BD /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		80326AF12C95EF26009C40C4 /* UserListConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListConfig.swift; sourceTree = "<group>"; };
 		80326AF72C97A0FE009C40C4 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
@@ -95,12 +99,18 @@
 		80326B112C9C5114009C40C4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		80326B142C9C70A6009C40C4 /* FlavorShare-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlavorShare-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
 		80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentVariables.swift; sourceTree = "<group>"; };
+		8052188C2D1F332F00A9B8DB /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
 		806353102CA1CB990021AAD2 /* AppAPIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAPIHandler.swift; sourceTree = "<group>"; };
+		80B7772F2CC2A59700B2B48C /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		80D7DB422CBC1EA10080B59F /* RecipeSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSquare.swift; sourceTree = "<group>"; };
 		80D7DB452CBC2AE00080B59F /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		80D7DB4A2CBC3F390080B59F /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		80A252672D13689F0007EE13 /* MealPlanning */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MealPlanning; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		802047D72C93DF1200F07CE4 /* Frameworks */ = {
@@ -190,6 +200,7 @@
 				8063530D2C9CC5F30021AAD2 /* RemoteImageView.swift */,
 				80D7DB452CBC2AE00080B59F /* BlurView.swift */,
 				80D7DB4A2CBC3F390080B59F /* SearchBar.swift */,
+				80B7772F2CC2A59700B2B48C /* BackgroundView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -199,6 +210,7 @@
 			children = (
 				800424222CB349420070BACC /* Navbar */,
 				802B1F752CACDD6000798F6D /* User */,
+				80A252672D13689F0007EE13 /* MealPlanning */,
 				8020481C2C9502D900F07CE4 /* Auth */,
 				802047F42C93E0BE00F07CE4 /* Recipe */,
 				802047F32C93E09100F07CE4 /* Root */,
@@ -230,6 +242,7 @@
 				802048222C95042700F07CE4 /* AuthService.swift */,
 				802048242C95055600F07CE4 /* UserAPIService.swift */,
 				80326B0B2C9B6832009C40C4 /* ImageStorageService.swift */,
+				806353102CA1CB990021AAD2 /* AppAPIHandler.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -240,7 +253,6 @@
 				80326AF72C97A0FE009C40C4 /* MockData.swift */,
 				80326B072C9B5EBA009C40C4 /* ImageConverter.swift */,
 				80326B152C9C7209009C40C4 /* EnvironmentVariables.swift */,
-				806353102CA1CB990021AAD2 /* AppAPIHandler.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -276,8 +288,9 @@
 		802047F62C93E0DC00F07CE4 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				8020480D2C94949000F07CE4 /* RecipeListViewModel.swift */,
 				802048152C94A5C000F07CE4 /* RecipeEditorViewModel.swift */,
+				802B6F3A2CBF65F600125F88 /* RecipeViewModel.swift */,
+				8020480D2C94949000F07CE4 /* RecipeListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -321,6 +334,7 @@
 		80326AEF2C95EEE2009C40C4 /* RecipeModels */ = {
 			isa = PBXGroup;
 			children = (
+				8052188C2D1F332F00A9B8DB /* Review.swift */,
 				802047FD2C93E4CB00F07CE4 /* Recipe.swift */,
 				802048032C94810500F07CE4 /* NutritionalValues.swift */,
 				802048052C94811D00F07CE4 /* Instruction.swift */,
@@ -391,6 +405,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				80A252672D13689F0007EE13 /* MealPlanning */,
 			);
 			name = FlavorShare_iOS;
 			packageProductDependencies = (
@@ -482,18 +499,21 @@
 				802048202C95031C00F07CE4 /* AuthView.swift in Sources */,
 				80D7DB462CBC2AE00080B59F /* BlurView.swift in Sources */,
 				80D7DB432CBC1EA10080B59F /* RecipeSquare.swift in Sources */,
+				80B777302CC2A59700B2B48C /* BackgroundView.swift in Sources */,
 				800424282CB34E610070BACC /* UserEditView.swift in Sources */,
 				802047FA2C93E11600F07CE4 /* RecipeListView.swift in Sources */,
 				802047FE2C93E4CB00F07CE4 /* Recipe.swift in Sources */,
 				80326B0A2C9B66A9009C40C4 /* ImagePicker.swift in Sources */,
 				802048142C949E9500F07CE4 /* DateFormatter.swift in Sources */,
 				806353112CA1CB990021AAD2 /* AppAPIHandler.swift in Sources */,
+				8052188D2D1F333500A9B8DB /* Review.swift in Sources */,
 				8020480C2C94946000F07CE4 /* RecipeAPIService.swift in Sources */,
 				8020480E2C94949000F07CE4 /* RecipeListViewModel.swift in Sources */,
 				80326B082C9B5EBA009C40C4 /* ImageConverter.swift in Sources */,
 				8063530E2C9CC5F30021AAD2 /* RemoteImageView.swift in Sources */,
 				80326AF82C97A0FE009C40C4 /* MockData.swift in Sources */,
 				80326B162C9C7209009C40C4 /* EnvironmentVariables.swift in Sources */,
+				802B6F3B2CBF65F600125F88 /* RecipeViewModel.swift in Sources */,
 				802048252C95055600F07CE4 /* UserAPIService.swift in Sources */,
 				80326B0C2C9B6832009C40C4 /* ImageStorageService.swift in Sources */,
 				802047FC2C93E12D00F07CE4 /* RecipeEditorView.swift in Sources */,
@@ -645,8 +665,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -679,8 +698,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

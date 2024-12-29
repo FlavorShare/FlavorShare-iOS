@@ -30,7 +30,7 @@ class MockData {
             updatedAt: Date(),
             description: "A classic Italian pasta dish.",
             ingredients: [Ingredient(name: "Spaghetti"), Ingredient(name: "Eggs"), Ingredient(name: "Pancetta"), Ingredient(name: "Parmesan Cheese"), Ingredient(name: "Black Pepper")],
-            instructions: [Instruction(step: 1, description: "Boil the spaghetti.", ingredients: [Ingredient(name: "Spaghetti")]), Instruction(step: 2, description: "Cook the pancetta.", ingredients: [Ingredient(name: "Eggs"), Ingredient(name: "Pancetta"), Ingredient(name: "Parmesan Cheese")]), Instruction(step: 3, description: "Mix eggs and cheese."), Instruction(step: 4, description: "Combine all ingredients.")],
+            instructions: [Instruction(step: 1, description: "Boil the spaghetti."), Instruction(step: 2, description: "Cook the pancetta."), Instruction(step: 3, description: "Mix eggs and cheese."), Instruction(step: 4, description: "Combine all ingredients.")],
             cookTime: 30,
             servings: 4,
             likes: 100,

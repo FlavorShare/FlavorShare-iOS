@@ -1,58 +1,10 @@
+
+
+//  NavbarView.swift
+//  FlavorShare_iOS
 //
+//  Created by Benjamin Lefebvre on 2024-10-06.
 //
-////  NavbarView.swift
-////  FlavorShare_iOS
-////
-////  Created by Benjamin Lefebvre on 2024-10-06.
-////
-//
-//import SwiftUI
-//
-//struct NavbarView: View {
-//    // MARK: VARIABLES
-//    let user: User
-//    @State private var selectedIndex = 0
-//
-//    init(user: User) {
-//        self.user = user
-//        // Set the background color of the tab bar
-//        let tabBarAppearance = UITabBarAppearance()
-//        tabBarAppearance.configureWithOpaqueBackground()
-//        tabBarAppearance.backgroundColor = UIColor.white
-//        UITabBar.appearance().standardAppearance = tabBarAppearance
-//        if #available(iOS 15.0, *) {
-//            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-//        }
-//    }
-//
-//    // MARK: BODY
-//    var body: some View {
-//        TabView(selection: $selectedIndex) {
-//            RecipeListView()
-//                .onAppear() {
-//                    selectedIndex = 0
-//                }
-//                .tabItem {
-//                    Image(systemName: "house")
-//                }
-//                .tag(0)
-//
-//            UserView(user: user)
-//                .onAppear() {
-//                    selectedIndex = 1
-//                }
-//                .tabItem {
-//                    Image(systemName: "person")
-//                }
-//                .tag(1)
-//        }
-//        .accentColor(.black)
-//    }
-//}
-//
-//#Preview {
-//    NavbarView(user: MockData.shared.user)
-//}
 
 import SwiftUI
 
@@ -72,8 +24,13 @@ struct NavbarView: View {
                 RecipeListView()
                     .opacity(selectedIndex == 0 ? 1 : 0)
                     .animation(.easeInOut, value: selectedIndex)
+                
                 UserView(user: user)
                     .opacity(selectedIndex == 1 ? 1 : 0)
+                    .animation(.easeInOut, value: selectedIndex)
+                
+                MealPlanningView()
+                    .opacity(selectedIndex == 2 ? 1 : 0)
                     .animation(.easeInOut, value: selectedIndex)
             }
             .animation(.easeInOut, value: selectedIndex)
@@ -87,38 +44,52 @@ struct CustomTabBar: View {
     @Binding var selectedIndex: Int
     
     var body: some View {
-        HStack {
-            // ******* RecipeListView *******
-            Button(action: {
-                withAnimation {
-                    selectedIndex = 0
+            HStack {
+                // ******* MealPlanningView *******
+                Button(action: {
+                    withAnimation {
+                        selectedIndex = 2
+                    }
+                }) {
+                    VStack {
+                        Image(systemName: "calendar")
+                    }
                 }
-            }) {
-                VStack {
-                    Image(systemName: "house.fill")
+                .foregroundColor(selectedIndex == 2 ? .black.opacity(0.8) : .gray)
+                .padding(.horizontal)
+                
+                // ******* RecipeListView *******
+                Button(action: {
+                    withAnimation {
+                        selectedIndex = 0
+                    }
+                }) {
+                    VStack {
+                        Image(systemName: "house.fill")
+                    }
                 }
+                .foregroundColor(selectedIndex == 0 ? .black.opacity(0.8) : .gray)
+                .padding(.horizontal)
+                
+                // ********** UserView **********
+                Button(action: {
+                    withAnimation {
+                        selectedIndex = 1
+                    }
+                }) {
+                    VStack {
+                        Image(systemName: "person.fill")
+                    }
+                }
+                .foregroundColor(selectedIndex == 1 ? .black.opacity(0.8) : .gray)
+                .padding(.horizontal)
+                
             }
-            .foregroundColor(selectedIndex == 0 ? .mint : .gray)
-            .padding(.horizontal)
-            
-            // ********** UserView **********
-            Button(action: {
-                withAnimation {
-                    selectedIndex = 1
-                }
-            }) {
-                VStack {
-                    Image(systemName: "person.fill")
-                }
-            }
-            .foregroundColor(selectedIndex == 1 ? .mint : .gray)
-            .padding(.horizontal)
-            
-        }
-        .padding()
-        .background(Color.white.opacity(0.8))
-        .cornerRadius(25)
-        .shadow(radius: 5)
+            .padding()
+            .background(.ultraThinMaterial)
+            .background(Color.white.opacity(0.2))
+            .cornerRadius(25)
+            .shadow(radius: 5)
     }
 }
 

@@ -47,7 +47,7 @@ struct RecipeSquare: View {
             // MARK: SHADOW OVERLAY
             LinearGradient(
                 gradient: .init(
-                    colors: [.black.opacity(1), .clear]
+                    colors: [.black.opacity(1), .clear, .clear]
                 ),
                 startPoint: .bottom,
                 endPoint: .top)
@@ -67,25 +67,11 @@ struct RecipeSquare: View {
                 
                 // TYPE & COOK TIME
                 HStack {
-                    
                     Text("\(recipe.type) | \(recipe.cookTime) min")
-//
-//                    Text("|")
-//                    
-//                    Text(" \(recipe.cookTime) min.")
-//    
                 } // HStack
                 .font(.caption)
                 .fontWeight(.bold)
                 .foregroundStyle(.white)
-                
-                
-                // Rating
-                //                Text("⭐️ \(recipe.)")
-                //                    .font(.footnote)
-                //                    .fontWeight(.bold)
-                //                    .foregroundStyle(.white)
-                
                 
             } // VStack
             .padding(.bottom)

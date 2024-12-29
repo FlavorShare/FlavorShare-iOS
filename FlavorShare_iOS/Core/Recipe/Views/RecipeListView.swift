@@ -10,39 +10,27 @@ import SwiftUI
 struct RecipeListView: View {
     @StateObject private var viewModel = RecipeListViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
-    @State private var selectedCategory: String = "All"
-    
-    var filteredRecipes: [Recipe] {
-        if selectedCategory == "All" {
-            return viewModel.recipes
-        } else {
-            return viewModel.recipes.filter { $0.type == selectedCategory }
-        }
-    }
     
     // Screen Height and Width
     let screenHeight = UIScreen.main.bounds.height
     let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
-        NavigationStack{
+        NavigationStack (){
             ZStack {
                 // Background Image
                 Image("Background")
                     .resizable()
                     .blur(radius: 20)
                     .frame(width: screenWidth, height: screenHeight)
-//                    .ignoresSafeArea(.container, edges: .top)
-
+                
                 BlurView(style: .regular)
                     .frame(width: screenWidth, height: screenHeight)
-//                    .ignoresSafeArea(.container, edges: .top)
-
+                
                 Rectangle()
                     .fill(Color.black.opacity(0.4))
                     .frame(width: screenWidth, height: screenHeight)
-//                    .ignoresSafeArea(.container, edges: .top)
-
+                
                 ScrollView {
                     VStack(spacing: 0) {
                         
@@ -55,12 +43,18 @@ struct RecipeListView: View {
                         // Welcome Message
                         let userFirstName = AuthService.shared.currentUser?.firstName ?? "User"
                         HStack {
-                            RemoteImageView(fileName: AuthService.shared.currentUser?.profileImageURL ?? "Image", width: screenWidth / 5, height: screenWidth / 5)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.white, lineWidth: 3))
-                                .shadow(radius: 5)
-                                .padding(.leading)
-                                .padding(.trailing, 5)
+                            if let imageURL = AuthService.shared.currentUser?.profileImageURL {
+                                if imageURL != "" {
+                                    RemoteImageView(fileName: imageURL, width: screenWidth / 5, height: screenWidth / 5)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                                        .shadow(radius: 5)
+                                        .padding(.trailing, 5)
+                                }
+                                
+                               
+                                
+                            }
                             
                             VStack (alignment: .leading) {
                                 Spacer()
@@ -77,10 +71,26 @@ struct RecipeListView: View {
                             
                             Spacer()
                         }
+                        .padding(.leading)
                         
                         // Custom SearchBar
-                        SearchBar(searchText: $viewModel.searchText)
-                            .padding()
+                        HStack (alignment: .center, spacing: 0) {
+                            SearchBar(searchText: $viewModel.searchText)
+                                .padding()
+                                .onChange(of: viewModel.searchText) {
+                                    viewModel.filterRecipes()
+                                }
+                            
+                            Button(action: {
+                                viewModel.likeFilter.toggle()
+                                viewModel.filterRecipes()
+                            }) {
+                                Image(systemName: viewModel.likeFilter ? "heart.fill" : "heart")
+                                    .foregroundColor(.white)
+                                    .padding(.trailing)
+                                    .font(.title)
+                            }
+                        }
                         
                         // Horizontal Scroll Bar for Categories
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -89,11 +99,13 @@ struct RecipeListView: View {
                                     Text(category)
                                         .padding(.horizontal)
                                         .padding(.vertical, 5)
-                                        .background(selectedCategory == category ? Color.black.opacity(0.8) : Color.black.opacity(0.5))
+                                        .background(viewModel.selectedCategory == category ? Color.black.opacity(0.8) : Color.black.opacity(0.3))
+                                        .fontWeight(viewModel.selectedCategory == category ? .bold : .regular)
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
                                         .onTapGesture {
-                                            selectedCategory = category
+                                            viewModel.selectedCategory = category
+                                            viewModel.filterRecipes()
                                         }
                                 }
                             }
@@ -116,7 +128,7 @@ struct RecipeListView: View {
                             
                             // Recipe Lists
                             LazyVGrid(columns: columns, spacing: screenWidth / 6) {
-                                ForEach(filteredRecipes) { recipe in
+                                ForEach(viewModel.filteredRecipes) { recipe in
                                     NavigationLink(destination: RecipeView(recipe: recipe)) {
                                         RecipeSquare(recipe: recipe, size: .profile)
                                     }
@@ -125,21 +137,23 @@ struct RecipeListView: View {
                             }
                             .padding(.horizontal)
                             .padding(.top, screenHeight / 15)
-                            .padding(.bottom, screenHeight / 5)
                         }
                         
                         Spacer()
                     } // VStack
+                    .padding(.bottom, 150)
                     
                 } // ScrollView
-//                .refreshable {
-//                    viewModel.fetchRecipes()
-//                }
-                .ignoresSafeArea(.container, edges: .top)
+                .refreshable {
+                    viewModel.fetchRecipes()
+                }
+                .onAppear() {
+                    viewModel.fetchRecipes()
+                }
+                
             } // ZStack
             .ignoresSafeArea(.container, edges: .top)
         } // NavigationStack
-        .ignoresSafeArea(.container, edges: .top)
     } // Body
 }
 
