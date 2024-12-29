@@ -24,8 +24,13 @@ struct NavbarView: View {
                 RecipeListView()
                     .opacity(selectedIndex == 0 ? 1 : 0)
                     .animation(.easeInOut, value: selectedIndex)
+                
                 UserView(user: user)
                     .opacity(selectedIndex == 1 ? 1 : 0)
+                    .animation(.easeInOut, value: selectedIndex)
+                
+                MealPlanningView()
+                    .opacity(selectedIndex == 2 ? 1 : 0)
                     .animation(.easeInOut, value: selectedIndex)
             }
             .animation(.easeInOut, value: selectedIndex)
@@ -39,38 +44,52 @@ struct CustomTabBar: View {
     @Binding var selectedIndex: Int
     
     var body: some View {
-        HStack {
-            // ******* RecipeListView *******
-            Button(action: {
-                withAnimation {
-                    selectedIndex = 0
+            HStack {
+                // ******* MealPlanningView *******
+                Button(action: {
+                    withAnimation {
+                        selectedIndex = 2
+                    }
+                }) {
+                    VStack {
+                        Image(systemName: "calendar")
+                    }
                 }
-            }) {
-                VStack {
-                    Image(systemName: "house.fill")
+                .foregroundColor(selectedIndex == 2 ? .black.opacity(0.8) : .gray)
+                .padding(.horizontal)
+                
+                // ******* RecipeListView *******
+                Button(action: {
+                    withAnimation {
+                        selectedIndex = 0
+                    }
+                }) {
+                    VStack {
+                        Image(systemName: "house.fill")
+                    }
                 }
+                .foregroundColor(selectedIndex == 0 ? .black.opacity(0.8) : .gray)
+                .padding(.horizontal)
+                
+                // ********** UserView **********
+                Button(action: {
+                    withAnimation {
+                        selectedIndex = 1
+                    }
+                }) {
+                    VStack {
+                        Image(systemName: "person.fill")
+                    }
+                }
+                .foregroundColor(selectedIndex == 1 ? .black.opacity(0.8) : .gray)
+                .padding(.horizontal)
+                
             }
-            .foregroundColor(selectedIndex == 0 ? .black.opacity(0.8) : .gray)
-            .padding(.horizontal)
-            
-            // ********** UserView **********
-            Button(action: {
-                withAnimation {
-                    selectedIndex = 1
-                }
-            }) {
-                VStack {
-                    Image(systemName: "person.fill")
-                }
-            }
-            .foregroundColor(selectedIndex == 1 ? .black.opacity(0.8) : .gray)
-            .padding(.horizontal)
-            
-        }
-        .padding()
-        .background(Color.white.opacity(0.8))
-        .cornerRadius(25)
-        .shadow(radius: 5)
+            .padding()
+            .background(.ultraThinMaterial)
+            .background(Color.white.opacity(0.2))
+            .cornerRadius(25)
+            .shadow(radius: 5)
     }
 }
 

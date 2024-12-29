@@ -172,6 +172,13 @@ struct UserView: View {
                 .navigationBarBackButtonHidden(true)
                 .navigationBarHidden(true)
                 .ignoresSafeArea(.all)
+                .gesture(
+                    DragGesture().onEnded { value in
+                        if value.location.x - value.startLocation.x > 150 {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                )
             }
         } // Navigation
     } // Body end

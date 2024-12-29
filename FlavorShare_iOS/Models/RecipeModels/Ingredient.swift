@@ -16,6 +16,7 @@ struct Ingredient: Identifiable, Hashable, Codable {
     var quantity: Float?
     var unit: String?
     var imageURL: String?
+    var isCompleted: Bool? = false
     
     init(name: String, quantity: Float? = nil, unit: String? = "", imageURL: String? = nil) {
         self._id = UUID().uuidString

@@ -128,6 +128,13 @@ struct RecipeEditorView: View {
         .sheet(isPresented: $viewModel.isImagePickerPresented) {
             ImagePicker(image: $viewModel.selectedImage, isPresented: $viewModel.isImagePickerPresented)
         }
+        .gesture(
+            DragGesture().onEnded { value in
+                if value.location.x - value.startLocation.x > 150 {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
     }
     
     var recipeDetails: some View {

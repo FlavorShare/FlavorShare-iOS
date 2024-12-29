@@ -26,8 +26,7 @@ struct RecipeView: View {
                 ScrollView {
                     VStack {
                         RecipeImageView(imageURL: recipe.imageURL)
-                        //                        RecipeHeader(recipe: recipe, viewModel: $viewModel)
-                        //                            .padding(.top, -(UIScreen.main.bounds.height / 9))
+                        
                         VStack {
                             ZStack (alignment: .bottom) {
                                 VStack (alignment: .center) {
@@ -38,10 +37,6 @@ struct RecipeView: View {
                                         .padding(.horizontal)
                                         .padding(.bottom, 2)
                                     
-                                    //                                    // Recipe Details
-                                    //                                    Text("\(recipe.type) | Serving \(recipe.servings) | \(recipe.cookTime) minutes")
-                                    //                                        .padding(.bottom, 5)
-                                    // Recipe Details
                                     Text("\(recipe.type) | \(recipe.cookTime) minutes")
                                     
                                     HStack (alignment: .center, spacing: 0) {
@@ -61,7 +56,6 @@ struct RecipeView: View {
                                         .font(.footnote)
                                         .padding(.bottom, 5)
                                     
-                                    
                                 }
                                 .padding(.horizontal)
                                 .shadow(radius: 3)
@@ -69,20 +63,8 @@ struct RecipeView: View {
                                     print(selectedServings)
                                 }
                                 
-                                HStack {
-                                    Spacer()
-                                    Button(action: {
-                                        if viewModel.isLiked {
-                                            viewModel.unlikeRecipe()
-                                        } else {
-                                            viewModel.likeRecipe()
-                                        }
-                                    }) {
-                                        Image(systemName: (viewModel.isLiked ? "heart.fill" : "heart"))
-                                    }
-                                    .font(.title2)
-                                    .padding()
-                                }
+                                InteractionButtons()
+                                    .environmentObject(viewModel)
                             }
                             VStack (alignment: .leading) {
                                 // Recipe Owner
@@ -106,10 +88,8 @@ struct RecipeView: View {
                         }
                         .foregroundStyle(.white)
                         
-                        
-                        
-                        
-                        RecipeDetailsView(recipe: recipe, viewDetails: $viewDetails, selectedServings: $selectedServings)
+                        RecipeDetailsView(viewDetails: $viewDetails, selectedServings: $selectedServings)
+                            .environmentObject(viewModel)
                             .padding(.horizontal)
                             .padding(.top)
                         Spacer()
@@ -204,49 +184,208 @@ struct RecipeImageView: View {
     }
 }
 
+struct InteractionButtons: View {
+    @EnvironmentObject var viewModel: RecipeViewModel
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                if viewModel.isPlanned {
+                    viewModel.removeRecipeFromMealPlan()
+                } else {
+                    viewModel.addRecipeToMealPlan()
+                }
+            }) {
+                Image(systemName:(viewModel.isPlanned ? "calendar.badge.checkmark" : "calendar.badge.plus") )
+                
+            }
+            .font(.title2)
+            .padding(.leading)
+            .padding(.vertical)
+            
+            Button(action: {
+                if viewModel.isLiked {
+                    viewModel.unlikeRecipe()
+                } else {
+                    viewModel.likeRecipe()
+                }
+            }) {
+                Image(systemName: (viewModel.isLiked ? "heart.fill" : "heart"))
+                    .padding(.bottom, 3)
+            }
+            .font(.title2)
+            .padding(.trailing)
+            .padding(.vertical)
+        }
+    }
+}
+
 struct RecipeDetailsView: View {
-    var recipe: Recipe
+    @EnvironmentObject var viewModel: RecipeViewModel
+    
     @Binding var viewDetails: String
     @Binding var selectedServings: Int
     
     var body: some View {
         VStack(alignment: .center) {
-            // TabView for Ingredients/Instructions
-            HStack (spacing: 0) {
-                Button(action: {
-                    viewDetails = "Ingredients"
-                }) {
-                    Text("Ingredients")
-                        .foregroundColor(viewDetails == "Ingredients" ? .black : .white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 5)
-                        .background(viewDetails == "Ingredients" ? Color.white : Color.clear)
-                        .cornerRadius(10)
-                }
-                
-                Button(action: {
-                    viewDetails = "Instructions"
-                }) {
-                    Text("Instructions")
-                        .foregroundColor(viewDetails == "Instructions" ? .black : .white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 5)
-                        .background(viewDetails == "Instructions" ? Color.white : Color.clear)
-                        .cornerRadius(10)
-                }
-            }
-            .background(Color.black.opacity(0.5))
-            .cornerRadius(10)
-            .clipped()
+            RecipeTabs(viewDetails: $viewDetails)
             
             Group {
                 if viewDetails == "Ingredients" {
-                    VStack(alignment: .leading) {
-                        Text("Ingredients")
-                            .font(.title)
+                    IngredientTab(selectedServings: $selectedServings)
+                        .environmentObject(viewModel)
+                }
+                
+                if viewDetails == "Instructions" {
+                    InstructionTab(selectedServings: $selectedServings)
+                        .environmentObject(viewModel)
+                }
+                
+                if viewDetails == "Reviews" {
+                    ReviewTab()
+                        .environmentObject(viewModel)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top)
+            .padding(.bottom, 100)
+        }
+        .foregroundStyle(.white)
+        .shadow(radius: 3)
+    }
+}
+
+struct RecipeTabs: View {
+    @Binding var viewDetails: String
+    
+    var body: some View {
+        // TabView for Ingredients/Instructions
+        HStack (spacing: 0) {
+            Button(action: {
+                viewDetails = "Ingredients"
+            }) {
+                Text("Ingredients")
+                    .foregroundColor(viewDetails == "Ingredients" ? .black : .white)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 5)
+                    .background(viewDetails == "Ingredients" ? Color.white : Color.clear)
+                    .cornerRadius(10)
+            }
+            
+            Button(action: {
+                viewDetails = "Instructions"
+            }) {
+                Text("Instructions")
+                    .foregroundColor(viewDetails == "Instructions" ? .black : .white)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 5)
+                    .background(viewDetails == "Instructions" ? Color.white : Color.clear)
+                    .cornerRadius(10)
+            }
+            
+            Button(action: {
+                viewDetails = "Reviews"
+            }) {
+                Text("Reviews")
+                    .foregroundColor(viewDetails == "Reviews" ? .black : .white)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 5)
+                    .background(viewDetails == "Reviews" ? Color.white : Color.clear)
+                    .cornerRadius(10)
+            }
+        }
+        .background(Color.black.opacity(0.5))
+        .cornerRadius(10)
+        .clipped()
+    }
+}
+
+struct IngredientTab: View {
+    @EnvironmentObject var viewModel: RecipeViewModel
+    
+    @Binding var selectedServings: Int
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Ingredients")
+                .font(.title)
+                .padding(.bottom)
+            
+            ForEach(viewModel.recipe!.ingredients, id: \.self) { ingredient in
+                HStack {
+                    Text(ingredient.name)
+                    
+                    Spacer()
+                    
+                    if let quantity = ingredient.quantity {
+                        Text(quantity.truncatingRemainder(dividingBy: 1) == 0
+                             ? String(format: "%.0f", getQuantity(quantity)) // For round numbers, show no decimals
+                             : String(format: "%.1f", getQuantity(quantity)) // For decimal numbers, show one decimal
+                        )
+                        
+                        if let unit = ingredient.unit {
+                            if (quantity == 1) {
+                                Text( "\(unit)")
+                            } else {
+                                Text( "\(unit)s")
+                            }
+                        }
+                    }
+                }
+                .padding(.top, 5)
+                
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.black.opacity(0.5))
+                    .clipped()
+                
+            }
+        }
+    }
+    
+    // MARK: - FUNCTIONS
+    func getInstructionIngredients(instruction: Instruction) -> [Ingredient] {
+        if let listIngredientID = instruction.ingredients {
+            return listIngredientID.compactMap { ingredientID in
+                return viewModel.recipe!.ingredients.first { $0._id == ingredientID }
+            }
+        }
+        
+        return []
+    }
+    
+    func getQuantity(_ quantity: Float) -> Float {
+        return quantity * Float(Float(selectedServings) / Float(viewModel.recipe!.servings))
+        
+    }
+}
+
+struct InstructionTab: View {
+    @EnvironmentObject var viewModel: RecipeViewModel
+    
+    @Binding var selectedServings: Int
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Instructions")
+                .font(.title)
+                .padding(.bottom)
+            
+            ForEach(viewModel.recipe!.instructions.indices, id: \.self) { index in
+                HStack (alignment: .top) {
+                    Text("\(index + 1).")
+                        .font(.title)
+                        .foregroundColor(.gray)
+                    
+                    VStack (alignment: .leading) {
+                        Text("\(viewModel.recipe!.instructions[index].description)")
+                            .font(.body)
+                            .multilineTextAlignment(.leading)
                             .padding(.bottom)
                         
-                        ForEach(recipe.ingredients, id: \.self) { ingredient in
+                        let ingredients = getInstructionIngredients(instruction: viewModel.recipe!.instructions[index])
+                        ForEach(ingredients, id: \.self) { ingredient in
                             HStack {
                                 Text(ingredient.name)
                                 
@@ -266,88 +405,29 @@ struct RecipeDetailsView: View {
                                         }
                                     }
                                 }
-                            }
-                            .padding(.top, 5)
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .background(Color.black.opacity(0.5))
-                                .clipped()
-                            
-                        }
-                    }
-                }
-                
-                if viewDetails == "Instructions" {
-                    VStack(alignment: .leading) {
-                        Text("Instructions")
-                            .font(.title)
-                            .padding(.bottom)
-                        
-                        ForEach(recipe.instructions.indices, id: \.self) { index in
-                            HStack (alignment: .top) {
-                                Text("\(index + 1).")
-                                    .font(.title)
-                                    .foregroundColor(.gray)
                                 
-                                VStack (alignment: .leading) {
-                                    Text("\(recipe.instructions[index].description)")
-                                        .font(.body)
-                                        .multilineTextAlignment(.leading)
-                                        .padding(.bottom)
-                                    
-                                    let ingredients = getInstructionIngredients(instruction: recipe.instructions[index])
-                                    ForEach(ingredients, id: \.self) { ingredient in
-                                        HStack {
-                                            Text(ingredient.name)
-                                            
-                                            Spacer()
-                                            
-                                            if let quantity = ingredient.quantity {
-                                                Text(quantity.truncatingRemainder(dividingBy: 1) == 0
-                                                     ? String(format: "%.0f", getQuantity(quantity)) // For round numbers, show no decimals
-                                                     : String(format: "%.1f", getQuantity(quantity)) // For decimal numbers, show one decimal
-                                                )
-                                                
-                                                if let unit = ingredient.unit {
-                                                    if (quantity == 1) {
-                                                        Text( "\(unit)")
-                                                    } else {
-                                                        Text( "\(unit)s")
-                                                    }
-                                                }
-                                            }
-                                            
-                                        }
-                                        .font(.footnote)
-                                        .padding(.horizontal)
-                                        
-                                    }
-                                }
                             }
-                            .padding(.top, 5)
+                            .font(.footnote)
+                            .padding(.horizontal)
                             
-                            Divider()
-                                .frame(height: 1)
-                                .background(Color.black.opacity(0.5))
-                                .clipped()
                         }
                     }
                 }
+                .padding(.top, 5)
+                
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.black.opacity(0.5))
+                    .clipped()
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top)
-            .padding(.bottom, 100)
         }
-        .foregroundStyle(.white)
-        .shadow(radius: 3)
     }
     
     // MARK: - FUNCTIONS
     func getInstructionIngredients(instruction: Instruction) -> [Ingredient] {
         if let listIngredientID = instruction.ingredients {
             return listIngredientID.compactMap { ingredientID in
-                return recipe.ingredients.first { $0._id == ingredientID }
+                return viewModel.recipe!.ingredients.first { $0._id == ingredientID }
             }
         }
         
@@ -355,8 +435,155 @@ struct RecipeDetailsView: View {
     }
     
     func getQuantity(_ quantity: Float) -> Float {
-        return quantity * Float(Float(selectedServings) / Float(recipe.servings))
+        return quantity * Float(Float(selectedServings) / Float(viewModel.recipe!.servings))
+        
+    }
+}
 
+struct ReviewTab: View {
+    @EnvironmentObject var viewModel: RecipeViewModel
+    @State private var users: [String: User] = [:]
+    
+    func fetchUser(for review: Review) {
+        viewModel.getUserById(userId: review.ownerId) { fetchedUser in
+            if let fetchedUser = fetchedUser {
+                users[review.ownerId] = fetchedUser
+            }
+        }
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Reviews")
+                    .font(.title)
+                    .padding(.bottom)
+                
+                Spacer()
+                // Rating
+            }
+            
+            
+            // TODO: Comment Creation
+            // Text input for creating a new comment
+            TextField("Add a Comment", text: $viewModel.newComment, prompt: Text("Add a Comment").foregroundColor(.white.opacity(0.5)))
+            
+            // Button to submit the comment
+            HStack {
+                Spacer()
+                
+                Button(action: {
+                    viewModel.addReview()
+                }) {
+                    Text("Submit")
+                }
+            }
+            
+            if (viewModel.recipe!.reviews == nil || viewModel.recipe!.reviews!.isEmpty) {
+                Text("No Reviews Yet")
+            } else {
+                // TODO: List Reviews
+                //                ForEach(viewModel.recipe!.reviews!, id: \.self) { review in
+                //                    let user = viewModel.getUserById(userId: review.ownerId)
+                //
+                //                    HStack {
+                //                        // Profile Picture
+                //                        if let imageURL = user?.profileImageURL {
+                //                            if imageURL != "" {
+                //                                RemoteImageView(fileName: imageURL, width: 50, height: 50)
+                //                                    .clipShape(Circle())
+                //                                    .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                //                                    .shadow(radius: 5)
+                //                            }
+                //                        }
+                //
+                //                        VStack {
+                //                            HStack {
+                //                                // Username
+                //                                Text(user?.username ?? "User")
+                //                                    .font(.headline)
+                //
+                //                                Spacer()
+                //
+                //                                // Rating
+                //                                Text("\(review.rating)/5")
+                //                                    .font(.headline)
+                //                            }
+                //
+                //
+                //                            // Review
+                //                            Text(review.comment)
+                //                                .font(.body)
+                //                        }
+                //
+                //
+                //
+                //                    }
+                //
+                //                    Divider()
+                //                        .frame(height: 1)
+                //                        .background(Color.black.opacity(0.5))
+                //                        .clipped()
+                //                }
+                //            }
+                ForEach(viewModel.recipe!.reviews!, id: \.self) { review in
+                    if let user = users[review.ownerId] {
+                        HStack (alignment: .top) {
+                            // Profile Picture
+                            if let imageURL = user.profileImageURL, !imageURL.isEmpty {
+                                RemoteImageView(fileName: imageURL, width: 40, height: 40)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.white, lineWidth: 1))
+                                    .shadow(radius: 3)
+                            }
+                            
+                            VStack (alignment: .leading){
+                                HStack {
+                                    // Username
+                                    Text(user.username)
+                                        .font(.headline)
+                                    
+                                    Spacer()
+                                    
+                                    // Rating
+                                    Text("\(review.rating)/5")
+                                        .font(.headline)
+                                }
+                                
+                                // Review
+                                Text(review.comment)
+                                    .font(.body)
+                            }
+                            .padding(.leading)
+                        }
+                        
+                        Divider()
+                            .frame(height: 1)
+                            .background(Color.black.opacity(0.5))
+                            .clipped()
+                    } else {
+                        // Placeholder view while fetching user information
+                        HStack {
+                            Text("Loading user...")
+                                .font(.headline)
+                            
+                            Spacer()
+                            
+                            Text("\(review.rating)/5")
+                                .font(.headline)
+                        }
+                        .onAppear {
+                            fetchUser(for: review)
+                        }
+                        
+                        Divider()
+                            .frame(height: 1)
+                            .background(Color.black.opacity(0.5))
+                            .clipped()
+                    }
+                }
+            }
+        }
     }
 }
 

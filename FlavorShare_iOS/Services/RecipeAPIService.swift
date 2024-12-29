@@ -50,6 +50,17 @@ class RecipeAPIService {
         AppAPIHandler.shared.performRequest(endpoint: "/recipes/user/\(user.id)", completion: completion)
     }
     
+    // MARK: - fetchRecipesByIds()
+    /**
+     Get a list of recipes based on their IDs
+     - parameter ids: The recipe IDs for the recipes you want back
+     - returns: Recipe array of all the recipes found OR the error encoutered
+     */
+    func fetchRecipesByIds(withIds ids: [String], completion: @escaping (Result<[Recipe], Error>) -> Void) {
+        print("Fetching recipes by IDs")
+        AppAPIHandler.shared.performRequest(endpoint: "/recipes/ids", method: "POST", body: try! JSONEncoder().encode(ids), completion: completion)
+    }
+    
     // MARK: - createRecipe()
     /**
      Post new recipe to the server

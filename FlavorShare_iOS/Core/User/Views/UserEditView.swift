@@ -269,6 +269,13 @@ struct UserEditView: View {
         .background(.gray)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .gesture(
+            DragGesture().onEnded { value in
+                if value.location.x - value.startLocation.x > 150 {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
     } // end of body
 }
 

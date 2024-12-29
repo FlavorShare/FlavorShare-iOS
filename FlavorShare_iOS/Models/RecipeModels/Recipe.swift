@@ -29,6 +29,7 @@ struct Recipe: Identifiable, Codable {
     var user: User?
     
     var peopleWhoLiked: [String]?
+    var reviews: [Review]?
     
     init(
         id: String,
@@ -52,7 +53,8 @@ struct Recipe: Identifiable, Codable {
         
         user: User? = nil,
         
-        peopleWhoLiked: [String]? = nil
+        peopleWhoLiked: [String]? = nil,
+        reviews: [Review]? = nil
     ) {
         self.id = id
         
@@ -75,6 +77,7 @@ struct Recipe: Identifiable, Codable {
         self.user = user
         
         self.peopleWhoLiked = peopleWhoLiked
+        self.reviews = reviews
     }
     
     enum CodingKeys: String, CodingKey {
@@ -99,6 +102,7 @@ struct Recipe: Identifiable, Codable {
         case user
         
         case peopleWhoLiked
+        case reviews
     }
     
     init(from decoder: Decoder) throws {
@@ -124,7 +128,7 @@ struct Recipe: Identifiable, Codable {
             self.user = try container.decodeIfPresent(User.self, forKey: .user)
             
             self.peopleWhoLiked = try container.decodeIfPresent([String].self, forKey: .peopleWhoLiked)
-             
+            self.reviews = try container.decodeIfPresent([Review].self, forKey: .reviews)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -150,6 +154,6 @@ struct Recipe: Identifiable, Codable {
             try container.encodeIfPresent(user, forKey: .user)
             
             try container.encodeIfPresent(peopleWhoLiked, forKey: .peopleWhoLiked)
-       
+            try container.encodeIfPresent(reviews, forKey: .reviews)
     }
 }
