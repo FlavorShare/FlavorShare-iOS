@@ -59,7 +59,6 @@ class UserAPIService {
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
             
             let data = try encoder.encode(user)
-            print("Encoded user data:", String(data: data, encoding: .utf8)!) // Add this line to log the encoded data
 
             return try await withCheckedThrowingContinuation { continuation in
                 AppAPIHandler.shared.performRequest(endpoint: "/user", method: "POST", body: data) { (result: Result<User, Error>) in
@@ -116,6 +115,16 @@ class UserAPIService {
             }
         }
     }
+    
+//    // MARK: - fetchMealPlanItems()
+//    /**
+//     Get the meal plan for a specified user ID
+//     - parameter withUid: Represent the ID for the wanted user
+//     - returns: The meal plan found OR the error encountered
+//     */
+//    func fetchMealPlanItems(withUid id: String, completion: @escaping (Result<[MealPlanItem], Error>) -> Void) {
+//        AppAPIHandler.shared.performRequest(endpoint: "/user/\(id)/mealPlanItems", completion: completion)
+//    }
 }
 
 extension UserAPIService {

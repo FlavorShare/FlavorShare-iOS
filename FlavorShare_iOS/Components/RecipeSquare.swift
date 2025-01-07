@@ -33,6 +33,13 @@ struct RecipeSquare: View {
     // MARK: VARIABLES
     let recipe: Recipe
     let size: RecipeSquareSizes
+    let servings: Int?
+    
+    init(recipe: Recipe, size: RecipeSquareSizes, servings: Int? = nil) {
+        self.recipe = recipe
+        self.size = size
+        self.servings = servings
+    }
     
     // MARK: BODY
     var body: some View {
@@ -73,6 +80,15 @@ struct RecipeSquare: View {
                 .fontWeight(.bold)
                 .foregroundStyle(.white)
                 
+                // SERVINGS
+                if let servings = servings {
+                    HStack {
+                        Text("Servings: \(servings)")
+                    } // HStack
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                }
             } // VStack
             .padding(.bottom)
             .padding(.horizontal, 5)

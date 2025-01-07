@@ -17,21 +17,9 @@ struct MealPlanningView: View {
     var body: some View {
         NavigationStack (){
             ZStack {
-                // Background Image
-                Image("Background")
-                    .resizable()
-                    .blur(radius: 20)
-                    .frame(width: screenWidth, height: screenHeight)
-                
-                BlurView(style: .regular)
-                    .frame(width: screenWidth, height: screenHeight)
-                
-                Rectangle()
-                    .fill(Color.black.opacity(0.4))
-                    .frame(width: screenWidth, height: screenHeight)
+                BackgroundView(imageURL: nil)
                 
                 ScrollView {
-                   
                     VStack(alignment: .leading) {
                         HStack {
                             Text("Meal Planning")
@@ -39,6 +27,7 @@ struct MealPlanningView: View {
                                 .fontWeight(.bold)
                                 .foregroundStyle(.white)
                                 .padding(.bottom)
+                                .shadow(radius: 5)
                             
                             Spacer()
                             
@@ -48,62 +37,60 @@ struct MealPlanningView: View {
                                 Text("Clear")
                                     .font(.subheadline)
                                     .foregroundStyle(.white)
-                                    .padding(.top, -10)
+                                    .padding(.bottom, 20)
+                                    .shadow(radius: 3)
                             }
                         }
-                       
+                        
                         // Recipe Lists
-                        LazyHStack(spacing: screenWidth / 6) {
+                        let columns = [
+                            GridItem(.flexible(), spacing: 10),
+                            GridItem(.flexible(), spacing: 10)
+                        ]
+                        
+                        // Recipe Lists
+                        LazyVGrid(columns: columns, spacing: screenWidth / 6) {
                             ForEach(viewModel.RecipePlanned) { recipe in
-                                NavigationLink(destination: RecipeView(recipe: recipe)) {
-                                    RecipeSquare(recipe: recipe, size: .profile)
+                                
+                                let servings: Int = viewModel.getNumberOfServings(for: recipe)
+                                
+                                NavigationLink(destination: RecipeView(recipe: recipe, servings: servings)) {
+                                    
+                                    
+                                    
+                                    RecipeSquare(recipe: recipe, size: .profile, servings: servings)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
                         }
-                        .padding(.horizontal)
                         .padding(.top)
                         
                         
-                        Text("Grocery List (\(viewModel.ingredients.count) items)")
+                        Text("Grocery List (\(viewModel.quantityItems) \(viewModel.quantityItems == 1 ? "item" : "items"))")
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
-                            .padding(.top, screenHeight/10)
+                            .padding(.top, 50)
                             .padding(.bottom)
+                            .shadow(radius: 5)
                         
                         // Grocery List
-                        LazyVStack {
-                            ForEach($viewModel.ingredients) { $ingredient in
-                                Button(action: {
-                                    ingredient.isCompleted?.toggle() // Update directly with the binding
-                                }) {
-                                    HStack {
-                                        // TODO: Bullet
-                                        Image(systemName: (ingredient.isCompleted ?? false) ? "checkmark.circle.fill" : "circle")
-                                        
-                                        Text("\(ingredient.name)")
-                                        
-                                        Spacer()
-                                        
-                                        if let quantity = ingredient.quantity {
-                                            Text(quantity.truncatingRemainder(dividingBy: 1) == 0
-                                                 ? String(format: "%.0f", quantity)
-                                                 : String(format: "%.1f", quantity)
-                                            )
-                                            
-                                            if let unit = ingredient.unit {
-                                                Text(quantity == 1 ? "\(unit)" : "\(unit)s")
-                                            }
-                                        }
-                                    }
-                                    .font(.body)
-                                    .foregroundStyle(.white)
-                                }
+                        LazyVStack(alignment: .leading) {
+                            ForEach(categories(), id: \.self) { category in
+                                // If there is more than 1 item in the category
+                                let isSingleItem = viewModel.categorizedGroceryItems[category]?.count ?? 0 == 1
                                 
-                                Divider()
-                                    .frame(width: screenWidth / 1.1, height: 1)
-                                    .background(Color.white)
+                                Text(isSingleItem ? category.capitalized : category.capitalized + "s")
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.white)
+                                    .padding(.bottom, 5)
+                                    .shadow(radius: 5)
+                                
+                                GroceryListItems(category: category)
+                                    .environmentObject(viewModel)
+                                    .padding(.bottom, 25)
+                                
                             }
                         } // LazyVStack
                         
@@ -111,13 +98,14 @@ struct MealPlanningView: View {
                     } // VStack
                     .padding(.top, screenHeight/10)
                     .padding(.horizontal)
+                    .padding(.bottom, 150)
                     
                 } // ScrollView
                 .refreshable {
-                    viewModel.getRecipePlanned()
+                    viewModel.updateMealPlan()
                 }
                 .onAppear() {
-                    viewModel.getRecipePlanned()
+                    viewModel.updateMealPlan()
                 }
                 
             }// ZStack
@@ -125,7 +113,143 @@ struct MealPlanningView: View {
         }// NavigationStack
         
     }
+    
+    private func categories() -> [String] {
+        var categories: [String] = Array(viewModel.categorizedGroceryItems.keys)
         
+        // move "others" to the end
+        if let index = categories.firstIndex(where: { $0.lowercased() == "other" }) {
+            categories.append(categories.remove(at: index))
+        }
+        
+        // move fruits to the front
+        if let index = categories.firstIndex(where: { $0.lowercased() == "fruit" }) {
+            categories.insert(categories.remove(at: index), at: 0)
+        }
+        
+        // move vegetables to the front
+        if let index = categories.firstIndex(where: { $0.lowercased() == "vegetable" }) {
+            categories.insert(categories.remove(at: index), at: 0)
+        }
+        
+        return categories
+    }
+}
+
+struct GroceryListItems: View {
+    @EnvironmentObject var viewModel: MealPlanningViewModel
+    
+    var category: String
+    
+    @State private var newItemName: String = ""
+    @State private var newItemQuantity: String = ""
+    @State private var newItemUnit: String = ""
+    
+    // Screen Height and Width
+    let screenHeight = UIScreen.main.bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    
+    var body: some View {
+        LazyVStack(alignment: .leading) {
+            ForEach(viewModel.categorizedGroceryItems[category] ?? [], id: \.id) { foodItem in
+                Button(action: {
+                    if let index = viewModel.categorizedGroceryItems[category]?.firstIndex(where: { $0.id == foodItem.id }) {
+                        viewModel.categorizedGroceryItems[category]?[index].isCompleted?.toggle()
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: (foodItem.isCompleted ?? false) ? "checkmark.circle.fill" : "circle")
+                        
+                        Text("\(foodItem.name.capitalized)")
+                        
+                        Spacer()
+                        
+                        if let quantity = foodItem.quantity {
+                            Text(quantity.truncatingRemainder(dividingBy: 1) == 0
+                                 ? String(format: "%.0f", quantity)
+                                 : String(format: "%.1f", quantity)
+                            )
+                            
+                            if let unit = foodItem.unit {
+                                Text(quantity == 1 ? "\(unit)" : "\(unit)s")
+                            }
+                        }
+                    }
+                    .font(.body)
+                    .foregroundStyle(.white)
+                }
+                
+                Divider()
+                    .frame(maxWidth: .infinity, maxHeight: 1)
+                    .background(Color.white)
+                    .padding(.bottom, 5)
+            }
+            
+            // Allow user to add new items
+            HStack {
+                TextField("New item name", text: $newItemName, prompt: Text("New item name").foregroundColor(.white.opacity(0.5)))
+                    .padding(.trailing, 5)
+                
+                TextField("Quantity", text: $newItemQuantity, prompt: Text("Quantity").foregroundColor(.white.opacity(0.5)))
+                    .keyboardType(.decimalPad)
+                    .padding(.trailing, 5)
+                
+                Picker("Unit", selection: $newItemUnit) {
+                    ForEach(viewModel.units, id: \.self) { unit in
+                        Text(unit).tag(unit)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .tint(.white)
+                .padding(.bottom, 5)
+                
+                Button(action: {
+                    guard !newItemName.isEmpty else { return }
+                    
+                    // Creating new Food Item
+                    let newFoodItem = FoodItem(
+                        name: newItemName,
+                        category: category,
+                        quantity: Float(newItemQuantity) ?? nil,
+                        unit: newItemUnit.isEmpty ? nil : newItemUnit
+                    )
+                    
+                    // Adding to the categorizedGroceryItems based on if existing category exists
+                    if viewModel.categorizedGroceryItems[category] != nil {
+                        
+                        if (viewModel.categorizedGroceryItems[category]?.contains(where: { $0.name == newFoodItem.name && $0.unit == newFoodItem.unit })) ?? false {
+                            if let index = viewModel.categorizedGroceryItems[category]?.firstIndex(where: { $0.id == newFoodItem.id && $0.unit == newFoodItem.unit }) {
+                                viewModel.categorizedGroceryItems[category]?[index].quantity! += newFoodItem.quantity!
+                            }
+                            return
+                            
+                        } else {
+                            viewModel.categorizedGroceryItems[category]?.append(newFoodItem)
+                        }
+                        
+                    } else {
+                        viewModel.categorizedGroceryItems[category] = [newFoodItem]
+                    }
+                    
+                    viewModel.groceryFoodItems.append(newFoodItem)
+                    
+                    // Clear the input fields
+                    newItemName = ""
+                    newItemQuantity = ""
+                    newItemUnit = ""
+                    
+//                    // Save to local storage
+//                    viewModel.saveToLocalStorage()
+                }) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title2)
+                }
+            }
+            .foregroundStyle(.white)
+            .padding(.top, 5)
+            
+        }
+    }
 }
 
 #Preview {

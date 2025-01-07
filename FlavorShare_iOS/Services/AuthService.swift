@@ -46,7 +46,6 @@ class AuthService: ObservableObject {
         do {
             // 1 - Create new Firebase Auth
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            print(result)
             
             // 2 - Assign the user session and the Authenticated property
             self.userSession = result.user

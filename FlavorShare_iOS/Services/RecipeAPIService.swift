@@ -25,7 +25,6 @@ class RecipeAPIService {
      - returns: Recipe array of all recipe  OR the error encoutered
      */
     func fetchAllRecipes(completion: @escaping (Result<[Recipe], Error>) -> Void) {
-        print("Fetching all recipes")
         AppAPIHandler.shared.performRequest(endpoint: "/recipes", completion: completion)
     }
     
@@ -46,7 +45,6 @@ class RecipeAPIService {
      - returns: Recipe array of all the user's recipes OR the error encoutered
      */
     func fetchRecipes(for user: User, completion: @escaping (Result<[Recipe], Error>) -> Void) {
-        print("Fetching recipes for user")
         AppAPIHandler.shared.performRequest(endpoint: "/recipes/user/\(user.id)", completion: completion)
     }
     
@@ -57,7 +55,6 @@ class RecipeAPIService {
      - returns: Recipe array of all the recipes found OR the error encoutered
      */
     func fetchRecipesByIds(withIds ids: [String], completion: @escaping (Result<[Recipe], Error>) -> Void) {
-        print("Fetching recipes by IDs")
         AppAPIHandler.shared.performRequest(endpoint: "/recipes/ids", method: "POST", body: try! JSONEncoder().encode(ids), completion: completion)
     }
     
@@ -69,13 +66,12 @@ class RecipeAPIService {
      */
     func createRecipe(recipe: Recipe, completion: @escaping (Result<Recipe, Error>) -> Void) {
         do {
-            print("Creating recipe")
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
             let data = try encoder.encode(recipe)
             AppAPIHandler.shared.performRequest(endpoint: "/recipes", method: "POST", body: data, completion: completion)
         } catch {
-            print(error.localizedDescription)
+            print("func createRecipe() - Error encoding/creating recipe: \(error.localizedDescription)")
             completion(.failure(error))
         }
     }
@@ -89,14 +85,12 @@ class RecipeAPIService {
      */
     func updateRecipe(id: String, recipe: Recipe, completion: @escaping (Result<Recipe, Error>) -> Void) {
         do {
-            print("Updating recipe")
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .formatted(DateFormatter.iso8601Full)
             let data = try encoder.encode(recipe)
             AppAPIHandler.shared.performRequest(endpoint: "/recipes/\(id)", method: "PUT", body: data, completion: completion)
-            print("Update completed")
         } catch {
-            print(error.localizedDescription)
+            print("func updateRecipe() - Error encoding/creating recipe: \(error.localizedDescription)")
             completion(.failure(error))
         }
     }
@@ -113,6 +107,7 @@ class RecipeAPIService {
             case .success:
                 completion(.success(()))
             case .failure(let error):
+                print("func deleteRecipe() - Error deleting recipe: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }

@@ -9,16 +9,33 @@ import Foundation
 
 class RecipeViewModel: ObservableObject {
     @Published var recipe: Recipe?
+    
     @Published var isLiked: Bool = false
     @Published var isPlanned: Bool = false
+    
     @Published var newComment: String = ""
     @Published var rating: Int = 5
+    @Published var userHasAlreadyReviewed: Bool = false
+    @Published var hideCommentField: Bool = false
     
-    init(recipe: Recipe) {
+    @Published var selectedServings: Int
+    @Published var showMealPlanningConfirmation: Bool = false
+    
+    init(recipe: Recipe, servings: Int? = nil) {
         self.recipe = recipe
+        self.selectedServings = servings == nil ? recipe.servings : servings!
+        
         getUser()
         updateIsLiked()
         updateIsPlanned()
+        userHasAlreadyReviewed = recipe.reviews?.contains(where: { $0.ownerId == AuthService.shared.currentUser?.id }) ?? false
+        
+        if (userHasAlreadyReviewed) {
+            guard let review = recipe.reviews?.first(where: { $0.ownerId == AuthService.shared.currentUser?.id }) else { return }
+            newComment = review.comment
+            rating = review.rating
+            hideCommentField = true
+        }
     }
     
     // MARK: - getUser()
@@ -34,7 +51,7 @@ class RecipeViewModel: ObservableObject {
                 case .success(let user):
                     self?.recipe?.user = user
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    print("func getUser() - Error getting user: \(error.localizedDescription)")
                 }
             }
         }
@@ -64,9 +81,9 @@ class RecipeViewModel: ObservableObject {
         RecipeAPIService.shared.updateRecipe(id: self.recipe!.id, recipe: self.recipe!) { result in
             switch result {
             case .success:
-                print("Recipe liked updated")
+                break
             case .failure(let error):
-                print(error.localizedDescription)
+                print("func likeRecipe() - Error updating recipe: \(error.localizedDescription)")
                 self.unlikeRecipeUI()
                 return
             }
@@ -79,7 +96,7 @@ class RecipeViewModel: ObservableObject {
             case .success:
                 break
             case .failure(let error):
-                print(error.localizedDescription)
+                print("func likeRecipe() - Error updating user: \(error.localizedDescription)")
             }
         }
     }
@@ -96,9 +113,9 @@ class RecipeViewModel: ObservableObject {
         RecipeAPIService.shared.updateRecipe(id: self.recipe!.id, recipe: self.recipe!) { result in
             switch result {
             case .success:
-                print("Recipe unliked updated")
+                break
             case .failure(let error):
-                print(error.localizedDescription)
+                print("func unlikeRecipe() - Error updating recipe: \(error.localizedDescription)")
                 self.likeRecipeUI()
             }
         }
@@ -110,7 +127,7 @@ class RecipeViewModel: ObservableObject {
             case .success:
                 break
             case .failure(let error):
-                print(error.localizedDescription)
+                print("func unlikeRecipe() - Error updating user: \(error.localizedDescription)")
             }
         }
     }
@@ -152,11 +169,22 @@ class RecipeViewModel: ObservableObject {
      This function updates the `isPlanned` property
      */
     func updateIsPlanned() {
-        if AuthService.shared.currentUser?.mealPlanList?.contains(recipe!.id) ?? false {
-            isPlanned = true
-        } else {
-            isPlanned = false
+        guard let mealPlanList = AuthService.shared.currentUser?.mealPlanList else {return}
+                
+        isPlanned = isRecipeInMealPlan(mealPlanList: mealPlanList)
+    }
+    
+    // MARK: - isRecipeInMealPlan()
+    /**
+     This function checks if a recipe is in the meal plan
+     */
+    func isRecipeInMealPlan(mealPlanList: [MealPlanItem]) -> Bool {
+        for mealPlanItem in mealPlanList {
+            if mealPlanItem.recipe.id == recipe!.id {
+                return true
+            }
         }
+        return false
     }
     
     // MARK: - addRecipeToMealPlan()
@@ -166,18 +194,22 @@ class RecipeViewModel: ObservableObject {
     func addRecipeToMealPlan() {
         guard let _ = recipe else { return }
         guard let _ = AuthService.shared.currentUser else { return }
-        
+                
         isPlanned = true
         
-        AuthService.shared.currentUser!.mealPlanList?.append(recipe!.id)
+        let mealPlanItem = MealPlanItem(recipe: recipe!, servings: selectedServings)
+        
+        AuthService.shared.currentUser!.mealPlanList?.append(mealPlanItem)
         
         UserAPIService.shared.updateUser(id: AuthService.shared.currentUser!.id, user: AuthService.shared.currentUser!){ result in
             switch result {
             case .success:
-                print("Recipe Added to Meal Plan")
+                break
             case .failure(let error):
-                print(error.localizedDescription)
-                self.isPlanned = false
+                print("func addRecipeToMealPlan() - Error updating user: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.isPlanned = false
+                }
                 return
             }
         }
@@ -189,18 +221,23 @@ class RecipeViewModel: ObservableObject {
      */
     func removeRecipeFromMealPlan() {
         guard let _ = recipe else { return }
-        guard let _ = AuthService.shared.currentUser else { return }
+        guard let mealPlanList = AuthService.shared.currentUser?.mealPlanList else {return}
+        
+        // iterate through the user's mealPlanList to see if the recipe is already planned
+        mealPlanList.forEach { mealPlanItem in
+            if mealPlanItem.recipe.id == recipe?.id {
+                AuthService.shared.currentUser!.mealPlanList?.removeAll { $0.id == mealPlanItem.id }
+            }
+        }
         
         isPlanned = false
-        
-        AuthService.shared.currentUser!.mealPlanList?.removeAll { $0 == recipe!.id }
         
         UserAPIService.shared.updateUser(id: AuthService.shared.currentUser!.id, user: AuthService.shared.currentUser!){ result in
             switch result {
             case .success:
-                print("Recipe Removed from Meal Plan")
+                break
             case .failure(let error):
-                print(error.localizedDescription)
+                print("func removeRecipeFromMealPlan() - Error updating user: \(error.localizedDescription)")
                 self.isPlanned = true
                 return
             }
@@ -223,35 +260,45 @@ class RecipeViewModel: ObservableObject {
         RecipeAPIService.shared.updateRecipe(id: self.recipe!.id, recipe: self.recipe!) { result in
             switch result {
             case .success:
-                print("Recipe unliked updated")
-                self.newComment = ""
+                DispatchQueue.main.async {
+                    self.hideCommentField = true
+                }
             case .failure(let error):
-                print(error.localizedDescription)
-                self.likeRecipeUI()
+                print("func addReview() - Error updating recipe: \(error.localizedDescription)")
             }
         }
     }
+    
+    // MARK: - updateReview()
+    /**
+     This function is used to update a review
+     */
+    func updateReview() {
+        guard let _ = recipe else { return }
+        guard let _ = AuthService.shared.currentUser else { return }
+        
+        guard let reviewIndex = recipe!.reviews?.firstIndex(where: { $0.ownerId == AuthService.shared.currentUser?.id }) else { return }
+        
+        recipe!.reviews?[reviewIndex].comment = newComment
+        recipe!.reviews?[reviewIndex].rating = rating
+        
+        RecipeAPIService.shared.updateRecipe(id: self.recipe!.id, recipe: self.recipe!) { result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    self.hideCommentField = true
+                }
+            case .failure(let error):
+                print("func updateReview() - Error updating recipe: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     
     // MARK: getReviewAuthor()
     /**
      This function fetches the review author
      */
-//    func getUserById(userId: String) -> User? {
-//        var user: User? = nil
-//        
-//        UserAPIService.shared.fetchUserById(withUid: userId) {result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let userFound):
-//                    user = userFound
-//                case .failure(let error):
-//                    print(error.localizedDescription)
-//                }
-//            }
-//        }
-//        
-//        return user
-//    }
     func getUserById(userId: String, completion: @escaping (User?) -> Void) {
         UserAPIService.shared.fetchUserById(withUid: userId) { result in
             DispatchQueue.main.async {
@@ -259,7 +306,7 @@ class RecipeViewModel: ObservableObject {
                 case .success(let userFound):
                     completion(userFound)
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    print("func getUserById(userId: String, completion: @escaping (User?) -> Void) - Error updating user: \(error.localizedDescription)")
                     completion(nil)
                 }
             }

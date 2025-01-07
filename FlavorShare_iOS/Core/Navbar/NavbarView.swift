@@ -32,6 +32,11 @@ struct NavbarView: View {
                 MealPlanningView()
                     .opacity(selectedIndex == 2 ? 1 : 0)
                     .animation(.easeInOut, value: selectedIndex)
+                
+                // TODO: SHOW ONLY IF USER IS ADMIN (MODIFY TO BECOME ADMIN PANEL)
+//                AddFoodItemView()
+//                    .opacity(selectedIndex == 3 ? 1 : 0)
+//                    .animation(.easeInOut, value: selectedIndex)
             }
             .animation(.easeInOut, value: selectedIndex)
             
@@ -45,6 +50,20 @@ struct CustomTabBar: View {
     
     var body: some View {
             HStack {
+                // TODO: SHOW ONLY IF USER IS ADMIN (MODIFY TO BECOME ADMIN PANEL)
+//                // ********** Add Food Item View **********
+//                Button(action: {
+//                    withAnimation {
+//                        selectedIndex = 3
+//                    }
+//                }) {
+//                    VStack {
+//                        Image(systemName: "plus.circle")
+//                    }
+//                }
+//                .foregroundColor(selectedIndex == 3 ? .black.opacity(0.8) : .gray)
+//                .padding(.horizontal)
+                
                 // ******* MealPlanningView *******
                 Button(action: {
                     withAnimation {

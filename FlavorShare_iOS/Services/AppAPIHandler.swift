@@ -30,8 +30,6 @@ class AppAPIHandler {
         body: Data? = nil,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
-        print("Performing request to \(endpoint)")
-        
         guard let url = URL(string: "\(baseURL)\(endpoint)") else {
             completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
             return
@@ -49,22 +47,20 @@ class AppAPIHandler {
                 let (data, response) = try await URLSession.shared.data(for: request)
                 
                 guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 || httpResponse.statusCode == 201 else {
-                    print("Error: \(response)")
+                    print("func performRequest<T: Decodable>() - Error: \(response)")
                     throw URLError(.badServerResponse)
                 }
                 
                 if T.self == EmptyResponse.self {
-                    print("Request completed")
                     completion(.success(EmptyResponse() as! T))
                 } else {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
                     let decodedResponse = try decoder.decode(T.self, from: data)
-                    print("Request completed")
                     completion(.success(decodedResponse))
                 }
             } catch {
-                print(error.localizedDescription)
+                print("func performRequest<T: Decodable>() - \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }

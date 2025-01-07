@@ -26,7 +26,7 @@ class UserViewModel: ObservableObject {
                 case .success(let recipes):
                     self?.recipes = recipes
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    print("func fetchRecipes() - Error getting user recipes: \(error.localizedDescription)")
                 }
             }
         }

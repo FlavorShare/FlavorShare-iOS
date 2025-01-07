@@ -42,9 +42,13 @@ class RecipeEditorViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isImagePickerPresented: Bool = false
     
+    @Published var foodItems: [FoodItem] = []
+    @Published var filteredFoodItems: [FoodItem] = []
+    
     init() {
         fetchCuisineTypes()
         assignOwnerID()
+        getFoodItems()
     }
     
     // MARK: assignOwnerID()
@@ -96,6 +100,35 @@ class RecipeEditorViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    // MARK: getFoodItems()
+    /**
+     Update the foodItems property with the locally saved JSON data in Ressources
+     */
+    func getFoodItems() {
+        foodItems = FoodItemsList.shared.foodItems
+        
+    }
+    
+    // MARK: searchFoodItems()
+    /**
+     Search the foodItems property for a given string
+     */
+    func searchFoodItems(for searchText: String) {
+        print("Searching for: \(searchText)")
+        
+        // Filter the foodItems based on the search should also avoid returning duplicate based on name & category
+        filteredFoodItems = foodItems.filter { foodItem in
+            foodItem.name.lowercased().contains(searchText.lowercased()) || foodItem.category.lowercased().contains(searchText.lowercased())
+        }
+        
+        // Filter out the foodItems that are already in the ingredients list
+        filteredFoodItems = filteredFoodItems.filter { foodItem in
+            !ingredients.contains(where: { $0.name == foodItem.name })
+        }
+        
+        print("Fetched items: \(self.filteredFoodItems)")
     }
     
     // MARK: createRecipe()
@@ -180,12 +213,9 @@ class RecipeEditorViewModel: ObservableObject {
      */
     func updateRecipe(completion: @escaping (Bool) -> Void) {
         isLoading = true
-        
-        print("Updating Recipe")
-        
+                
         if (imageURL == "" || selectedImage != nil) {
             guard let selectedImage = selectedImage else {
-                print("Please select an image.")
                 self.errorMessage = "Please select an image."
                 self.isLoading = false
                 completion(false)
@@ -207,7 +237,7 @@ class RecipeEditorViewModel: ObservableObject {
                         self.isSuccess = true
                         completion(true)
                     case .failure(let error):
-                        print("Error: \(error.localizedDescription)")
+                        print("func updateRecipe(completion: @escaping (Bool) -> Void) - Error saving image: \(error.localizedDescription)")
                         self.errorMessage = error.localizedDescription
                         completion(false)
                         return
@@ -245,7 +275,7 @@ class RecipeEditorViewModel: ObservableObject {
                     self.isSuccess = true
                     completion(true)
                 case .failure(let error):
-                    print("Error: \(error.localizedDescription)")
+                    print("func updateRecipe(completion: @escaping (Bool) -> Void) - Error updating recipe: \(error.localizedDescription)")
                     self.errorMessage = error.localizedDescription
                     completion(false)
                 }

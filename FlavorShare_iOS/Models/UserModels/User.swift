@@ -29,7 +29,7 @@ struct User: Identifiable, Codable {
     var bio: String?
     
     var likedRecipes: [String]?
-    var mealPlanList: [String]?
+    var mealPlanList: [MealPlanItem]?
     
     init(
         id: String,
@@ -53,7 +53,7 @@ struct User: Identifiable, Codable {
         bio: String = "Hi! I'm new to FlavorShare!",
     
         likedRecipes: [String]? = [],
-        mealPlanList: [String]? = []
+        mealPlanList: [MealPlanItem]? = []
     )
     {
         self.id = id
@@ -120,19 +120,19 @@ struct User: Identifiable, Codable {
         do {
             self.recipes = try container.decode([String].self, forKey: .recipes)
         } catch let error {
-            print("Failed to decode recipes: \(error.localizedDescription)")
+            print("User init() - Failed to decode recipes: \(error.localizedDescription)")
             if let decodingError = error as? DecodingError {
                 switch decodingError {
                 case .typeMismatch(let type, let context):
-                    print("Type Mismatch: \(type), Context: \(context)")
+                    print("User init () - Type Mismatch: \(type), Context: \(context)")
                 case .valueNotFound(let type, let context):
-                    print("Value Not Found: \(type), Context: \(context)")
+                    print("User init () - Value Not Found: \(type), Context: \(context)")
                 case .keyNotFound(let key, let context):
-                    print("Key Not Found: \(key), Context: \(context)")
+                    print("User init () - Key Not Found: \(key), Context: \(context)")
                 case .dataCorrupted(let context):
-                    print("Data Corrupted: \(context)")
+                    print("User init () - Data Corrupted: \(context)")
                 @unknown default:
-                    print("Unknown Decoding Error")
+                    print("User init () - Unknown Decoding Error")
                 }
             }
             self.recipes = []
@@ -141,14 +141,14 @@ struct User: Identifiable, Codable {
         do {
             self.followers = try container.decode([String].self, forKey: .followers)
         } catch {
-            print("Failed to decode followers: \(error)")
+            print("User init () - Failed to decode followers: \(error)")
             self.followers = []
         }
         
         do {
             self.following = try container.decode([String].self, forKey: .following)
         } catch {
-            print("Failed to decode following: \(error)")
+            print("User init () - Failed to decode following: \(error)")
             self.following = []
         }
         
@@ -159,7 +159,7 @@ struct User: Identifiable, Codable {
         self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
         
         self.likedRecipes = try container.decodeIfPresent([String].self, forKey: .likedRecipes)
-        self.mealPlanList = try container.decodeIfPresent([String].self, forKey: .mealPlanList)
+        self.mealPlanList = try container.decodeIfPresent([MealPlanItem].self, forKey: .mealPlanList)
     }
     
     func encode(to encoder: Encoder) throws {

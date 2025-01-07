@@ -73,17 +73,6 @@ class UserEditViewModel: ObservableObject {
         self.password = ""
         self.newPassword = ""
         self.confirmPassword = ""
-        
-
-        print("User data loaded")
-        print("Created at: \(createdAt)")
-        print("Updated at: \(updatedAt)")
-        
-        print("Recipes: \(recipes.count)")
-        print("Recipe: \(recipes)")
-        print("Followers: \(followers.count)")
-        print("Following: \(following.count)")
-        
     }
     
     func refreshUser() {
@@ -93,7 +82,6 @@ class UserEditViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):
-                    print(user)
                     self.loadUserData(user: user)
                     self.isSuccess = true
                 case .failure(let error):

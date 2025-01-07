@@ -139,7 +139,7 @@ struct UserView: View {
                                 }
                             }
                             .padding(.horizontal)
-                            
+                            .padding(.bottom)
                             
                             let columns = [
                                 GridItem(.flexible(), spacing: 10),

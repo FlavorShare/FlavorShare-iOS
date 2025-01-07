@@ -61,7 +61,7 @@ class ImageConverter {
         // Prepare HEIF image destination
         let data = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(data, UTType.heic.identifier as CFString, 1, nil) else {
-            print("Failed to create CGImageDestination for HEIF")
+            print("func convertUIImageToHEIF() - Failed to create CGImageDestination for HEIF")
             return nil
         }
         
@@ -75,7 +75,7 @@ class ImageConverter {
         if CGImageDestinationFinalize(destination) {
             return data as Data
         } else {
-            print("Failed to finalize HEIF image destination")
+            print("func convertUIImageToHEIF() - Failed to finalize HEIF image destination")
             return nil
         }
     }

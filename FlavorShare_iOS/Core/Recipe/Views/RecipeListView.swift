@@ -19,17 +19,7 @@ struct RecipeListView: View {
         NavigationStack (){
             ZStack {
                 // Background Image
-                Image("Background")
-                    .resizable()
-                    .blur(radius: 20)
-                    .frame(width: screenWidth, height: screenHeight)
-                
-                BlurView(style: .regular)
-                    .frame(width: screenWidth, height: screenHeight)
-                
-                Rectangle()
-                    .fill(Color.black.opacity(0.4))
-                    .frame(width: screenWidth, height: screenHeight)
+                BackgroundView(imageURL: nil)
                 
                 ScrollView {
                     VStack(spacing: 0) {

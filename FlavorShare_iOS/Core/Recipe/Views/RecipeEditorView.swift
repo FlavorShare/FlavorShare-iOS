@@ -72,14 +72,14 @@ struct RecipeEditorView: View {
                         .font(.headline)
                         .shadow(radius: 3)
                         .padding(.top, 20)
-
+                    
                     ingredients
                     
                     Text("Recipe Instructions")
                         .font(.headline)
                         .shadow(radius: 3)
                         .padding(.top, 20)
-
+                    
                     instructions
                     
                     actionButtons
@@ -147,13 +147,13 @@ struct RecipeEditorView: View {
                 Divider()
                     .overlay(.black)
                     .padding(.vertical, 5)
-
+                
                 TextField("", text: $viewModel.description, prompt: Text("Description").foregroundColor(.white.opacity(0.5)), axis: .vertical)
                 
                 Divider()
                     .overlay(.black)
                     .padding(.vertical, 5)
-
+                
                 Picker("Cuisine Type", selection: $viewModel.type) {
                     ForEach(viewModel.cuisineTypes, id: \.self) { type in
                         Text(type).tag(type)
@@ -163,7 +163,7 @@ struct RecipeEditorView: View {
                 Divider()
                     .overlay(.black)
                     .padding(.vertical, 5)
-
+                
                 Stepper(value: $viewModel.cookTime, in: 0...240) {
                     Text("Cook Time: \(viewModel.cookTime) minutes")
                 }
@@ -171,7 +171,7 @@ struct RecipeEditorView: View {
                 Divider()
                     .overlay(.black)
                     .padding(.vertical, 5)
-
+                
                 Stepper(value: $viewModel.servings, in: 1...20) {
                     Text("Servings: \(viewModel.servings)")
                 }
@@ -180,7 +180,7 @@ struct RecipeEditorView: View {
                     Divider()
                         .overlay(.black)
                         .padding(.vertical, 5)
-
+                    
                     VStack (alignment: .center) {
                         Text("Current Image")
                         RemoteImageView(fileName: viewModel.imageURL, width: UIScreen.main.bounds.width / 1.2, height: UIScreen.main.bounds.width / 1.2)
@@ -192,7 +192,7 @@ struct RecipeEditorView: View {
                     Divider()
                         .overlay(.black)
                         .padding(.vertical, 5)
-
+                    
                     VStack (alignment: .center) {
                         Text("New Image")
                         Image(uiImage: selectedImage)
@@ -206,7 +206,7 @@ struct RecipeEditorView: View {
                 Divider()
                     .overlay(.black)
                     .padding(.top)
-
+                
                 Button(action: {
                     viewModel.isImagePickerPresented = true
                 }) {
@@ -281,8 +281,33 @@ struct RecipeEditorView: View {
                 
                 // *************** New ingredient ***************
                 VStack {
-                    TextField("", text: $newIngredient.name, prompt: Text("New Ingredient").foregroundColor(.white.opacity(0.5))
+                    TextField("Search for an ingredient", text: $newIngredient.name, prompt: Text("New Ingredient").foregroundColor(.white.opacity(0.5))
                     )
+                    .onChange(of: newIngredient.name) {
+                        viewModel.searchFoodItems(for: newIngredient.name)
+                    }
+                    
+                    ForEach(viewModel.filteredFoodItems, id: \._id) { item in
+                        Button(action: {
+                            newIngredient.name = item.name.capitalized
+                            viewModel.filteredFoodItems = []
+                        }) {
+                            HStack {
+                                Text(item.name.capitalized)
+                                
+                                Spacer()
+                                
+                                Text(item.category)
+                                    .foregroundColor(.white.opacity(0.5))
+                            }
+                        }
+                    }
+                    List(viewModel.foodItems, id: \._id) { item in
+                        Text(item.name)
+                            .onAppear {
+                                print("Rendering item: \(item.name)")
+                            }
+                    }
                     
                     HStack {
                         TextField("", text: quantityBinding, prompt: Text("Quantity").foregroundColor(.white.opacity(0.5)))
@@ -314,7 +339,7 @@ struct RecipeEditorView: View {
                         }
                     }
                     .padding(.top, 10)
-
+                    
                 }
             }
             .padding()
@@ -346,10 +371,6 @@ struct RecipeEditorView: View {
                     updateInstructionSteps()
                     
                 }
-                //            .onMove { indices, newOffset in
-                //                viewModel.instructions.move(fromOffsets: indices, toOffset: newOffset)
-                //                updateInstructionSteps()
-                //            }
                 
                 // *************** New Instructions ***************
                 VStack (alignment: .leading) {

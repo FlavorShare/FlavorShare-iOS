@@ -9,8 +9,8 @@ import Foundation
 
 public struct EnvironmentVariables {
     
-//    static let APIBaseURL = "https://flavorshare-backend.onrender.com"
-    static let APIBaseURL = "http://localhost:3000"
+    static let APIBaseURL = "https://flavorshare-backend.onrender.com"
+//    static let APIBaseURL = "http://localhost:3000"
 
     enum Keys {
         static let appAPIKey = "APP_API_Key"
