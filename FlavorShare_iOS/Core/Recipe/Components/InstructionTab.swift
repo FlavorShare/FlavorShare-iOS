@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InstructionTab: View {
     @EnvironmentObject var viewModel: RecipeViewModel
-        
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack (alignment: .bottom) {
@@ -20,7 +20,7 @@ struct InstructionTab: View {
                 Spacer()
                 
                 NavigationLink(destination: CookingModeView(recipe: viewModel.recipe!, selectedServings: viewModel.selectedServings)) {
-//                NavigationLink(destination: MealPlanningView()) {
+                    //                NavigationLink(destination: MealPlanningView()) {
                     Text("Cooking Mode")
                         .font(.body)
                         .padding(.bottom, 20)
@@ -60,7 +60,7 @@ struct InstructionTab: View {
                                         )
                                         
                                         if let unit = ingredient.unit {
-                                            Text(adjustedQuantity == 1 ? "\(unit)" : "\(unit)s")
+                                            Text(quantity == 1 ? "\(unit)" : "\(Unit.measurementsPlural[unit] ?? "\(unit)")")
                                         }
                                     }
                                 }

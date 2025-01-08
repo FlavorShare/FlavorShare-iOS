@@ -33,7 +33,6 @@ class RecipeEditorViewModel: ObservableObject {
     
     // ****** OTHER PROPERTIES ******
     @Published var cuisineTypes: [String] = []
-    @Published var units: [String] = ["", "g", "kg", "ml", "l", "tsp", "tbsp", "cup", "oz", "lb", "unit"]
     
     @Published var errorMessage: String?
     @Published var isLoading: Bool = false

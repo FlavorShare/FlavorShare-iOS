@@ -9,9 +9,9 @@ import Foundation
 
 struct Ingredient: Identifiable, Hashable, Codable {
     let id = UUID()
-
+    
     var _id: String
-
+    
     var name: String
     var quantity: Float?
     var unit: String?
@@ -20,11 +20,18 @@ struct Ingredient: Identifiable, Hashable, Codable {
     
     init(name: String, quantity: Float? = nil, unit: String? = "", imageURL: String? = nil) {
         self._id = UUID().uuidString
-
+        
         self.name = name
         self.quantity = quantity
         self.unit = unit
         self.imageURL = imageURL
+    }
+    
+    func getFormattedQuantity() -> String {
+        guard let quantity = quantity else {
+            return ""
+        }
+        return decimalToFraction(Double(quantity))
     }
     
     enum CodingKeys: String, CodingKey {

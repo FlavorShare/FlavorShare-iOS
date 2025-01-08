@@ -22,7 +22,7 @@ struct CookingModeView: View {
     var body: some View {
         ZStack(alignment: .top) {
             BackgroundView(imageURL: viewModel.recipe.imageURL)
-
+            
             VStack {
                 HStack (alignment: .top) {
                     // Back button to go back in navigation stack
@@ -47,7 +47,7 @@ struct CookingModeView: View {
                         HStack {
                             Text("Step \(currentStep + 1) of \(viewModel.recipe.instructions.count)")
                                 .font(.headline)
-                                
+                            
                             Spacer()
                         }
                         
@@ -71,7 +71,7 @@ struct CookingModeView: View {
                                                  ? String(format: "%.0f", getQuantity(quantity))
                                                  : String(format: "%.1f", getQuantity(quantity)))
                                             if let unit = ingredient.unit {
-                                                Text(quantity == 1 ? "\(unit)" : "\(unit)s")
+                                                Text(quantity == 1 ? "\(unit)" : "\(Unit.measurementsPlural[unit] ?? "\(unit)")")
                                             }
                                         }
                                     }

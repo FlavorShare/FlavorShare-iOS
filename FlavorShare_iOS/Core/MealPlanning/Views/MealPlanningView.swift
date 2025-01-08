@@ -66,13 +66,28 @@ struct MealPlanningView: View {
                         .padding(.top)
                         
                         
-                        Text("Grocery List (\(viewModel.quantityItems) \(viewModel.quantityItems == 1 ? "item" : "items"))")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
-                            .padding(.top, 50)
-                            .padding(.bottom)
-                            .shadow(radius: 5)
+                        HStack {
+                            Text("Grocery List (\(viewModel.quantityItems) \(viewModel.quantityItems == 1 ? "item" : "items"))")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.white)
+                                .padding(.top, 50)
+                                .padding(.bottom)
+                                .shadow(radius: 5)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                viewModel.categorizedGroceryItems.removeAll()
+                                viewModel.updateMealPlan()
+                            }) {
+                                Text("Reset")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white)
+                                    .padding(.bottom, 20)
+                                    .shadow(radius: 3)
+                            }
+                        }
                         
                         // Grocery List
                         LazyVStack(alignment: .leading) {
@@ -110,6 +125,12 @@ struct MealPlanningView: View {
                 
             }// ZStack
             .ignoresSafeArea(.container, edges: .top)
+            .gesture(
+                TapGesture()
+                    .onEnded {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
+            )
         }// NavigationStack
         
     }
@@ -171,7 +192,7 @@ struct GroceryListItems: View {
                             )
                             
                             if let unit = foodItem.unit {
-                                Text(quantity == 1 ? "\(unit)" : "\(unit)s")
+                                Text(quantity == 1 ? "\(unit)" : "\(Unit.measurementsPlural[unit] ?? "\(unit)")")
                             }
                         }
                     }
@@ -195,7 +216,7 @@ struct GroceryListItems: View {
                     .padding(.trailing, 5)
                 
                 Picker("Unit", selection: $newItemUnit) {
-                    ForEach(viewModel.units, id: \.self) { unit in
+                    ForEach(Unit.measurementsSingular, id: \.self) { unit in
                         Text(unit).tag(unit)
                     }
                 }
@@ -237,9 +258,6 @@ struct GroceryListItems: View {
                     newItemName = ""
                     newItemQuantity = ""
                     newItemUnit = ""
-                    
-//                    // Save to local storage
-//                    viewModel.saveToLocalStorage()
                 }) {
                     Image(systemName: "plus.circle.fill")
                         .font(.title2)

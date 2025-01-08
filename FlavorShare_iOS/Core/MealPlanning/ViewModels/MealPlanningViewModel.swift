@@ -10,7 +10,6 @@ import Foundation
 class MealPlanningViewModel: ObservableObject {
     @Published var RecipePlanned: [Recipe] = []
     @Published var groceryFoodItems: [FoodItem] = []
-    @Published var units: [String] = ["", "g", "kg", "ml", "l", "tsp", "tbsp", "cup", "oz", "lb", "unit"]
     @Published var quantityItems = 0
     
     @Published var categorizedGroceryItems: [String: [FoodItem]] = [:] {

@@ -126,7 +126,7 @@ struct UserEditView: View {
                         .font(.headline)
                         .shadow(radius: 3)
                         .padding(.top, 20)
-
+                    
                     VStack {
                         VStack {
                             TextField("", text: $viewModel.email, prompt: Text("Email").foregroundStyle(.white.opacity(0.5))
@@ -140,80 +140,81 @@ struct UserEditView: View {
                             )
                         }
                         .padding()
+                        .disabled(true)
                     }
                     .background(.black.opacity(0.5))
                     .cornerRadius(10)
                     .clipped()
                     .tint(.white)
                     
-//                    Section(header: Text("Change Password")) {
-//                        SecureField("Current Password", text: $viewModel.password)
-//                        SecureField("New Password", text: $viewModel.newPassword)
-//                        SecureField("Confirm Password", text: $viewModel.confirmPassword)
-//                        
-//                        Button(action: {
-//                            viewModel.changePassword { success in
-//                                if viewModel.isSuccess {
-//                                    alertMessage = "Password changed successfully."
-//                                    showAlert = true
-//                                } else {
-//                                    alertMessage = viewModel.errorMessage ?? "Failed to change password. Please try again."
-//                                    showAlert = true
-//                                }
-//                            }
-//                        }) {
-//                            Text("Change Password")
-//                        }
-//                    }
+                    //                    Section(header: Text("Change Password")) {
+                    //                        SecureField("Current Password", text: $viewModel.password)
+                    //                        SecureField("New Password", text: $viewModel.newPassword)
+                    //                        SecureField("Confirm Password", text: $viewModel.confirmPassword)
+                    //
+                    //                        Button(action: {
+                    //                            viewModel.changePassword { success in
+                    //                                if viewModel.isSuccess {
+                    //                                    alertMessage = "Password changed successfully."
+                    //                                    showAlert = true
+                    //                                } else {
+                    //                                    alertMessage = viewModel.errorMessage ?? "Failed to change password. Please try again."
+                    //                                    showAlert = true
+                    //                                }
+                    //                            }
+                    //                        }) {
+                    //                            Text("Change Password")
+                    //                        }
+                    //                    }
                     
                     VStack (spacing: 0) {
-                            Button(action: {
-                                viewModel.updateUser { success in
-                                    if success {
-                                        user = User(id: user.id,
-                                                    email: viewModel.email,
-                                                    username: viewModel.username,
-                                                    firstName: viewModel.firstName,
-                                                    lastName: viewModel.lastName,
-                                                    phone: viewModel.phoneNumber,
-                                                    dateOfBirth: viewModel.dateOfBirth,
-                                                    recipes: user.recipes,
-                                                    followers: user.followers,
-                                                    following: user.following,
-                                                    createdAt: user.createdAt,
-                                                    updatedAt: user.updatedAt,
-                                                    profileImageURL: user.profileImageURL,
-                                                    bio: viewModel.bio)
-                                        dismiss()
-                                    } else {
-                                        alertMessage = "Failed to update profile. Please try again."
-                                        showAlert = true
-                                    }
+                        Button(action: {
+                            viewModel.updateUser { success in
+                                if success {
+                                    user = User(id: user.id,
+                                                email: viewModel.email,
+                                                username: viewModel.username,
+                                                firstName: viewModel.firstName,
+                                                lastName: viewModel.lastName,
+                                                phone: viewModel.phoneNumber,
+                                                dateOfBirth: viewModel.dateOfBirth,
+                                                recipes: user.recipes,
+                                                followers: user.followers,
+                                                following: user.following,
+                                                createdAt: user.createdAt,
+                                                updatedAt: user.updatedAt,
+                                                profileImageURL: user.profileImageURL,
+                                                bio: viewModel.bio)
+                                    dismiss()
+                                } else {
+                                    alertMessage = "Failed to update profile. Please try again."
+                                    showAlert = true
                                 }
-                            }) {
-                                Text("Update Profile")
                             }
-                            .padding()
-
-                            Divider()
-                                .overlay(.black)
-                                .padding(0)
-                            
-                            Button(action: {
-                                viewModel.deleteAccount { success in
-                                    if success {
-                                        dismiss()
-                                    } else {
-                                        alertMessage = "Failed to delete account. Please try again."
-                                        showAlert = true
-                                    }
+                        }) {
+                            Text("Update Profile")
+                        }
+                        .padding()
+                        
+                        Divider()
+                            .overlay(.black)
+                            .padding(0)
+                        
+                        Button(action: {
+                            viewModel.deleteAccount { success in
+                                if success {
+                                    dismiss()
+                                } else {
+                                    alertMessage = "Failed to delete account. Please try again."
+                                    showAlert = true
                                 }
-                            }) {
-                                Text("Delete Account")
-                                    .foregroundColor(.red)
-                            } // end of Button
-                            .padding()
-
+                            }
+                        }) {
+                            Text("Delete Account")
+                                .foregroundColor(.red)
+                        } // end of Button
+                        .padding()
+                        
                     } // end of Section
                     .background(.black.opacity(0.5))
                     .cornerRadius(10)
@@ -275,6 +276,12 @@ struct UserEditView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
+        )
+        .simultaneousGesture(
+            TapGesture()
+                .onEnded {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
         )
     } // end of body
 }

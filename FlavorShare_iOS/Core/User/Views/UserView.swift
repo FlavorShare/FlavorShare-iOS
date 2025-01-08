@@ -98,6 +98,7 @@ struct UserView: View {
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .multilineTextAlignment(.center)
                                     .shadow(radius: 5)
+                                    .padding(.horizontal)
                             }
                             
                             HStack {
@@ -114,7 +115,7 @@ struct UserView: View {
                                 }
                             }
                         }
-                        .padding(.vertical, screenHeight/20)
+                        .padding(.vertical, 30)
                         .foregroundColor(.white)
                         
                         VStack (alignment: .leading) {
@@ -164,6 +165,8 @@ struct UserView: View {
                 } // ScrollView end
                 .refreshable {
                     viewModel.fetchRecipes()
+                    
+                    // TODO: FIND A WAY TO REFRESH FULL PROFILE (IMAGE AND ALL ON REFRESH)
                 }
                 .onAppear() {
                     isPresentedAsChild = presentationMode.wrappedValue.isPresented

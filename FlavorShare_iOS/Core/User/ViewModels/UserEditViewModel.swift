@@ -101,6 +101,15 @@ class UserEditViewModel: ObservableObject {
     func updateUser(completion: @escaping (Bool) -> Void) {
         isLoading = true
         
+        // Validate all fields are filled
+        if username.isEmpty || firstName.isEmpty || lastName.isEmpty || dateOfBirth == Date() {
+            self.errorMessage = "Please fill in all fields."
+            self.isLoading = false
+            completion(false)
+            
+            return
+        }
+        
         self.updatedAt = Date()
         
         // Upload image

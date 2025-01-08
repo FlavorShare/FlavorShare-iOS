@@ -62,11 +62,11 @@ struct AuthView: View {
                         Group {
                             TextField("Email", text: $viewModel.email, prompt: Text("Email").foregroundColor(.secondary.opacity(0.5))
                             )
-                                .keyboardType(.emailAddress)
-                                .autocapitalization(.none)
-                                .padding()
-                                .background(Color(.secondarySystemBackground).opacity(0.5))
-                                .cornerRadius(10)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .padding()
+                            .background(Color(.secondarySystemBackground).opacity(0.5))
+                            .cornerRadius(10)
                             
                             SecureField("Password", text: $viewModel.password)
                                 .padding()
@@ -135,7 +135,12 @@ struct AuthView: View {
                 } // ScrollView
             } // ZStack
             .ignoresSafeArea(.container, edges: .top)
-
+            .gesture(
+                TapGesture()
+                    .onEnded {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
+            )
         } // NavigationStack
     } // body
 }

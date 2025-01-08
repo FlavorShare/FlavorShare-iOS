@@ -135,6 +135,12 @@ struct RecipeEditorView: View {
                 }
             }
         )
+        .simultaneousGesture(
+            TapGesture()
+                .onEnded {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+        )
     }
     
     var recipeDetails: some View {
@@ -164,17 +170,13 @@ struct RecipeEditorView: View {
                     .overlay(.black)
                     .padding(.vertical, 5)
                 
-                Stepper(value: $viewModel.cookTime, in: 0...240) {
-                    Text("Cook Time: \(viewModel.cookTime) minutes")
-                }
+                CustomStepper(value: $viewModel.cookTime, range: 0...240, label: "Cook Time (minutes)")
                 
                 Divider()
                     .overlay(.black)
                     .padding(.vertical, 5)
                 
-                Stepper(value: $viewModel.servings, in: 1...20) {
-                    Text("Servings: \(viewModel.servings)")
-                }
+                CustomStepper(value: $viewModel.servings, range: 1...20, label: "Cook Servings (portions)")
                 
                 if (viewModel.imageURL != "") {
                     Divider()
@@ -263,7 +265,7 @@ struct RecipeEditorView: View {
                                 get: { viewModel.ingredients[index].unit ?? "" },
                                 set: { viewModel.ingredients[index].unit = $0.isEmpty ? nil : $0 }
                             )) {
-                                ForEach(viewModel.units, id: \.self) { unit in
+                                ForEach(Unit.measurementsSingular, id: \.self) { unit in
                                     Text(unit).tag(unit)
                                 }
                             }
@@ -281,7 +283,7 @@ struct RecipeEditorView: View {
                 
                 // *************** New ingredient ***************
                 VStack {
-                    TextField("Search for an ingredient", text: $newIngredient.name, prompt: Text("New Ingredient").foregroundColor(.white.opacity(0.5))
+                    TextField("New Ingredient", text: $newIngredient.name, prompt: Text("New Ingredient").foregroundColor(.white.opacity(0.5))
                     )
                     .onChange(of: newIngredient.name) {
                         viewModel.searchFoodItems(for: newIngredient.name)
@@ -290,7 +292,9 @@ struct RecipeEditorView: View {
                     ForEach(viewModel.filteredFoodItems, id: \._id) { item in
                         Button(action: {
                             newIngredient.name = item.name.capitalized
-                            viewModel.filteredFoodItems = []
+                            DispatchQueue.main.async {
+                                viewModel.filteredFoodItems = []
+                            }
                         }) {
                             HStack {
                                 Text(item.name.capitalized)
@@ -302,12 +306,6 @@ struct RecipeEditorView: View {
                             }
                         }
                     }
-                    List(viewModel.foodItems, id: \._id) { item in
-                        Text(item.name)
-                            .onAppear {
-                                print("Rendering item: \(item.name)")
-                            }
-                    }
                     
                     HStack {
                         TextField("", text: quantityBinding, prompt: Text("Quantity").foregroundColor(.white.opacity(0.5)))
@@ -316,7 +314,7 @@ struct RecipeEditorView: View {
                         Spacer()
                         
                         Picker("Unit", selection: $newIngredient.unit) {
-                            ForEach(viewModel.units, id: \.self) { unit in
+                            ForEach(Unit.measurementsSingular, id: \.self) { unit in
                                 Text(unit).tag(unit)
                             }
                         }

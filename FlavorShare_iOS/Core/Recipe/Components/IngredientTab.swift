@@ -34,9 +34,11 @@ struct IngredientTab: View {
                                  ? String(format: "%.0f", adjustedQuantity) // For round numbers, show no decimals
                                  : String(format: "%.1f", adjustedQuantity) // For decimal numbers, show one decimal
                             )
+                            // TODO: FIX THE FRACTIONAL CONVERSION currently having issues with the numbers like 0.1666666666666667 and 0.3333333333333333 giving off fractions like 17/100 and 33/100 instead of 1/6 and 1/3 respectively
+                            // Text(decimalToFraction(Double(adjustedQuantity)))
                             
                             if let unit = ingredient.unit {
-                                Text(adjustedQuantity == 1 ? "\(unit)" : "\(unit)s")
+                                Text(quantity == 1 ? "\(unit)" : "\(Unit.measurementsPlural[unit] ?? "\(unit)")")
                             }
                         }
                     }

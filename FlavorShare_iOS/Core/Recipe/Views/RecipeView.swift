@@ -153,55 +153,59 @@ struct RecipeView: View {
             
             // MEAL PLANNING CONFIRMATION
             if viewModel.showMealPlanningConfirmation {
-                VStack {
-                    VStack (spacing: 20) {
-                        Text("Please Confirm the Number of Servings.")
-                            .font(.title2)
-                            .multilineTextAlignment(.center)
-                        
-                        HStack (alignment: .center, spacing: 0) {
-                            Picker("Servings", selection: $viewModel.selectedServings) {
-                                ForEach(1...20, id: \.self) { serving in
-                                    Text("\(serving)").tag(serving)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            Text("Serving\(viewModel.selectedServings > 1 ? "s" : "")")
-                        }
-                        .tint(.white)
-                        
-                        Text("Before confirming, note the grocery list will be reset and the new ingredients will be added.")
-                            .font(.footnote)
-                            .multilineTextAlignment(.center)
-                        
-                        HStack (spacing: 20) {
-                            Button(action: {
-                                viewModel.showMealPlanningConfirmation = false
-                            }) {
-                                Text("Cancel")
-                                    .font(.body)
-                            }
-                            .buttonStyle(.bordered)
+                ZStack {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                    
+                    VStack {
+                        VStack (spacing: 20) {
+                            Text("Please Confirm the Number of Servings.")
+                                .font(.title2)
+                                .multilineTextAlignment(.center)
                             
-                            Button(action: {
-                                viewModel.addRecipeToMealPlan()
-                                viewModel.showMealPlanningConfirmation = false
-                            }) {
-                                Text("Confirm")
-                                    .font(.body)
+                            HStack (alignment: .center, spacing: 0) {
+                                Picker("Servings", selection: $viewModel.selectedServings) {
+                                    ForEach(1...20, id: \.self) { serving in
+                                        Text("\(serving)").tag(serving)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                Text("Serving\(viewModel.selectedServings > 1 ? "s" : "")")
                             }
-                            .buttonStyle(.bordered)
+                            .tint(.white)
+                            
+                            Text("Before confirming, note the grocery list will be reset and the new ingredients will be added.")
+                                .font(.footnote)
+                                .multilineTextAlignment(.center)
+                            
+                            HStack (spacing: 20) {
+                                Button(action: {
+                                    viewModel.showMealPlanningConfirmation = false
+                                }) {
+                                    Text("Cancel")
+                                        .font(.body)
+                                }
+                                .buttonStyle(.bordered)
+                                
+                                Button(action: {
+                                    viewModel.addRecipeToMealPlan()
+                                    viewModel.showMealPlanningConfirmation = false
+                                }) {
+                                    Text("Confirm")
+                                        .font(.body)
+                                }
+                                .buttonStyle(.bordered)
+                            }
                         }
+                        .padding()
+                        .foregroundStyle(.white)
+                        .background(Color.gray.opacity(0.8))
+                        .cornerRadius(10)
+                        .clipped()
+                        .shadow(radius: 10)
+                        .padding(.horizontal)
                     }
-                    .padding()
-//                    .padding(.vertical, 30)
-                    .foregroundStyle(.white)
-                    .background(Color.black.opacity(0.8))
-                    .cornerRadius(10)
-                    .clipped()
-                    .shadow(radius: 10)
                 }
-                .padding(.top, UIScreen.main.bounds.height/3)
             }
             
         } // ZStack

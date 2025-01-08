@@ -16,7 +16,6 @@ struct AddFoodItemView: View {
     
     var body: some View {
         NavigationStack (){
-            
             ZStack {
                 BackgroundView(imageURL: nil)
                 
@@ -55,6 +54,12 @@ struct AddFoodItemView: View {
                 
             } // ZStack
             .ignoresSafeArea(.container, edges: .top)
+            .gesture(
+                TapGesture()
+                    .onEnded {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
+            )
         }
     }
 }

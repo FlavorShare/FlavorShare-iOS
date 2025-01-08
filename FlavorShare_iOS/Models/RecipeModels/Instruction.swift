@@ -13,9 +13,9 @@ struct Instruction: Identifiable, Hashable, Codable {
     
     var step: Int
     var description: String
-    var ingredients: [String]?
+    var ingredients: [String]? = []
     
-    init(step: Int, description: String, ingredients: [String]? = nil) {
+    init(step: Int, description: String, ingredients: [String]? = []) {
         self.step = step
         self.description = description
         self.ingredients = ingredients
