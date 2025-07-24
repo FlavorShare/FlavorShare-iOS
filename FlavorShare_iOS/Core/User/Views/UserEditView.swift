@@ -116,9 +116,7 @@ struct UserEditView: View {
                         }
                         .padding()
                     }
-                    .background(.black.opacity(0.5))
-                    .cornerRadius(10)
-                    .clipped()
+                    .glassEffect(.clear, in: .rect(cornerRadius: 10))
                     .tint(.white)
                     
                     
@@ -142,9 +140,7 @@ struct UserEditView: View {
                         .padding()
                         .disabled(true)
                     }
-                    .background(.black.opacity(0.5))
-                    .cornerRadius(10)
-                    .clipped()
+                    .glassEffect(.clear, in: .rect(cornerRadius: 10))
                     .tint(.white)
                     
                     //                    Section(header: Text("Change Password")) {
@@ -167,7 +163,7 @@ struct UserEditView: View {
                     //                        }
                     //                    }
                     
-                    VStack (spacing: 0) {
+                    VStack (spacing: 10) {
                         Button(action: {
                             viewModel.updateUser { success in
                                 if success {
@@ -195,10 +191,8 @@ struct UserEditView: View {
                             Text("Update Profile")
                         }
                         .padding()
-                        
-                        Divider()
-                            .overlay(.black)
-                            .padding(0)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 10))
                         
                         Button(action: {
                             viewModel.deleteAccount { success in
@@ -214,12 +208,10 @@ struct UserEditView: View {
                                 .foregroundColor(.red)
                         } // end of Button
                         .padding()
-                        
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 10))
+                    
                     } // end of Section
-                    .background(.black.opacity(0.5))
-                    .cornerRadius(10)
-                    .clipped()
-                    .tint(.white)
                     .padding(.top)
                     
                 } // end of Form
@@ -251,12 +243,12 @@ struct UserEditView: View {
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 10)
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(10)
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(Color.black.opacity(0.2))
+                        .cornerRadius(25)
                         .clipped()
+                        .glassEffect(.clear.interactive())
                         .shadow(radius: 3)
                 }
                 

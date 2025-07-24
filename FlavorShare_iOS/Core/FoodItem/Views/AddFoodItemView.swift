@@ -18,7 +18,8 @@ struct AddFoodItemView: View {
         NavigationStack (){
             ZStack {
                 BackgroundView(imageURL: nil)
-                
+                    .ignoresSafeArea(.all)
+
                 VStack (alignment: .leading) {
                     Text("Add a Food Item")
                         .font(.title)
@@ -51,9 +52,9 @@ struct AddFoodItemView: View {
                 .padding(.horizontal)
                 .padding(.top, screenHeight/10)
                 .foregroundStyle(.white)
-                
+                .ignoresSafeArea(.all)
+
             } // ZStack
-            .ignoresSafeArea(.container, edges: .top)
             .gesture(
                 TapGesture()
                     .onEnded {

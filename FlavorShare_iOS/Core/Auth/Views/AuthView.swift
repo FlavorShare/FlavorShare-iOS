@@ -21,7 +21,8 @@ struct AuthView: View {
             ZStack {
                 // Background Image
                 BackgroundView(imageURL: nil)
-                
+                    .ignoresSafeArea(.all)
+
                 ScrollView {
                     VStack {
                         // App Logo
@@ -35,27 +36,47 @@ struct AuthView: View {
                             Button(action: {
                                 isLoginMode = true
                             }) {
-                                Text("Login")
-                                    .foregroundColor(isLoginMode ? .black : .white)
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 5)
-                                    .background(isLoginMode ? Color.white : Color.clear)
-                                    .cornerRadius(10)
+                                if (isLoginMode) {
+                                    Text("Login")
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 5)
+                                        .cornerRadius(10)
+                                        .glassEffect(.clear.interactive())
+
+                                } else {
+                                    Text("Login")
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 5)
+                                        .cornerRadius(10)
+                                }
+                                
                             }
                             
                             Button(action: {
                                 isLoginMode = false
                             }) {
-                                Text("Sign Up")
-                                    .foregroundColor(!isLoginMode ? .black : .white)
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 5)
-                                    .background(!isLoginMode ? Color.white : Color.clear)
-                                    .cornerRadius(10)
+                                if (isLoginMode) {
+                                    Text("Sign Up")
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 5)
+                                        .cornerRadius(10)
+
+                                } else {
+                                    Text("Sign Up")
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 5)
+                                        .cornerRadius(10)
+                                        .glassEffect(.clear.interactive())
+                                }
+                                
                             }
                         }
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(10)
+                        .background(Color.secondary.opacity(0.5))
+                        .cornerRadius(25)
                         .clipped()
                         .padding()
                         
@@ -65,42 +86,44 @@ struct AuthView: View {
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
                             .padding()
-                            .background(Color(.secondarySystemBackground).opacity(0.5))
+                            .glassEffect(.clear.interactive())
                             .cornerRadius(10)
                             
                             SecureField("Password", text: $viewModel.password)
                                 .padding()
-                                .background(Color(.secondarySystemBackground).opacity(0.5))
+                                .glassEffect(.clear.interactive())
                                 .cornerRadius(10)
                             
                             if !isLoginMode {
                                 TextField("Username", text: $viewModel.username)
                                     .padding()
-                                    .background(Color(.secondarySystemBackground).opacity(0.5))
+                                    .glassEffect(.clear.interactive())
                                     .cornerRadius(10)
                                 
                                 TextField("First Name", text: $viewModel.firstName)
                                     .padding()
-                                    .background(Color(.secondarySystemBackground).opacity(0.5))
+                                    .glassEffect(.clear.interactive())
                                     .cornerRadius(10)
                                 
                                 TextField("Last Name", text: $viewModel.lastName)
                                     .padding()
-                                    .background(Color(.secondarySystemBackground).opacity(0.5))
+                                    .glassEffect(.clear.interactive())
                                     .cornerRadius(10)
                                 
                                 TextField("Phone", text: $viewModel.phone)
                                     .keyboardType(.phonePad)
                                     .padding()
-                                    .background(Color(.secondarySystemBackground).opacity(0.5))
+                                    .glassEffect(.clear.interactive())
                                     .cornerRadius(10)
                                 
                                 DatePicker("Date of Birth", selection: $viewModel.dateOfBirth, displayedComponents: .date)
                                     .padding()
-                                    .background(Color(.secondarySystemBackground).opacity(0.5))
+                                    .glassEffect(.clear.interactive())
                                     .cornerRadius(10)
                             }
                         }
+                        .padding(.horizontal)
+                        
                         
                         Button(action: {
                             if isLoginMode {
@@ -114,11 +137,14 @@ struct AuthView: View {
                             }
                         }) {
                             Text(isLoginMode ? "Login" : "Sign Up")
-                                .foregroundColor(.white)
                                 .padding(.vertical)
                                 .frame(maxWidth: .infinity)
-                                .background(Color.black.opacity(0.5))
-                                .cornerRadius(10)
+                                .foregroundStyle(.white)
+                                .frame(height: 40)
+                                .padding(.horizontal, 15)
+                                .cornerRadius(25)
+                                .clipped()
+                                .glassEffect(.regular.interactive())
                         }
                         .padding()
                         
@@ -130,11 +156,10 @@ struct AuthView: View {
                         }
                         
                         Spacer()
-                    }
+                    } // VStack
                     .padding()
                 } // ScrollView
             } // ZStack
-            .ignoresSafeArea(.container, edges: .top)
             .gesture(
                 TapGesture()
                     .onEnded {

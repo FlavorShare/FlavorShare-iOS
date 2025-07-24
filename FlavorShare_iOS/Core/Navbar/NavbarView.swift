@@ -23,24 +23,25 @@ struct NavbarView: View {
             ZStack {
                 RecipeListView()
                     .opacity(selectedIndex == 0 ? 1 : 0)
-                    .animation(.easeInOut, value: selectedIndex)
+                    .animation(.easeInOut(duration: 0.3), value: selectedIndex)
                 
                 UserView(user: user)
                     .opacity(selectedIndex == 1 ? 1 : 0)
-                    .animation(.easeInOut, value: selectedIndex)
+                    .animation(.easeInOut(duration: 0.3), value: selectedIndex)
                 
                 MealPlanningView()
                     .opacity(selectedIndex == 2 ? 1 : 0)
-                    .animation(.easeInOut, value: selectedIndex)
+                    .animation(.easeInOut(duration: 0.3), value: selectedIndex)
                 
                 // TODO: SHOW ONLY IF USER IS ADMIN (MODIFY TO BECOME ADMIN PANEL)
                 //                AddFoodItemView()
                 //                    .opacity(selectedIndex == 3 ? 1 : 0)
                 //                    .animation(.easeInOut, value: selectedIndex)
             }
-            .animation(.easeInOut, value: selectedIndex)
+            .animation(.easeInOut(duration: 0.3), value: selectedIndex)
             
             CustomTabBar(selectedIndex: $selectedIndex)
+                .padding(.bottom, 30)
         }
     }
 }
@@ -75,7 +76,7 @@ struct CustomTabBar: View {
                 }
             }
             .foregroundColor(selectedIndex == 2 ? .black.opacity(0.8) : .gray)
-            .padding(.horizontal)
+            .padding()
             
             // ******* RecipeListView *******
             Button(action: {
@@ -88,7 +89,7 @@ struct CustomTabBar: View {
                 }
             }
             .foregroundColor(selectedIndex == 0 ? .black.opacity(0.8) : .gray)
-            .padding(.horizontal)
+            .padding()
             
             // ********** UserView **********
             Button(action: {
@@ -101,14 +102,14 @@ struct CustomTabBar: View {
                 }
             }
             .foregroundColor(selectedIndex == 1 ? .black.opacity(0.8) : .gray)
-            .padding(.horizontal)
+            .padding()
             
         }
-        .padding()
         .background(.ultraThinMaterial)
         .background(Color.white.opacity(0.2))
         .cornerRadius(25)
         .shadow(radius: 5)
+        .glassEffect(.clear.interactive())
     }
 }
 

@@ -33,13 +33,11 @@ struct BackgroundView: View {
                 RemoteImageView(fileName: imageURL!, width: screenWidth, height: screenHeight)
                     .blur(radius: 20)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .ignoresSafeArea(.all)
                 BlurView(style: .regular)
-                    .ignoresSafeArea(.all)
                 Rectangle()
                     .fill(Color.black.opacity(0.4))
-                    .ignoresSafeArea(.all)
             }
+            .ignoresSafeArea(.all)
         }
     }
 }

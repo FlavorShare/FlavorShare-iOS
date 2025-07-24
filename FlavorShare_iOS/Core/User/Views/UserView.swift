@@ -25,10 +25,12 @@ struct UserView: View {
         NavigationStack{
             ZStack {
                 // Background Image
-                RemoteImageView(fileName: viewModel.user.profileImageURL ?? "Image", width: screenWidth, height: screenHeight)
-                    .blur(radius: 20)
-                    .frame(width: screenWidth, height: screenHeight)
-                    .ignoresSafeArea(.all)
+                if let imageURL = viewModel.user.profileImageURL {
+                    RemoteImageView(fileName: imageURL != "" ? imageURL : "Image", width: screenWidth, height: screenHeight)
+                        .blur(radius: 20)
+                        .frame(width: screenWidth, height: screenHeight)
+                        .ignoresSafeArea(.all)
+                }
                 
                 BlurView(style: .regular)
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
@@ -48,12 +50,12 @@ struct UserView: View {
                                     presentationMode.wrappedValue.dismiss()
                                 }) {
                                     Image(systemName: "chevron.left")
-                                        .foregroundColor(.white)
-                                        .padding(.vertical, 5)
-                                        .padding(.horizontal, 10)
-                                        .background(Color.black.opacity(0.5))
-                                        .cornerRadius(10)
+                                        .foregroundStyle(.white)
+                                        .frame(width: 40, height: 40)
+                                        .background(Color.black.opacity(0.2))
+                                        .cornerRadius(25)
                                         .clipped()
+                                        .glassEffect(.clear.interactive())
                                         .shadow(radius: 3)
                                 }
                             }
@@ -164,13 +166,12 @@ struct UserView: View {
                     .padding(.bottom, 150)
                 } // ScrollView end
                 .refreshable {
-                    viewModel.fetchRecipes()
-                    
+                    viewModel.refreshView()
                     // TODO: FIND A WAY TO REFRESH FULL PROFILE (IMAGE AND ALL ON REFRESH)
                 }
                 .onAppear() {
                     isPresentedAsChild = presentationMode.wrappedValue.isPresented
-                    viewModel.fetchRecipes()
+                    viewModel.refreshView()
                 }
                 .navigationBarBackButtonHidden(true)
                 .navigationBarHidden(true)

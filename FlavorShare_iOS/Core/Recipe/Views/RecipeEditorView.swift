@@ -52,6 +52,7 @@ struct RecipeEditorView: View {
         ZStack (alignment: .top) {
             if let recipe = recipe {
                 BackgroundView(imageURL: recipe.imageURL)
+                    .ignoresSafeArea(.all)
             }
             
             ScrollView {
@@ -96,12 +97,12 @@ struct RecipeEditorView: View {
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 10)
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(10)
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(Color.black.opacity(0.2))
+                        .cornerRadius(25)
                         .clipped()
+                        .glassEffect(.clear.interactive())
                         .shadow(radius: 3)
                 }
                 
@@ -151,13 +152,13 @@ struct RecipeEditorView: View {
                 )
                 
                 Divider()
-                    .overlay(.black)
+                    .overlay(.white)
                     .padding(.vertical, 5)
                 
                 TextField("", text: $viewModel.description, prompt: Text("Description").foregroundColor(.white.opacity(0.5)), axis: .vertical)
                 
                 Divider()
-                    .overlay(.black)
+                    .overlay(.white)
                     .padding(.vertical, 5)
                 
                 Picker("Cuisine Type", selection: $viewModel.type) {
@@ -167,20 +168,20 @@ struct RecipeEditorView: View {
                 }
                 
                 Divider()
-                    .overlay(.black)
+                    .overlay(.white)
                     .padding(.vertical, 5)
                 
                 CustomStepper(value: $viewModel.cookTime, range: 0...240, label: "Cook Time (minutes)")
                 
                 Divider()
-                    .overlay(.black)
+                    .overlay(.white)
                     .padding(.vertical, 5)
                 
                 CustomStepper(value: $viewModel.servings, range: 1...20, label: "Cook Servings (portions)")
                 
                 if (viewModel.imageURL != "") {
                     Divider()
-                        .overlay(.black)
+                        .overlay(.white)
                         .padding(.vertical, 5)
                     
                     VStack (alignment: .center) {
@@ -218,10 +219,8 @@ struct RecipeEditorView: View {
             }
             .padding()
         }
-        .background(.black.opacity(0.5))
-        .cornerRadius(10)
-        .clipped()
         .tint(.white)
+        .glassEffect(.clear, in: .rect(cornerRadius: 10))
     }
     
     var ingredients: some View {
@@ -342,10 +341,8 @@ struct RecipeEditorView: View {
             }
             .padding()
         }
-        .background(.black.opacity(0.5))
-        .cornerRadius(10)
-        .clipped()
         .tint(.white)
+        .glassEffect(.clear, in: .rect(cornerRadius: 10))
     }
     
     
@@ -397,37 +394,13 @@ struct RecipeEditorView: View {
             }
             .padding()
         }
-        .background(.black.opacity(0.5))
-        .cornerRadius(10)
-        .clipped()
         .tint(.white)
+        .glassEffect(.clear, in: .rect(cornerRadius: 10))
     }
     
     var actionButtons: some View {
         // MARK: - Save / Delete Buttons
-        VStack (spacing: 0) {
-            if !isNewRecipe {
-                Button(action: {
-                    viewModel.deleteRecipe { success in
-                        if success {
-                            self.recipe = nil
-                            presentationMode.wrappedValue.dismiss()
-                        } else {
-                            alertMessage = viewModel.errorMessage ??  "Failed to delete recipe. Please try again."
-                            showAlert = true
-                        }
-                    }
-                }) {
-                    Text("Delete Recipe")
-                        .foregroundColor(.red)
-                }
-                .padding()
-            }
-            
-            Divider()
-                .overlay(.black)
-                .padding(0)
-            
+        VStack (spacing: 10) {
             Button(action: {
                 if isNewRecipe {
                     viewModel.createRecipe { success in
@@ -470,13 +443,33 @@ struct RecipeEditorView: View {
                 Text(isNewRecipe ? "Create Recipe" : "Update Recipe")
             }
             .padding()
+            .frame(maxWidth: .infinity, alignment: .center)
+            .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 10))
+            
+            if !isNewRecipe {
+                Button(action: {
+                    viewModel.deleteRecipe { success in
+                        if success {
+                            self.recipe = nil
+                            presentationMode.wrappedValue.dismiss()
+                        } else {
+                            alertMessage = viewModel.errorMessage ??  "Failed to delete recipe. Please try again."
+                            showAlert = true
+                        }
+                    }
+                }) {
+                    Text("Delete Recipe")
+                        .foregroundColor(.red)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+                .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 10))
+            }
+            
             
         } // end of Section
-        .background(.black.opacity(0.5))
-        .cornerRadius(10)
-        .clipped()
-        .padding(.top)
         .tint(.white)
+        .padding(.top)
         .frame(maxWidth: .infinity)
     }
     
@@ -534,5 +527,5 @@ struct InstructionView: View {
 
 
 #Preview {
-    RecipeEditorView(isNewRecipe: true, recipe: .constant(MockData.shared.recipe[0]))
+    RecipeEditorView(isNewRecipe: false, recipe: .constant(MockData.shared.recipe[0]))
 }

@@ -18,7 +18,8 @@ struct MealPlanningView: View {
         NavigationStack (){
             ZStack {
                 BackgroundView(imageURL: nil)
-                
+                    .ignoresSafeArea(.all)
+
                 ScrollView {
                     VStack(alignment: .leading) {
                         HStack {
@@ -71,7 +72,6 @@ struct MealPlanningView: View {
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.white)
-                                .padding(.top, 50)
                                 .padding(.bottom)
                                 .shadow(radius: 5)
                             
@@ -84,11 +84,13 @@ struct MealPlanningView: View {
                                 Text("Reset")
                                     .font(.subheadline)
                                     .foregroundStyle(.white)
-                                    .padding(.bottom, 20)
                                     .shadow(radius: 3)
+                                    .padding(.bottom, 20)
+
                             }
                         }
-                        
+                        .padding(.top, 50)
+
                         // Grocery List
                         LazyVStack(alignment: .leading) {
                             ForEach(categories(), id: \.self) { category in
@@ -124,7 +126,6 @@ struct MealPlanningView: View {
                 }
                 
             }// ZStack
-            .ignoresSafeArea(.container, edges: .top)
             .gesture(
                 TapGesture()
                     .onEnded {

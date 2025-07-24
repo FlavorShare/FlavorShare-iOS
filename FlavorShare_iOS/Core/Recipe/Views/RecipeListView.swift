@@ -20,7 +20,8 @@ struct RecipeListView: View {
             ZStack {
                 // Background Image
                 BackgroundView(imageURL: nil)
-                
+                    .ignoresSafeArea(.all)
+
                 ScrollView {
                     VStack(spacing: 0) {
                         
@@ -33,7 +34,7 @@ struct RecipeListView: View {
                         // Welcome Message
                         let userFirstName = AuthService.shared.currentUser?.firstName ?? "User"
                         HStack {
-                            if let imageURL = AuthService.shared.currentUser?.profileImageURL {
+                            if let imageURL = viewModel.profileImage {
                                 if imageURL != "" {
                                     RemoteImageView(fileName: imageURL, width: screenWidth / 5, height: screenWidth / 5)
                                         .clipShape(Circle())
@@ -77,6 +78,8 @@ struct RecipeListView: View {
                             }) {
                                 Image(systemName: viewModel.likeFilter ? "heart.fill" : "heart")
                                     .foregroundColor(.white)
+                                    .padding(6)
+                                    .glassEffect(.clear)
                                     .padding(.trailing)
                                     .font(.title)
                             }
@@ -92,11 +95,12 @@ struct RecipeListView: View {
                                         .background(viewModel.selectedCategory == category ? Color.black.opacity(0.8) : Color.black.opacity(0.3))
                                         .fontWeight(viewModel.selectedCategory == category ? .bold : .regular)
                                         .foregroundColor(.white)
-                                        .cornerRadius(10)
+                                        .cornerRadius(25)
                                         .onTapGesture {
                                             viewModel.selectedCategory = category
                                             viewModel.filterRecipes()
                                         }
+                                        .glassEffect()
                                 }
                             }
                             .padding(.horizontal)
@@ -135,10 +139,10 @@ struct RecipeListView: View {
                     
                 } // ScrollView
                 .refreshable {
-                    viewModel.fetchRecipes()
+                    viewModel.refreshView()
                 }
                 .onAppear() {
-                    viewModel.fetchRecipes()
+                    viewModel.refreshView()
                 }
                 
             } // ZStack

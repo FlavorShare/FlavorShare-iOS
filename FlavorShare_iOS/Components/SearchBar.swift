@@ -15,8 +15,9 @@ struct SearchBar: View {
             TextField("Search recipes...", text: $searchText)
                 .padding(8)
                 .padding(.horizontal, 24)
-                .background(Color(.white).opacity(0.5))
                 .cornerRadius(8)
+                .glassEffect(.clear.interactive())
+                .foregroundStyle(.white)
                 .overlay(
                     HStack {
                         Image(systemName: "magnifyingglass")
@@ -35,7 +36,6 @@ struct SearchBar: View {
                         }
                     }
                 )
-//                .padding(.horizontal, 10)
         }
     }
 }

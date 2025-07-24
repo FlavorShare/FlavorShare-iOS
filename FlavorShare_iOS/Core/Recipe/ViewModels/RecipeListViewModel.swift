@@ -17,9 +17,26 @@ class RecipeListViewModel: ObservableObject {
     @Published var selectedCategory: String = "All"
     @Published var likeFilter: Bool = false
     
+    @Published var profileImage: String? = AuthService.shared.currentUser?.profileImageURL
+    
     init() {
         fetchRecipes()
         fetchCuisineTypes()
+    }
+    
+    func refreshView() {
+        fetchRecipes()
+
+        // Refresh Profile image
+        let profileImageTemp = profileImage
+        profileImage = nil
+
+        // Restore profile image after a delay
+        #if os(iOS)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            self?.profileImage = profileImageTemp
+        }
+        #endif
     }
     
     // MARK: filterRecipes()

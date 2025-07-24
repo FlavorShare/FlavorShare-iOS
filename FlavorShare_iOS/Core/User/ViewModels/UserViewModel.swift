@@ -14,6 +14,7 @@ class UserViewModel: ObservableObject {
     init(user: User) {
         self.user = user
         self.fetchRecipes()
+        print("Showing User View")
     }
     
     /**
@@ -30,5 +31,25 @@ class UserViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func fetchUpdatedUserData() {
+        self.user.profileImageURL = nil
+        UserAPIService.shared.fetchUserById(withUid: user.id) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let user):
+                    self?.user = user
+                case .failure(let error):
+                    print("func fetchUpdatedUserData() - Error fetching user data: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    func refreshView() {
+        print("Refreshing view...")
+        fetchRecipes()
+        fetchUpdatedUserData()
     }
 }

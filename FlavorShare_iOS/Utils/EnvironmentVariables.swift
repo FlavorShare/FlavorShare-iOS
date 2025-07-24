@@ -9,7 +9,7 @@ import Foundation
 
 public struct EnvironmentVariables {
     
-    static let APIBaseURL = "https://flavorshare-backend.onrender.com"
+    static let APIBaseURL = "http://flavorshare-backend-production.up.railway.app"
 //    static let APIBaseURL = "http://localhost:3000"
 
     enum Keys {

@@ -7,10 +7,17 @@
 
 import SwiftUI
 
+enum Tabs: String, CaseIterable, Identifiable {
+    var id: Self { self }
+    case ingredients = "Ingredients"
+    case instructions = "Instructions"
+    case reviews = "Reviews"
+}
+
 struct RecipeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject var viewModel: RecipeViewModel
-    @State var viewDetails = "Ingredients"
+    @State var viewDetails: Tabs = .ingredients
     
     init (recipe: Recipe, servings: Int? = nil) {
         _viewModel = StateObject(wrappedValue: RecipeViewModel(recipe: recipe, servings: servings))
@@ -20,6 +27,7 @@ struct RecipeView: View {
         ZStack(alignment: .top) {
             if let recipe = viewModel.recipe {
                 BackgroundView(imageURL: recipe.imageURL)
+                    .ignoresSafeArea(.all)
                 
                 ScrollView {
                     VStack {
@@ -108,12 +116,12 @@ struct RecipeView: View {
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 10)
-                            .background(Color.black.opacity(0.5))
-                            .cornerRadius(10)
+                            .foregroundStyle(.white)
+                            .frame(width: 40, height: 40)
+                            .background(Color.black.opacity(0.2))
+                            .cornerRadius(25)
                             .clipped()
+                            .glassEffect(.clear.interactive())
                             .shadow(radius: 3)
                     }
                     
@@ -122,13 +130,15 @@ struct RecipeView: View {
                     if let user = viewModel.recipe?.user {
                         if user.id == AuthService.shared.currentUser?.id {
                             NavigationLink(destination: RecipeEditorView(isNewRecipe: false, recipe: $viewModel.recipe)) {
+                                
                                 Text("Edit")
                                     .foregroundStyle(.white)
-                                    .padding(.vertical, 5)
-                                    .padding(.horizontal, 10)
-                                    .background(Color.black.opacity(0.5))
-                                    .cornerRadius(10)
+                                    .frame(height: 40)
+                                    .padding(.horizontal, 15)
+                                    .background(Color.black.opacity(0.2))
+                                    .cornerRadius(25)
                                     .clipped()
+                                    .glassEffect(.clear.interactive())
                                     .shadow(radius: 3)
                             }
                         } else {
@@ -154,8 +164,11 @@ struct RecipeView: View {
             // MEAL PLANNING CONFIRMATION
             if viewModel.showMealPlanningConfirmation {
                 ZStack {
+                    BlurView(style: .regular)
+                    
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
+                    
                     
                     VStack {
                         VStack (spacing: 20) {
@@ -170,6 +183,9 @@ struct RecipeView: View {
                                     }
                                 }
                                 .pickerStyle(MenuPickerStyle())
+                                .glassEffect(.clear)
+                                .padding(.trailing)
+                                .tint(.white)
                                 Text("Serving\(viewModel.selectedServings > 1 ? "s" : "")")
                             }
                             .tint(.white)
@@ -185,7 +201,10 @@ struct RecipeView: View {
                                     Text("Cancel")
                                         .font(.body)
                                 }
-                                .buttonStyle(.bordered)
+                                .padding(.horizontal)
+                                .padding(.vertical, 10)
+                                .foregroundStyle(.white)
+                                .glassEffect(.clear.interactive())
                                 
                                 Button(action: {
                                     viewModel.addRecipeToMealPlan()
@@ -194,16 +213,20 @@ struct RecipeView: View {
                                     Text("Confirm")
                                         .font(.body)
                                 }
-                                .buttonStyle(.bordered)
+                                .padding(.horizontal)
+                                .padding(.vertical, 10)
+                                .foregroundStyle(.white)
+                                .glassEffect(.clear.interactive())
                             }
                         }
                         .padding()
                         .foregroundStyle(.white)
-                        .background(Color.gray.opacity(0.8))
+                        .background(Color.black.opacity(0.2))
                         .cornerRadius(10)
                         .clipped()
                         .shadow(radius: 10)
                         .padding(.horizontal)
+                        
                     }
                 }
             }
@@ -226,6 +249,7 @@ struct RecipeView: View {
                 viewModel.getUser()
             }
         }
+        
     }
 }
 

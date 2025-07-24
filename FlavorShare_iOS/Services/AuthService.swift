@@ -209,6 +209,7 @@ class AuthService: ObservableObject {
                         self?.currentUser = user
                     case .failure(let error):
                         errorMessage = error.localizedDescription
+                        _ = self?.signOut()
                     }
                 }
             }

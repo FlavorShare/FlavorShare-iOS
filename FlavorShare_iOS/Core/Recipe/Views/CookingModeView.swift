@@ -22,7 +22,8 @@ struct CookingModeView: View {
     var body: some View {
         ZStack(alignment: .top) {
             BackgroundView(imageURL: viewModel.recipe.imageURL)
-            
+                .ignoresSafeArea(.all)
+
             VStack {
                 HStack (alignment: .top) {
                     // Back button to go back in navigation stack
@@ -30,11 +31,13 @@ struct CookingModeView: View {
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Image(systemName: "chevron.left")
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 10)
-                            .background(Color.black.opacity(0.5))
-                            .cornerRadius(10)
+                            .foregroundStyle(.white)
+                            .frame(width: 40, height: 40)
+                            .background(Color.black.opacity(0.2))
+                            .cornerRadius(25)
                             .clipped()
+                            .glassEffect(.clear.interactive())
+                            .shadow(radius: 3)
                     }
                     
                     Spacer()
@@ -97,11 +100,13 @@ struct CookingModeView: View {
                             if currentStep > 0 { currentStep -= 1 }
                         }) {
                             Text("Previous")
-                                .padding(.vertical, 5)
-                                .padding(.horizontal, 10)
-                                .background(Color.black.opacity(0.5))
-                                .cornerRadius(10)
+                                .foregroundStyle(.white)
+                                .frame(height: 40)
+                                .padding(.horizontal, 15)
+                                .background(Color.black.opacity(0.2))
+                                .cornerRadius(25)
                                 .clipped()
+                                .glassEffect(.clear.interactive())
                         }
                     }
                     
@@ -112,11 +117,13 @@ struct CookingModeView: View {
                             if currentStep < viewModel.recipe.instructions.count { currentStep += 1 }
                         }) {
                             Text("Next")
-                                .padding(.vertical, 5)
-                                .padding(.horizontal, 10)
-                                .background(Color.black.opacity(0.5))
-                                .cornerRadius(10)
+                                .foregroundStyle(.white)
+                                .frame(height: 40)
+                                .padding(.horizontal, 15)
+                                .background(Color.black.opacity(0.2))
+                                .cornerRadius(25)
                                 .clipped()
+                                .glassEffect(.clear.interactive())
                         }
                     }
                     
@@ -125,11 +132,13 @@ struct CookingModeView: View {
                             presentationMode.wrappedValue.dismiss()
                         }) {
                             Text("Done")
-                                .padding(.vertical, 5)
-                                .padding(.horizontal, 10)
-                                .background(Color.black.opacity(0.5))
-                                .cornerRadius(10)
+                                .foregroundStyle(.white)
+                                .frame(height: 40)
+                                .padding(.horizontal, 15)
+                                .background(Color.black.opacity(0.2))
+                                .cornerRadius(25)
                                 .clipped()
+                                .glassEffect(.clear.interactive())
                         }
                     }
                 }
