@@ -73,9 +73,11 @@ struct CustomTabBar: View {
             }) {
                 VStack {
                     Image(systemName: "calendar")
+                      
+
                 }
             }
-            .foregroundColor(selectedIndex == 2 ? .black.opacity(0.8) : .gray)
+            .foregroundColor(selectedIndex == 2 ? .black.opacity(0.8) : .white.opacity(0.8))
             .padding()
             
             // ******* RecipeListView *******
@@ -88,7 +90,7 @@ struct CustomTabBar: View {
                     Image(systemName: "house.fill")
                 }
             }
-            .foregroundColor(selectedIndex == 0 ? .black.opacity(0.8) : .gray)
+            .foregroundColor(selectedIndex == 0 ? .black.opacity(0.8) : .white.opacity(0.8))
             .padding()
             
             // ********** UserView **********
@@ -101,7 +103,7 @@ struct CustomTabBar: View {
                     Image(systemName: "person.fill")
                 }
             }
-            .foregroundColor(selectedIndex == 1 ? .black.opacity(0.8) : .gray)
+            .foregroundColor(selectedIndex == 1 ? .black.opacity(0.8) : .white.opacity(0.8))
             .padding()
             
         }

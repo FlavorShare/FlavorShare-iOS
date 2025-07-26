@@ -16,7 +16,10 @@ enum Tabs: String, CaseIterable, Identifiable {
 
 struct RecipeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+   
     @StateObject var viewModel: RecipeViewModel
+    @StateObject private var keyboardResponder = KeyboardResponder()
+
     @State var viewDetails: Tabs = .ingredients
     
     init (recipe: Recipe, servings: Int? = nil) {
@@ -109,6 +112,13 @@ struct RecipeView: View {
                         Spacer()
                     }
                 }
+                .padding(.bottom, keyboardResponder.isKeyboardVisible ? 250 : 40)
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        }
+                )
                 
                 HStack (alignment: .top) {
                     // Back button to go back in navigation stack
@@ -157,7 +167,7 @@ struct RecipeView: View {
                         }
                     }
                 }
-                .padding(.top, 60)
+                .padding(.top, keyboardResponder.isKeyboardVisible ? 250 : 60)
                 .padding(.horizontal)
             } // if let recipe
             

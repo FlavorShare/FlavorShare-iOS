@@ -11,6 +11,8 @@ import SwiftUI
 
 struct RecipeEditorView: View {
     @StateObject private var viewModel = RecipeEditorViewModel()
+    @StateObject private var keyboardResponder = KeyboardResponder()
+
     @State private var newIngredient: Ingredient = Ingredient(name: "", quantity: nil, unit: nil)
     @State private var newInstruction: Instruction = Instruction(step: 0, description: "")
     
@@ -19,6 +21,8 @@ struct RecipeEditorView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var isImagePickerPresented = false
+    
+    @State private var topPadding: CGFloat = 0
     
     var isNewRecipe: Bool
     @Binding var recipe: Recipe?
@@ -58,7 +62,7 @@ struct RecipeEditorView: View {
             ScrollView {
                 Text(isNewRecipe ? "New Recipe" : "Edit Recipe")
                     .font(.title)
-                    .padding(.top, 60)
+                    .padding(.top, (isNewRecipe ? 0 : 60))
                     .padding(.horizontal)
                     .shadow(radius: 3)
                 
@@ -89,6 +93,7 @@ struct RecipeEditorView: View {
                 .padding(.bottom, 150)
                 .padding(.horizontal)
             }
+            .padding(.top, keyboardResponder.isKeyboardVisible ? (isNewRecipe ? 0 : 150) : 0)
             .foregroundStyle(.white)
             
             HStack (alignment: .top) {
@@ -108,8 +113,9 @@ struct RecipeEditorView: View {
                 
                 Spacer()
             } // end of HStack
-            .padding(.top, 60)
+            .padding(.top, keyboardResponder.isKeyboardVisible ? (isNewRecipe ? 0 : 200) : (isNewRecipe ? 0 : 60))
             .padding(.horizontal)
+            
         } // end of ZStack
         .background(.gray)
         .navigationBarHidden(true)
@@ -166,7 +172,7 @@ struct RecipeEditorView: View {
                         Text(type).tag(type)
                     }
                 }
-                
+       
                 Divider()
                     .overlay(.white)
                     .padding(.vertical, 5)

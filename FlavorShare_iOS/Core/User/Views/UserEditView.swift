@@ -9,8 +9,9 @@ import SwiftUI
 import PhotosUI
 
 struct UserEditView: View {
-    
     @StateObject private var viewModel = UserEditViewModel()
+    @StateObject private var keyboardResponder = KeyboardResponder()
+
     @Binding var user: User
     
     @Environment(\.presentationMode) var presentationMode
@@ -140,7 +141,7 @@ struct UserEditView: View {
                         .padding()
                         .disabled(true)
                     }
-                    .glassEffect(.clear, in: .rect(cornerRadius: 10))
+                    .glassEffect(.regular.tint(.black), in: .rect(cornerRadius: 10))
                     .tint(.white)
                     
                     //                    Section(header: Text("Change Password")) {
@@ -235,6 +236,8 @@ struct UserEditView: View {
                 
             } // end of ScrollView
             .foregroundStyle(.white)
+            .padding(.vertical, keyboardResponder.isKeyboardVisible ? 150 : 0)
+
             
             
             HStack (alignment: .top) {
@@ -254,7 +257,7 @@ struct UserEditView: View {
                 
                 Spacer()
             }
-            .padding(.top, 70)
+            .padding(.top, keyboardResponder.isKeyboardVisible ? 200 : 60)
             .padding(.horizontal)
             
         } // end of ZStack

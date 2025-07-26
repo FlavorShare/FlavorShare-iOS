@@ -141,12 +141,14 @@ struct RecipeListView: View {
                 .refreshable {
                     viewModel.refreshView()
                 }
-                .onAppear() {
-                    viewModel.refreshView()
-                }
-                
             } // ZStack
-            .ignoresSafeArea(.container, edges: .top)
+//            .ignoresSafeArea(.container, edges: .top)
+            .simultaneousGesture(
+                TapGesture()
+                    .onEnded {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
+            )
         } // NavigationStack
     } // Body
 }

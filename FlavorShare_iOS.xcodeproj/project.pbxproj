@@ -28,6 +28,7 @@
 		80326B0F2C9B6AD5009C40C4 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		80326B112C9C5114009C40C4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		80326B142C9C70A6009C40C4 /* FlavorShare-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlavorShare-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
+		80D07B512E351F4C0066D853 /* FlavorShare_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlavorShare_iOS.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -80,6 +81,7 @@
 		802047DC2C93DF1200F07CE4 /* FlavorShare_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				80D07B512E351F4C0066D853 /* FlavorShare_iOS.entitlements */,
 				80326B142C9C70A6009C40C4 /* FlavorShare-iOS-Info.plist */,
 				802048172C9501A500F07CE4 /* GoogleService-Info.plist */,
 				802047E12C93DF1400F07CE4 /* Assets.xcassets */,
@@ -341,6 +343,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FlavorShare_iOS/FlavorShare_iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FlavorShare_iOS/Preview Content\"";
@@ -378,6 +381,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FlavorShare_iOS/FlavorShare_iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FlavorShare_iOS/Preview Content\"";
@@ -420,7 +424,7 @@
 				802047E72C93DF1400F07CE4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		802047E82C93DF1400F07CE4 /* Build configuration list for PBXNativeTarget "FlavorShare_iOS" */ = {
 			isa = XCConfigurationList;
@@ -429,7 +433,7 @@
 				802047EA2C93DF1400F07CE4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
