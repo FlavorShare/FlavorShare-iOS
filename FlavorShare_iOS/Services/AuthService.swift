@@ -18,7 +18,7 @@ class AuthService: ObservableObject {
     
     static let shared = AuthService()
     
-    private let baseURL = "http://localhost:3000"
+    private let baseURL = EnvironmentVariables.APIBaseURL
     
     // MARK: - Init
     init() {
@@ -121,6 +121,76 @@ class AuthService: ObservableObject {
         return nil
     }
     
+    // MARK: - updateEmail()
+    /**
+     This function is used to update the current user email.
+     - parameter email: new email provided for update
+     - returns: String containing error if process failed
+     */
+    func updateEmail(email: String, completion: @escaping (String?) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            completion("User is not authenticated.")
+            self.userSession = nil
+            self.currentUser = nil
+            self.isAuthenticated = false
+            return
+        }
+
+        user.sendEmailVerification(beforeUpdatingEmail: email) { error in
+            if let error = error {
+                completion(error.localizedDescription)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
+    // MARK: - updatePassword()
+    /**
+     This function is used to update the current user password.
+     - parameter password: new password provided for update
+     - returns: String containing error if process failed
+     */
+    func updatePassword(password: String, completion: @escaping (String?) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            completion("User is not authenticated.")
+            self.userSession = nil
+            self.currentUser = nil
+            self.isAuthenticated = false
+            return
+        }
+
+        user.updatePassword(to: password) { error in
+            if let error = error {
+                completion(error.localizedDescription)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
+    // MARK: - deleteAccount()
+    /**
+     This function is used to delete the current user account.
+     - returns: String containing error if process failed
+     */
+    func deleteAccount() async -> String? {
+        do {
+            // 1 - Delete user from Firebase Auth
+            try await Auth.auth().currentUser?.delete()
+            
+            // 2 - Update properties
+            self.userSession = nil
+            self.currentUser = nil
+            self.isAuthenticated = false
+            
+        } catch {
+            return error.localizedDescription
+        }
+        
+        return nil
+    }
+    
     // MARK: - loadUserData()
     /**
      This function is used to load  the current user data.
@@ -139,6 +209,7 @@ class AuthService: ObservableObject {
                         self?.currentUser = user
                     case .failure(let error):
                         errorMessage = error.localizedDescription
+                        _ = self?.signOut()
                     }
                 }
             }

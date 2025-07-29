@@ -18,42 +18,91 @@ struct User: Identifiable, Codable {
     var phone: String
     var dateOfBirth: Date
     
+    var recipes: [String]
+    var followers: [String]
+    var following: [String]
+    
+    var createdAt: Date?
+    var updatedAt: Date?
+    
     var profileImageURL: String?
     var bio: String?
     
-    var isFollowed: Bool? = false
-    var stats: UserStats?
+    var likedRecipes: [String]?
+    var mealPlanList: [MealPlanItem]?
     
-    var isCurrentUser: Bool?
+    init(
+        id: String,
+        email: String,
+        username: String,
+        
+        firstName: String,
+        lastName: String,
+        
+        phone: String,
+        dateOfBirth: Date,
+        
+        recipes: [String] = [],
+        followers: [String] = [],
+        following: [String] = [],
+        
+        createdAt: Date? = Date(),
+        updatedAt: Date? = Date(),
+        
+        profileImageURL: String? = nil,
+        bio: String = "Hi! I'm new to FlavorShare!",
     
-    init(id: String, email: String, username: String, firstName: String, lastName: String, phone: String, dateOfBirth: Date, profileImageURL: String? = nil, bio: String? = nil, isFollowed: Bool? = nil, stats: UserStats? = nil, isCurrentUser: Bool? = nil) {
+        likedRecipes: [String]? = [],
+        mealPlanList: [MealPlanItem]? = []
+    )
+    {
         self.id = id
         self.email = email
         self.username = username
+        
         self.firstName = firstName
         self.lastName = lastName
+        
         self.phone = phone
         self.dateOfBirth = dateOfBirth
+        
+        self.recipes = recipes
+        self.followers = followers
+        self.following = following
+        
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        
         self.profileImageURL = profileImageURL
         self.bio = bio
-        self.isFollowed = isFollowed
-        self.stats = stats
-        self.isCurrentUser = isCurrentUser
+        
+        self.likedRecipes = likedRecipes
+        self.mealPlanList = mealPlanList
     }
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
         case email
         case username
+        
         case firstName
         case lastName
+        
         case phone
         case dateOfBirth
+        
+        case recipes
+        case followers
+        case following
+        
+        case createdAt
+        case updatedAt
+        
         case profileImageURL
         case bio
-        case isFollowed
-        case stats
-        case isCurrentUser
+        
+        case likedRecipes
+        case mealPlanList
     }
     
     init(from decoder: Decoder) throws {
@@ -61,26 +110,79 @@ struct User: Identifiable, Codable {
         self.id = try container.decode(String.self, forKey: .id)
         self.email = try container.decode(String.self, forKey: .email)
         self.username = try container.decode(String.self, forKey: .username)
+        
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
+        
         self.phone = try container.decode(String.self, forKey: .phone)
         self.dateOfBirth = try container.decode(Date.self, forKey: .dateOfBirth)
+        
+        do {
+            self.recipes = try container.decode([String].self, forKey: .recipes)
+        } catch let error {
+            print("User init() - Failed to decode recipes: \(error.localizedDescription)")
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .typeMismatch(let type, let context):
+                    print("User init () - Type Mismatch: \(type), Context: \(context)")
+                case .valueNotFound(let type, let context):
+                    print("User init () - Value Not Found: \(type), Context: \(context)")
+                case .keyNotFound(let key, let context):
+                    print("User init () - Key Not Found: \(key), Context: \(context)")
+                case .dataCorrupted(let context):
+                    print("User init () - Data Corrupted: \(context)")
+                @unknown default:
+                    print("User init () - Unknown Decoding Error")
+                }
+            }
+            self.recipes = []
+        }
+        
+        do {
+            self.followers = try container.decode([String].self, forKey: .followers)
+        } catch {
+            print("User init () - Failed to decode followers: \(error)")
+            self.followers = []
+        }
+        
+        do {
+            self.following = try container.decode([String].self, forKey: .following)
+        } catch {
+            print("User init () - Failed to decode following: \(error)")
+            self.following = []
+        }
+        
+        self.createdAt = try container.decode(Date.self, forKey: .createdAt)
+        self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+
         self.profileImageURL = try container.decodeIfPresent(String.self, forKey: .profileImageURL)
         self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
-        self.isFollowed = try container.decodeIfPresent(Bool.self, forKey: .isFollowed)
-        self.stats = try container.decodeIfPresent(UserStats.self, forKey: .stats)
-        self.isCurrentUser = try container.decodeIfPresent(Bool.self, forKey: .isCurrentUser)
+        
+        self.likedRecipes = try container.decodeIfPresent([String].self, forKey: .likedRecipes)
+        self.mealPlanList = try container.decodeIfPresent([MealPlanItem].self, forKey: .mealPlanList)
     }
-}
-
-struct UserStats: Codable {
-    var followers: Int
-    var following: Int
-    var posts: Int
     
-    init(followers: Int, following: Int, posts: Int) {
-        self.followers = followers
-        self.following = following
-        self.posts = posts
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(email, forKey: .email)
+        try container.encode(username, forKey: .username)
+        
+        try container.encode(firstName, forKey: .firstName)
+        try container.encode(lastName, forKey: .lastName)
+        
+        try container.encode(phone, forKey: .phone)
+        try container.encode(dateOfBirth, forKey: .dateOfBirth)
+        
+        try container.encode(recipes, forKey: .recipes)
+        try container.encode(followers, forKey: .followers)
+        try container.encode(following, forKey: .following)
+        
+        // Created and Updated at are handled in the backend
+        try container.encodeIfPresent(profileImageURL, forKey: .profileImageURL)
+        try container.encodeIfPresent(bio, forKey: .bio)
+            
+        try container.encodeIfPresent(likedRecipes, forKey: .likedRecipes)
+        try container.encodeIfPresent(mealPlanList, forKey: .mealPlanList)
     }
 }

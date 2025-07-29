@@ -11,13 +11,20 @@ struct ContentView: View {
     @StateObject var viewModel = ContentViewModel()
     
     var body: some View {
-        NavigationView {
+        Group {
             if viewModel.userSession == nil {
                 AuthView()
-            } else if viewModel.currentUser != nil {
-                RecipeListView()
+            } else if let user = viewModel.currentUser {
+                NavbarView(user: user)
+            } else {
+                // Try to retrieve user
+                ProgressView()
+                    .onAppear {
+                        viewModel.checkAuthState()
+                    }
             }
         }
+        .ignoresSafeArea(.all)
     }
 }
 

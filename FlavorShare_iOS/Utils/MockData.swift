@@ -13,7 +13,7 @@ class MockData {
     let user = User(
         id: "1",
         email: "test_email@gmail.com",
-        username: "PreviewAccount",
+        username: "BengeeL",
         firstName: "John",
         lastName: "Doe",
         phone: "1233211234",
@@ -38,17 +38,12 @@ class MockData {
             nutritionalValues: NutritionalValues(calories: 500, protein: 20, fat: 25, carbohydrates: 50),
             user: User(
                 id: "1",
-                email: "user@example.com",
-                username: "user123",
+                email: "test_email@gmail.com",
+                username: "BengeeL",
                 firstName: "John",
                 lastName: "Doe",
-                phone: "123-456-7890",
-                dateOfBirth: Date(),
-                profileImageURL: nil,
-                bio: "This is a bio",
-                isFollowed: false,
-                stats: UserStats(followers: 100, following: 50, posts: 10),
-                isCurrentUser: false
+                phone: "1233211234",
+                dateOfBirth: Date()
             )
         )
     ]

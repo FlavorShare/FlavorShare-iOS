@@ -25,6 +25,9 @@ class ContentViewModel: ObservableObject {
     }
     
     // MARK: FUNCTIONS
+    /**
+        This function sets up the subscribers for the ContentViewModel
+     */
     func setupSubscribers() {
         service.$userSession
             .receive(on: DispatchQueue.main)
@@ -41,6 +44,9 @@ class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /**
+        This function checks the authentication state for the ContentViewModel
+     */
     func checkAuthState() {
         if let user = Auth.auth().currentUser {
             self.userSession = user

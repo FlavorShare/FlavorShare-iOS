@@ -9,18 +9,20 @@ import SwiftUI
 import FirebaseCore
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    // Manage User Auth
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        FoodItemsList.shared.loadFoodItems()
         return true
     }
 }
 
 @main
 struct FlavorShare_iOSApp: App {
-    // register app delegate for Firebase setup
+    // Register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()

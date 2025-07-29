@@ -10,96 +10,150 @@ import SwiftUI
 struct RecipeListView: View {
     @StateObject private var viewModel = RecipeListViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
-    @State private var selectedCategory: String = "All"
     
-    var filteredRecipes: [Recipe] {
-        if selectedCategory == "All" {
-            return viewModel.recipes
-        } else {
-            return viewModel.recipes.filter { $0.type == selectedCategory }
-        }
-    }
+    // Screen Height and Width
+    let screenHeight = UIScreen.main.bounds.height
+    let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
-        VStack(spacing: 0) { // Adjust spacing to 0
-            // Horizontal Scroll Bar for Categories
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(viewModel.cuisineTypes, id: \.self) { category in
-                        Text(category)
-                            .padding()
-                            .background(selectedCategory == category ? Color.blue : Color.gray)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .onTapGesture {
-                                selectedCategory = category
-                            }
-                    }
-                }
-                .padding(.horizontal) // Only horizontal padding
-            }
-            .padding(.top, 10) // Add some top padding to the ScrollView
-            
-            // Recipe List
-            if viewModel.isLoading {
-                ProgressView()
-            } else if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-            } else {
-                
-                List(filteredRecipes) { recipe in
-                    NavigationLink(destination: RecipeView(recipe: recipe)) {
+        NavigationStack (){
+            ZStack {
+                // Background Image
+                BackgroundView(imageURL: nil)
+                    .ignoresSafeArea(.all)
+
+                ScrollView {
+                    VStack(spacing: 0) {
+                        
+                        // App Logo
+                        Image("AppLogo")
+                            .resizable()
+                            .frame(width: screenWidth / 4, height: screenWidth / 4)
+                            .padding(.top, 50)
+                        
+                        // Welcome Message
+                        let userFirstName = AuthService.shared.currentUser?.firstName ?? "User"
                         HStack {
-                            if let url = URL(string: recipe.imageURL) {
-                                AsyncImage(url: url) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 50, height: 50)
-                                        .clipped()
-                                } placeholder: {
-                                    ProgressView()
+                            if let imageURL = viewModel.profileImage {
+                                if imageURL != "" {
+                                    RemoteImageView(fileName: imageURL, width: screenWidth / 5, height: screenWidth / 5)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                                        .shadow(radius: 5)
+                                        .padding(.trailing, 5)
                                 }
+                                
+                               
+                                
                             }
-                            VStack(alignment: .leading) {
-                                Text(recipe.title)
+                            
+                            VStack (alignment: .leading) {
+                                Spacer()
+                                
+                                Text("Hi, \(userFirstName)!")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.white)
+                                
+                                Text("What's cooking today?")
                                     .font(.headline)
-                                Text(recipe.description)
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
+                                    .foregroundStyle(.white)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.leading)
+                        
+                        // Custom SearchBar
+                        HStack (alignment: .center, spacing: 0) {
+                            SearchBar(searchText: $viewModel.searchText)
+                                .padding()
+                                .onChange(of: viewModel.searchText) {
+                                    viewModel.filterRecipes()
+                                }
+                            
+                            Button(action: {
+                                viewModel.likeFilter.toggle()
+                                viewModel.filterRecipes()
+                            }) {
+                                Image(systemName: viewModel.likeFilter ? "heart.fill" : "heart")
+                                    .foregroundColor(.white)
+                                    .padding(6)
+                                    .glassEffect(.clear)
+                                    .padding(.trailing)
+                                    .font(.title)
                             }
                         }
+                        
+                        // Horizontal Scroll Bar for Categories
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(viewModel.cuisineTypes, id: \.self) { category in
+                                    Text(category)
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 5)
+                                        .background(viewModel.selectedCategory == category ? Color.black.opacity(0.8) : Color.black.opacity(0.3))
+                                        .fontWeight(viewModel.selectedCategory == category ? .bold : .regular)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(25)
+                                        .onTapGesture {
+                                            viewModel.selectedCategory = category
+                                            viewModel.filterRecipes()
+                                        }
+                                        .glassEffect()
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        
+                        // Recipe List
+                        if viewModel.isLoading {
+                            ProgressView()
+                        } else if let errorMessage = viewModel.errorMessage {
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .padding()
+                                .multilineTextAlignment(.leading)
+                        } else {
+                            let columns = [
+                                GridItem(.flexible(), spacing: 10),
+                                GridItem(.flexible(), spacing: 10)
+                            ]
+                            
+                            // Recipe Lists
+                            LazyVGrid(columns: columns, spacing: screenWidth / 6) {
+                                ForEach(viewModel.filteredRecipes) { recipe in
+                                    NavigationLink(destination: RecipeView(recipe: recipe)) {
+                                        RecipeSquare(recipe: recipe, size: .profile)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                            }
+                            .padding(.horizontal)
+                            .padding(.top, screenHeight / 15)
+                        }
+                        
+                        Spacer()
+                    } // VStack
+                    .padding(.bottom, 150)
+                    
+                } // ScrollView
+                .refreshable {
+                    viewModel.refreshView()
+                }
+            } // ZStack
+//            .ignoresSafeArea(.container, edges: .top)
+            .simultaneousGesture(
+                TapGesture()
+                    .onEnded {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
-                }
-                //                .onDelete(perform: viewModel.deleteRecipe)
-                .listStyle(PlainListStyle()) // Use plain list style to reduce padding
-            }
-        }
-        .navigationTitle("Recipes")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    let feedback = AuthService.shared.signOut()
-                    if let errorMessage = feedback {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                    }
-                }) {
-                    Text("Sign Out")
-                }
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: RecipeEditorView(isNewRecipe: true)) {
-                    Image(systemName: "plus")
-                }
-            }
-        }
-    }
+            )
+        } // NavigationStack
+    } // Body
 }
 
 #Preview {
     RecipeListView()
         .environmentObject(AuthViewModel())
 }
-
